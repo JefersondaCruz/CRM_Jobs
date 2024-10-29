@@ -117,7 +117,6 @@ input {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
             0 10px 10px rgba(0,0,0,0.22);
     position: relative;
-    overflow: hidden;
     max-width: 96%;
     height: 1000px;
     max-height: 760px;
@@ -139,29 +138,10 @@ input {
     background-image: url(../../public/img/logo.png);
     background-size: 800px;
     background-position: absolute ;
-    color: #FFFFFF;
-    position: relative;
     left: -100%;
     height: 100%;
     width: 200%;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
 }
-.overlay-panel {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 40px;
-    text-align: center;
-    top: 0;
-    height: 100%;
-    width: 50%;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
-}
-
 
 
 </style>
