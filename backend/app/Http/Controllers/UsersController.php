@@ -39,7 +39,7 @@ class UsersController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-        }
+
             if ($user->type === 'recruiter'){
 
                 $token = $user->createToken('recruiterToken')->plainTextToken;
@@ -52,13 +52,17 @@ class UsersController extends Controller
                 return response()->json(['ERROR, Type nao encontrado']);
             }
 
-        return response()->json([
+            return response()->json([
 
-            'token'=> $token,
-            'user' => $user
-
+                'token'=> $token,
+                'user' => $user
         ]);
     }
+
+        return response()->json ([
+            'error' => 'credencais invalidas'
+        ]);
+}
 
     /**
      * Show the form for creating a new resource.
