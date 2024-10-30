@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,6 +31,33 @@ class UsersController extends Controller
             'usuario' => $user
         ]);
 
+    }
+
+    public function login(Request $request): JsonResponse
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+        }
+            if ($user->type === 'recruiter'){
+
+                $token = $user->createToken('recruiterToken')->plainTextToken;
+
+            } else if ($user->type === 'candidate') {
+
+                $token = $user->createToken('candidateToken')->plainTextToken;
+
+            } else {
+                return response()->json(['ERROR, Type nao encontrado']);
+            }
+
+        return response()->json([
+
+            'token'=> $token,
+            'user' => $user
+
+        ]);
     }
 
     /**
