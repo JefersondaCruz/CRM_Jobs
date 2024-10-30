@@ -2,68 +2,40 @@
     <div class="container">
         <div class="form-container">
             <form @submit.prevent="handleSubmit">
-                <h1> Registre-se</h1>
-                <span>use seu e-mail para cadastro</span><br>
-                <input type="text" placeholder="Nome" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="senha" />
-                <input type="password" placeholder="confirmar senha"/>
+                <h1>Entrar</h1>
+                <span>use seu e-mail para fazer login</span><br>
                 
-                    <div>
-                        <h3>Registrar como:</h3>
-                        <label>
-                            <input class="radio"
-                                type="radio"
-                                name="tipoUsuario"
-                                value="recrutador"
-                                v-model="tipoUsuario"
-                            />
-                            Recrutador
-                            </label>
-                            <label>
-                            <input class="radio"
-                                type="radio"
-                                name="tipoUsuario"
-                                value="candidato"
-                                v-model="tipoUsuario"
-                            />
-                            Candidato
-                        </label>
-                </div>
-                    <br>
-                <button type="submit">Cadastre-se</button><br>
-                ja tem uma conta?
-                <router-link class="link" to="/SignIn">Entrar</router-link>
+                <input type="email" placeholder="Email" v-model="email" required />
+                <input type="password" placeholder="Senha" v-model="password" required />
+
+                <button type="submit">Entrar</button><br>
+                Não tem uma conta?
+                <router-link class="link" to="/SignUp">Cadastre-se</router-link>
             </form>
         </div>
-            <div class="overlay">
-            </div>
-        
+        <div class="overlay">
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'SignUpForm',
-    props: ["logo","alt"],
+    name: 'SignInForm',
     data() {
         return {
-            name: '',
             email: '',
             password: '',
-            tipoUsuario: '',
         };
     },
     methods: {
         handleSubmit() {
-            console.log("Name:", this.name, "Email:", this.email, "Password:", this.password);
+            console.log("Email:", this.email, "Password:", this.password);
         },
     },
 };
 </script>
 
 <style scoped>
-
 body {
     background: #f6f5f7;
     display: flex;
@@ -120,7 +92,7 @@ input {
     width: 100%;
 }
 
-.form-container{
+.form-container {
     position: absolute;
     top: 0;
     height: 100%;
@@ -128,7 +100,7 @@ input {
     padding-left: 180px;
 }
 
-.container{
+.container {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
@@ -152,15 +124,5 @@ input {
     height: 100%;
     overflow: hidden;
     z-index: 100;
-}
-
-h3 {
-    font-weight: bold;
-    margin-right: 200px;
-    font-size: 15px;
-}
-
-label{
-    font-weight: bold;
 }
 </style>
