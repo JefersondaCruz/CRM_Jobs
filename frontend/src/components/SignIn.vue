@@ -19,8 +19,12 @@
 </template>
 
 <script>
+
+import { login } from "../services/AuthServices";
+
 export default {
     name: 'SignInForm',
+    
     data() {
         return {
             email: '',
@@ -28,11 +32,12 @@ export default {
         };
     },
     methods: {
-        handleSubmit() {
-            console.log("Email:", this.email, "Password:", this.password);
+        async handleSubmit() {
+                const user = await login(this.email, this.password);
+                console.log(user);
         },
-    },
-};
+    }
+}
 </script>
 
 <style scoped>
