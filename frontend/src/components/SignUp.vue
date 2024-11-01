@@ -4,10 +4,10 @@
             <form @submit.prevent="handleSubmit">
                 <h1> Registre-se</h1>
                 <span>use seu e-mail para cadastro</span><br>
-                <input type="text" placeholder="Nome" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="senha" />
-                <input type="password" placeholder="confirmar senha"/>
+                <input type="text" placeholder="Nome" v-model="name"/>
+                <input type="email" placeholder="Email" v-model="email" />
+                <input type="password" placeholder="senha" v-model="password"/>
+                <input type="password" placeholder="confirmar senha" v-model="password_confirmation"/>
                 
                     <div>
                         <h3>Registrar como:</h3>
@@ -15,7 +15,7 @@
                             <input class="radio"
                                 type="radio"
                                 name="tipoUsuario"
-                                value="recrutador"
+                                value="recruiter"
                                 v-model="tipoUsuario"
                             />
                             Recrutador
@@ -24,7 +24,7 @@
                             <input class="radio"
                                 type="radio"
                                 name="tipoUsuario"
-                                value="candidato"
+                                value="candidate"
                                 v-model="tipoUsuario"
                             />
                             Candidato
@@ -43,6 +43,8 @@
 </template>
 
 <script>
+
+import { register } from "../services/AuthServices";
 export default {
     name: 'SignUpForm',
     props: ["logo","alt"],
@@ -51,12 +53,16 @@ export default {
             name: '',
             email: '',
             password: '',
+            password_confirmation: '',
             tipoUsuario: '',
         };
     },
     methods: {
-        handleSubmit() {
-            console.log("Name:", this.name, "Email:", this.email, "Password:", this.password);
+
+        async handleSubmit() {
+            const user = await register( this.name, this.email, this.password, this.password_confirmation, this.tipoUsuario);
+            console.log(user);
+
         },
     },
 };
