@@ -37,7 +37,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/InfoPessoais',
+      path: '/RegisterCandidate',
       name: 'Registercandidate',
       component: () => import('../views/RegisterCandidateView.vue'),
       meta: {

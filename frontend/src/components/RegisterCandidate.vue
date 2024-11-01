@@ -1,8 +1,10 @@
 <template>
     <div class="container">
         <div class="form-container">
-            <h1>Informações Pessoais</h1>
             <form @submit.prevent="handlePersonalInfoSubmit">
+                <h1>Informações</h1>
+                <span>digite suas Informações pessoais </span>
+                <img src="../../public/img/jb.png">
                 <input type="text" placeholder="Experiências" v-model="experiences" />
                 <input type="text" placeholder="Habilidades" v-model="skills" />
                 <input type="text" placeholder="CEP" v-model="cep" />
@@ -94,7 +96,7 @@ input {
 .form-container {
     position: absolute;
     top: 0;
-    height: 80%;
+    height: 100%;
     transition: all 0.6s ease-in-out;
     padding-left: 180px;
 }
@@ -112,16 +114,18 @@ input {
 }
 
 .overlay {
-    background-image: url(../../public/img/registerlogo.png);
-    background-size: 1170px;
+    background-image: url(../../public/img/r);
+    background-size: 1142px;
     background-position: center ;
     left: -100%;
     position: absolute;
-    top: 0;
+    background-repeat: no-repeat;
     left: 50%;
     width: 50%;
     height: 100%;
     overflow: hidden;
     z-index: 100;
 }
+
+
 </style>
