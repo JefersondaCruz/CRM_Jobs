@@ -5,11 +5,21 @@
                 <h1>Informações</h1>
                 <span>digite suas Informações pessoais </span>
                 <img src="../../public/img/jb.png">
-                <input type="text" placeholder="Experiências" v-model="experiences" />
-                <input type="text" placeholder="Habilidades" v-model="skills" />
-                <input type="text" placeholder="CEP" v-model="cep" />
-                <input type="text" placeholder="Número da Casa" v-model="house_number" /><br>
-                <button type="submit">Salvar Informações</button>
+                <div v-if="currentStep === 1">
+                    <textarea type="text" placeholder="Experiências" v-model="experiences">
+                    </textarea>
+                </div>
+                <div v-if="currentStep === 2">
+                    <textarea type="text" placeholder="Habilidades" v-model="skills">
+                    </textarea>
+                </div>
+                <div class="form-step" v-if="currentStep === 3">
+                    <input type="text" placeholder="CEP" v-model="cep" />
+                    <input type="text" placeholder="Número da Casa" v-model="house_number" />
+                </div>
+                <br><button type="button" @click="prevStep" :disabled="currentStep === 1">Voltar</button><br>
+                <button type="button" @click="nextStep" v-if="currentStep < totalSteps">Avançar</button>
+                <button type="submit" v-if="currentStep === totalSteps">Salvar</button>
             </form>
         </div>
         <div class="overlay">
@@ -22,6 +32,8 @@ export default {
     name: 'PersonalInfo',
     data() {
         return {
+            currentStep: 1, 
+            totalSteps: 3,  
             experiences: '',
             skills: '',
             cep: '',
@@ -29,6 +41,16 @@ export default {
         };
     },
     methods: {
+        nextStep() {
+            if (this.currentStep < this.totalSteps) {
+                this.currentStep++;
+            }
+        },
+        prevStep() {
+            if (this.currentStep > 1) {
+                this.currentStep--;
+            }
+        },
         handlePersonalInfoSubmit() {
             console.log("Experiences:", this.experiences, "Skills:", this.skills, "CEP:", this.cep, "House Number:", this.house_number);
         },
@@ -68,6 +90,7 @@ button {
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: transform 80ms ease-in;
+    margin-left: 8px;
 }
 
 button:active {
@@ -82,7 +105,24 @@ form {
     flex-direction: column;
     padding: 0 50px;
     height: 100%;
-    text-align: center;
+    max-height: 98%;
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea{
+    background-color: #eee;
+    border: none;
+    padding: 90px 35x;
+    margin: 25px 10px;
+    margin-left: 34px;
+    height: 70px;
+    align-content: center;
+    position: center;
+    resize: none;
 }
 
 input {
@@ -95,10 +135,10 @@ input {
 
 .form-container {
     position: absolute;
-    top: 0;
     height: 100%;
     transition: all 0.6s ease-in-out;
-    padding-left: 180px;
+    padding-left: 10%;
+    max-width: 50%;
 }
 
 .container {
@@ -114,8 +154,8 @@ input {
 }
 
 .overlay {
-    background-image: url(../../public/img/r);
-    background-size: 1142px;
+    background-image: url(../../public/img/Candidato.png);
+    background-size: 770px;
     background-position: center ;
     left: -100%;
     position: absolute;
