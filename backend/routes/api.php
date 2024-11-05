@@ -16,4 +16,7 @@ Route::post('/login', [UsersController::class, 'login']);
 
 Route::middleware('auth:sanctum')->post('/vagas', [JobAplicationController::class, 'index']);
 
+Route::middleware('auth:sanctum')->put('/vagas/{id}', [JobAplicationController::class, 'update']);
+
+
 
