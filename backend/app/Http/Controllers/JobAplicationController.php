@@ -17,7 +17,7 @@ class JobAplicationController extends Controller
         if (Auth::user()->type !== 'recruiter') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        
+
         $jobs = $request->validate([
             'job_title' =>'required|string|max:255',
             'description' =>'required|string|max:255',
@@ -72,7 +72,34 @@ class JobAplicationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if (Auth::user()->type !== 'recruiter') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        
+        $request->validate([
+            'job_title' =>'required|string|max:255',
+            'description' =>'required|string|max:255',
+            'salary' =>'required|string|max:255',
+            'location' =>'required|string|max:255',
+            'company_id' =>'required|string|max:255',
+            'status' =>'required|string|max:255',
+        ]);
+
+        $job = job_application::findOrFail($id);
+
+        $job->job_title = $request->job_title;
+        $job->description = $request->description;
+        $job->salary = $request->salary;
+        $job->location = $request->location;
+        $job->company_id = $request->company_id;
+        $job->status = $request->status;
+
+        $job->save();
+
+        return response()->json([
+            'message' => 'vaga atualizada com sucesso!',
+            'vaga' => $job
+        ]);
     }
 
     /**
