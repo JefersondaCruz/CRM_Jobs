@@ -44,6 +44,14 @@ const router = createRouter({
         title: 'RegisterCandidate'
       }
     },
+    {
+      path: '/FormsJobs',
+      name: 'FormsJobs',
+      component: () => import('../views/FormsJobsView.vue'),
+      meta: {
+        title: 'FormsJobs'
+      }
+    },
   ]
 })
 
