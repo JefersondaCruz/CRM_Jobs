@@ -34,12 +34,7 @@ export default {
     methods: {
         async handleSubmit() {
                 const user = await login(this.email, this.password);
-                if(user.type === "recruiter")
-                    this.$router.push("/RecruiterHome");
-                else if(user.type === "candidate")
-                    this.$router.push("/CandidateHome");
-                else
-                    this.$router.push("/");
+                
         },
     }
 }

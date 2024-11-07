@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\job_application;
+
+use App\Models\JobOpening;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,28 +13,34 @@ class JobAplicationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         if (Auth::user()->type !== 'recruiter') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $jobs = $request->validate([
-            'job_title' =>'required|string|max:255',
+        $validateData = $request->validate([
+            'title' =>'required|string|max:255',
             'description' =>'required|string|max:255',
-            'salary' =>'required|string|max:255',
-            'location' =>'required|string|max:255',
-            'company_id' =>'required|string|max:255',
-            'status' =>'required|string|max:255',
+            'salaries' =>'required|string|max:255',
+            'categories' =>'required|string|max:255',
+            'publication_date' =>'required|date',
         ]);
 
-        $job = job_application::create($jobs);
+        $recruiter = Auth::user()->recruiter;
+        if (!$recruiter) {
+            return response()->json(['message' => 'Recruiter not found'], 404);
+        }
+        $validateData['recruiter_id'] = $recruiter->id;
+
+        $job = JobOpening::create($validateData);
 
         return response()->json([
-            'message' => 'vaga registrada com sucessoo!',
+            'message' => 'vaga criada com sucesso!',
             'vaga' => $job
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -46,7 +53,7 @@ class JobAplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function index(Request $request)
     {
         //
     }
@@ -54,10 +61,13 @@ class JobAplicationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
-    }
+        $vagas = JobOpening::all();
+        return response()->json([
+            'vagas' => $vagas
+        ]);
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -75,24 +85,22 @@ class JobAplicationController extends Controller
         if (Auth::user()->type !== 'recruiter') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        
+
         $request->validate([
-            'job_title' =>'required|string|max:255',
+            'title' =>'required|string|max:255',
             'description' =>'required|string|max:255',
-            'salary' =>'required|string|max:255',
-            'location' =>'required|string|max:255',
-            'company_id' =>'required|string|max:255',
-            'status' =>'required|string|max:255',
+            'salaries' =>'required|string|max:255',
+            'categories' =>'required|string|max:255',
+            'publication_date' =>'required|date',
         ]);
 
-        $job = job_application::findOrFail($id);
+        $job = JobOpening::findOrFail($id);
 
-        $job->job_title = $request->job_title;
+        $job->title = $request->title;
         $job->description = $request->description;
-        $job->salary = $request->salary;
-        $job->location = $request->location;
-        $job->company_id = $request->company_id;
-        $job->status = $request->status;
+        $job->salaries = $request->salaries;
+        $job->categories = $request->categories;
+        $job->publication_date = $request->publication_date;
 
         $job->save();
 

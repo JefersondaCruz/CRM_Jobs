@@ -61,7 +61,12 @@ export default {
 
         async handleSubmit() {
             const user = await register( this.name, this.email, this.password, this.password_confirmation, this.tipoUsuario);
-            console.log(user);
+            if(user.type === "recruiter")
+                    this.$router.push("/RecruiterHome");
+                else if(user.type === "candidate")
+                    this.$router.push("/CandidateHome");
+                else
+                    this.$router.push("/");
 
         },
     },

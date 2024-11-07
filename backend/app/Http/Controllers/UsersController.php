@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidates;
+use App\Models\Recruiter;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -25,6 +27,18 @@ class UsersController extends Controller
             'password' => Hash::make($request->password),
             'type' => $request->type
         ]);
+
+        if ($user->type == User::TYPE_RECRUITER) {
+
+            Recruiter::create([
+                'user_id' => $user->id
+            ]);
+        } else if ($user->type == User::TYPE_CANDIDATE) {
+
+            Candidates::create([
+                'user_id' => $user->id
+            ]);
+        }
 
         return response()->json([
             'message' => 'usuario registrado com sucessoo!',

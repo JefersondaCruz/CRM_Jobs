@@ -31,4 +31,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function recruiter()
+    {
+        return $this->hasOne(Recruiter::class);
+    }
+
+    public function candidate()
+    {
+        return $this->hasOne(Candidates::class);
+    }
 }
