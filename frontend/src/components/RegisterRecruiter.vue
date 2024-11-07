@@ -6,11 +6,18 @@
                 <h1>Informações</h1>
                 <span>digite suas Informações pessoais </span>
                 <img src="../../public/img/jb.png">
-
-                <input type="text" placeholder="Nome Fantasia" v-model="nome_fantasia" />
-                <input type="text" placeholder="CNPJ" v-model="cnpj" />
-                <input type="text" placeholder="Localização" v-model="location" />
-                <button type="submit">Salvar Informações</button>
+                <div v-if="currentStep === 1">
+                    <input type="text" placeholder="Nome Fantasia" v-model="Nome_Fantasia">
+                </div>
+                <div v-if="currentStep === 2">
+                    <input type="text" placeholder="CNPJ" v-model="cnpj">
+                </div>
+                <div class="form-step" v-if="currentStep === 3">
+                    <input type="text" placeholder="Localização" v-model="location" />
+                </div>
+                <br><button type="button" @click="prevStep" v-if="currentStep > 1">Voltar</button><br>
+                    <button type="button" @click="nextStep" v-if="currentStep < totalSteps">Avançar</button>
+                    <button type="submit" v-if="currentStep === totalSteps">Salvar</button>
             </form>
         </div>
 
@@ -23,119 +30,132 @@ export default {
     name: 'PersonalInfo',
     data() {
         return {
+            currentStep: 1, 
+            totalSteps: 3,  
             nome_fantasia: '',
             cnpj: '',
             location: '',
         };
     },
     methods: {
+        nextStep() {
+            if (this.currentStep < this.totalSteps) {
+                this.currentStep++;
+            }
+        },
+        prevStep() {
+            if (this.currentStep > 1) {
+                this.currentStep--;
+            }
+        },
         handlePersonalInfoSubmit() {
             console.log("nome_fantasia:", this.nome_fantasia, "cnpj:", this.cnpj, "location:", this.location);
         },
     },
 };
-</script><style scoped>
+</script>
 
-body {
-    background: #F6F5F7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    height: 100vh;
-    margin: -20px 0 50px;
-}
+<style scoped>
 
-h1 {
-    font-weight: bold;
-    margin: 0;
-}
+    body {
+        background: #F6F5F7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: 'Montserrat', sans-serif;
+        height: 100vh;
+        margin: -20px 0 50px;
+    }
 
-span {
-    font-size: 12px;
-}
+    h1 {
+        font-weight: bold;
+        margin: 0;
+    }
 
-button {
-    margin-top: 20px;
-    border-radius: 20px;
-    border: 1px solid #E97A12;
-    background-color: #E97A12;
-    color: #FFFFFF;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 12px 45px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: transform 80ms ease-in;
-}
+    span {
+        font-size: 12px;
+    }
 
-button:hover {
-    background-color: #ff7e28;
-}
+    button {
+        margin-top: 20px;
+        border-radius: 20px;
+        border: 1px solid #E97A12;
+        background-color: #E97A12;
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 12px 45px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: transform 80ms ease-in;
+    }
 
-button:active {
-    transform: scale(0.95);
-}
+    button:hover {
+        background-color: #f36d14;
+    }
 
-form {
-    background-color: #FFFFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 50px;
-    height: 100%;
-    text-align: center;
-}
+    button:active {
+        transform: scale(0.95);
+    }
 
-input {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    margin: 12px 0;
-    width: 100%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.22);
-}
+    form {
+        background-color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 50px;
+        height: 100%;
+    }
 
-.form-container {
-    position: absolute;
-    top: 0px;
-    height: 80%;
-    transition: all 0.6s ease-in-out;
-    padding-left: 180px;
-}
+    input {
+        background-color: #eee;
+        border: none;
+        padding: 12px 15px;
+        margin: 12px 0;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.22);
+    }
 
-.container {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25),
-    0 10px 10px rgba(0,0,0,0.22);
-    position: relative;
-    max-width: 96%;
-    height: 1000px;
-    max-height: 760px;
-    margin-top: 40px;
-}
+    .form-container {
+        position: absolute;
+        top: 0px;
+        height: 80%;
+        transition: all 0.6s ease-in-out;
+        padding-left: 160px;
+    }
 
-.overlay {
-    background-image: url(../../public/img/recrutadorCap.PNG);
-    background-size: 800px;
-    background-position: absolute ;
-    left: -100%;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 100;
-}
+    .container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.25),
+        0 10px 10px rgba(0,0,0,0.22);
+        position: relative;
+        max-width: 96%;
+        height: 1000px;
+        max-height: 760px;
+        margin-top: 40px;
+    }
 
-.footer {
-    margin-top: 20px;
-    text-align: center;
-}
+    .overlay {
+        background-image: url(../../public/img/recrutadorCap.PNG);
+        background-size: 800px;
+        background-position: absolute ;
+        left: -100%;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 100;
+    }
+
+    .footer {
+        margin-top: 20px;
+        text-align: center;
+    }
 </style>
 
     
