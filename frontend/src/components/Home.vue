@@ -1,55 +1,64 @@
 <template>
   <div class="container">
-  <h1 class="title">Jobify</h1>
-  <div class="search-bar">
-      <input
-      type="text"
-      v-model="searchQuery"
-      placeholder="Pesquise por vagas"
-      />
-      <button @click="searchJobs">Buscar</button>
-  </div>
-  <div class="content">
-      <div class="filters">
-      <h3>Filtros</h3>
-      <div class="filter-group">
-          <label for="location">Localização</label>
-          <select v-model="selectedLocation" id="location">
-          <option value="">Todos</option>
-          <option value="São Paulo">São Paulo</option>
-          <option value="Rio de Janeiro">Rio de Janeiro</option>
-          </select>
-      </div>
-      <div class="filter-group">
-          <label for="type">Tipo de Vaga</label>
-          <select v-model="selectedType" id="type">
-          <option value="">Todos</option>
-          <option value="Tempo Integral">Tempo Integral</option>
-          <option value="Freelance">Freelance</option>
-          </select>
-      </div>
-      </div>
-      <div class="job-list">
-      <h3>Vagas de Emprego</h3>
-      <div v-for="job in filteredJobs" :key="job.id" class="job-card">
-          <h4>{{ job.title }}</h4>
-          <p>{{ job.location }} - {{ job.type }}</p>
-          <p>{{ job.description }}</p>
-          <button @click="applyToJob(job.id)">Mais Detalhes</button>
-      </div>
-      </div>
-      <div class="details-section" v-if="selectedJob">
-      <h3>Detalhes da Vaga</h3>
-      <p><strong>Título:</strong> {{ selectedJob.title }}</p>
-      <p><strong>Localização:</strong> {{ selectedJob.location }}</p>
-      <p><strong>Tipo:</strong> {{ selectedJob.type }}</p>
-      <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
-      <button @click="submitApplication">Candidatar-se</button>
-      </div>
-  </div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" @click="searchJobs" type="search" placeholder="Pesquise por vagas" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">buscar</button>
+      </form>
+          <a href="/perfil" class="ms-3">
+            <i class="fas fa-user-circle" style="font-size: 40px;"></i>
+          </a>
+    </div>
+</nav>
+
+    <div class="content">
+        <div class="filters">
+        <h3>Filtros</h3>
+        <div class="filter-group">
+            <label for="location">Localização</label>
+            <select v-model="selectedLocation" id="location">
+            <option value="">Todos</option>
+            <option value="São Paulo">São Paulo</option>
+            <option value="Rio de Janeiro">Rio de Janeiro</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="type">Tipo de Vaga</label>
+            <select v-model="selectedType" id="type">
+            <option value="">Todos</option>
+            <option value="Tempo Integral">Tempo Integral</option>
+            <option value="Freelance">Freelance</option>
+            </select>
+        </div>
+        </div>
+        <div class="job-list">
+        <h3>Vagas de Emprego</h3>
+        <div v-for="job in jobs" :key="job.id" class="job-card">
+            <h4>{{ job.title }}</h4>
+            <p>{{ job.salaries }} - {{ job.type }}</p>
+            <p>{{ job.description }}</p>
+            <button @click="viewJobDetails(job)">Mais Detalhes</button>
+        </div>
+        </div>
+        <div class="details-section" v-if="selectedJob">
+        <h3>
+          Detalhes da Vaga
+          <span class="fa-solid fa-xmark" @click="selectedJob = null"></span>
+        </h3>
+        <p><strong>Título:</strong> {{ selectedJob.title }}</p>
+        <p><strong>Localização:</strong> {{ selectedJob.location }}</p>
+        <p><strong>Salário:</strong> {{ selectedJob.salaries }}</p>
+        <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
+        <button @click="submitApplication">Candidatar-se</button>
+        </div>
+    </div>
   </div>
 </template>
 <script>
+import { vagas } from '@/services/JobServices';
+
 export default {
   data() {
   return {
@@ -57,35 +66,29 @@ export default {
       selectedLocation: '',
       selectedType: '',
       selectedJob: null,
-      jobs: [
-      { id: 1, title: 'Desenvolvedor Frontend', location: 'São Paulo', type: 'Tempo Integral', description: 'Desenvolvimento de interfaces.' },
-      { id: 2, title: 'Designer UI/UX', location: 'Rio de Janeiro', type: 'Freelance', description: 'Design de experiência e interface do usuário.' },
-      { id: 3, title: 'Engenheiro de Software', location: 'São Paulo', type: 'Tempo Integral', description: 'Desenvolvimento de software.' }
-      ]
+      jobs: []
   };
   },
-  computed: {
-  filteredJobs() {
-      return this.jobs.filter(job => {
-      const matchesQuery = job.title.toLowerCase().includes(this.searchQuery.toLowerCase());
-      const matchesLocation = !this.selectedLocation || job.location === this.selectedLocation;
-      const matchesType = !this.selectedType || job.type === this.selectedType;
-      return matchesQuery && matchesLocation && matchesType;
-      });
-  }
-  },
   methods: {
-  searchJobs() {
-      console.log('Pesquisando por:', this.searchQuery);
-  },
-  applyToJob(jobId) {
-      this.selectedJob = this.jobs.find(job => job.id === jobId);
-  },
-  submitApplication() {
-      alert(`Você se candidatou à vaga: ${this.selectedJob.title}`);
+    async GetJob() {
+      const response = await vagas();
+      console.log('response', response);
+      this.jobs = response.data.vagas;  
+    },
+    viewJobDetails(jobs) {
+      this.selectedJob = jobs; 
+    },
+    closeJobDetails() {
       this.selectedJob = null;
-  }
-  }
+    },
+    submitApplication() {
+        alert(`Você se candidatou à vaga: ${this.selectedJob.title}`);
+        this.selectedJob = null;
+    }
+  },
+  created() {
+    this.GetJob();
+  } 
 };
 </script>
 <style scoped>
@@ -179,10 +182,23 @@ body {
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 .details-section h3 {
   margin: 0 0 10px;
+  margin: 0;
+  padding-right: 30px;
 }
+.details-section .fa-xmark {
+  font-size: 24px;
+  color: #ff0000;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
 .details-section button {
   background-color: #28A745;
   color: white;
