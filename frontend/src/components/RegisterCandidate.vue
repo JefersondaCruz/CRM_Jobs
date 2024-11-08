@@ -17,7 +17,7 @@
                     <input type="text" placeholder="CEP" v-model="cep" />
                     <input type="text" placeholder="Número da Casa" v-model="house_number" />
                 </div>
-                <br><button type="button" @click="prevStep" :disabled="currentStep === 1">Voltar</button><br>
+                <br><button type="button" @click="prevStep" v-if="currentStep > 1">Voltar</button><br>
                 <button type="button" @click="nextStep" v-if="currentStep < totalSteps">Avançar</button>
                 <button type="submit" v-if="currentStep === totalSteps">Salvar</button>
             </form>
@@ -81,8 +81,8 @@ span {
 
 button {
     border-radius: 20px;
-    border: 1px solid #e97a12;
-    background-color: #e97a12;
+    border: 1px solid #E97A12;
+    background-color: #E97A12;
     color: #ffffff;
     font-size: 12px;
     font-weight: bold;
@@ -92,7 +92,9 @@ button {
     transition: transform 80ms ease-in;
     margin-left: 8px;
 }
-
+button:hover {
+    background-color: #ff7e28;
+}
 button:active {
     transform: scale(0.95);
 }
@@ -105,7 +107,6 @@ form {
     flex-direction: column;
     padding: 0 50px;
     height: 100%;
-    max-height: 98%;
 }
 
 .form-step {
@@ -131,6 +132,7 @@ input {
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
+    
 }
 
 .form-container {
