@@ -10,8 +10,12 @@ class Candidates extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'email',
+        'user_id',
+        'experiences',
+        'skills',
+        'CEP',
+        'house_number',
+
     ];
 
     public function user()

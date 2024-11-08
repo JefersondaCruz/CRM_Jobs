@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->text('experiences');
-            $table->text('skills');
-            $table->string('CEP');
-            $table->integer('house_number');
+            $table->text('experiences')->nullable();
+            $table->text('skills')->nullable();
+            $table->string('CEP')->nullable();
+            $table->integer('house_number')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
