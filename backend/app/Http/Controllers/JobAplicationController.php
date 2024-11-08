@@ -25,6 +25,7 @@ class JobAplicationController extends Controller
             'salaries' =>'required|string|max:255',
             'categories' =>'required|string|max:255',
             'publication_date' =>'required|date',
+            
         ]);
 
         $recruiter = Auth::user()->recruiter;

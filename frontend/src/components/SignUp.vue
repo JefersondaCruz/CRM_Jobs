@@ -14,18 +14,18 @@
                         <label>
                             <input class="radio"
                                 type="radio"
-                                name="tipoUsuario"
+                                name="type"
                                 value="recruiter"
-                                v-model="tipoUsuario"
+                                v-model="type"
                             />
                             Recrutador
                             </label>
                             <label>
                             <input class="radio"
                                 type="radio"
-                                name="tipoUsuario"
+                                name="type"
                                 value="candidate"
-                                v-model="tipoUsuario"
+                                v-model="type"
                             />
                             Candidato
                         </label>
@@ -55,17 +55,27 @@ export default {
             email: '',
             password: '',
             password_confirmation: '',
-            tipoUsuario: '',
+            type: '',
         };
     },
     methods: {
 
         async handleSubmit() {
-            const user = await register( this.name, this.email, this.password, this.password_confirmation, this.tipoUsuario);
-            if(user.type === "recruiter")
-                    this.$router.push("/RegisterRecruiter");
-                else if(user.type === "candidate")
-                    this.$router.push("/RegisterCandidate");
+        try {
+            const response = await register( this.name, this.email, this.password, this.password_confirmation, this.type);
+            if(response.usuario.type === "recruiter") {
+                this.$router.push("/RegisterRecruiter");
+            }  
+            else if(response.usuario.type === "candidate") {
+                this.$router.push("/RegisterCandidate");
+            }
+            else
+                this.$router.push("/");
+        } catch (error) {
+            console.error("Erro ao cadastrar:", error);
+            throw error;
+        }
+
         },
     },
 };
