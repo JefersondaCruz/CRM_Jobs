@@ -52,6 +52,22 @@ const router = createRouter({
         title: 'FormsJobs'
       }
     },
+    {
+      path: '/EditForms',
+      name: 'EditForms',
+      component: () => import('../views/EditFormsView.vue'),
+      meta: {
+        title: 'EditForms'
+      }
+    },
+    {
+      path: '/Home',
+      name: 'HomeRecruiter',
+      component: () => import('../views/HomeRecruiterView.vue'),
+      meta: {
+        title: 'HomeRecruiter'
+      }
+    },
   ]
 })
 

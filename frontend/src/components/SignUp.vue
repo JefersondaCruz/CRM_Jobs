@@ -31,7 +31,7 @@
                         </label>
                 </div>
                     <br>
-                <button type="submit"><router-link class= "link" to="/RegisterCandidate">Cadastre-se</router-link></button><br>
+                <button type="submit">Cadastre-se></button><br>
 
                 ja tem uma conta?
                 <router-link to="/SignIn">Entrar</router-link>
