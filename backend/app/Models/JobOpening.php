@@ -15,7 +15,6 @@ class JobOpening extends Model
         'description',
         'salaries',
         'categories',
-        'publication_date',
         'recruiter_id',
     ];
 

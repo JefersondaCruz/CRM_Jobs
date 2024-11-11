@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('recruiter_id');
             $table->string('title');
             $table->string('description');
-            $table->date('publication_date');
             $table->string('salaries');
             $table->string('categories');
             $table->timestamps();

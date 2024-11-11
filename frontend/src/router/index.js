@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import store from "../store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,7 +34,8 @@ const router = createRouter({
       name: 'RegisterRecruiter',
       component: () => import('../views/RegisterRecruiterView.vue'),
       meta: {
-        title: 'RegisterRecruiter'
+        title: 'RegisterRecruiter',
+        requiresAuth: true
       }
     },
     {
@@ -41,15 +43,18 @@ const router = createRouter({
       name: 'Registercandidate',
       component: () => import('../views/RegisterCandidateView.vue'),
       meta: {
-        title: 'RegisterCandidate'
+        title: 'RegisterCandidate',
+        requiresAuth: true
       }
     },
     {
       path: '/FormsJobs',
       name: 'FormsJobs',
       component: () => import('../views/FormsJobsView.vue'),
+
       meta: {
-        title: 'FormsJobs'
+        title: 'FormsJobs',
+        requiresAuth: true
       }
     },
     {
@@ -57,7 +62,8 @@ const router = createRouter({
       name: 'EditForms',
       component: () => import('../views/EditFormsView.vue'),
       meta: {
-        title: 'EditForms'
+        title: 'EditForms',
+        requiresAuth: true
       }
     },
     {
@@ -73,7 +79,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
-  next();
+  
+  console.log('requiresAuth:', to.meta.requiresAuth);
+  console.log('loggedIn:', store.getters.loggedIn);
+  if (to.meta.requiresAuth && !store.getters.loggedIn) {
+    next('/SignIn');
+  } else {
+    next();
+    }
 });
 
 export default router

@@ -1,14 +1,18 @@
 import LaravelApi from "./HttpService";
 
-export const MakeVagas = async (title, description, salaries, categories, publication_date) => {
+export const MakeVagas = async (title, description, salaries, categories) => {
     try {
         const response = await LaravelApi.post("/vagas", {
         title,
         description,
         salaries,
         categories,
-        publication_date,
+    },{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
     })
+    
     
     return response.data;
 } catch (error) {

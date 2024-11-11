@@ -1,9 +1,64 @@
 import { createStore } from "vuex";
+import LaravelApi from "../services/HttpService";
 
 export default createStore({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
-});
+  state: {
+    acessToken :localStorage.getItem("token"),
+    user: null,
+  },  
+  
+  mutations: {
+    setToken(state, token) {
+      state.acessToken = token;
+      localStorage.setItem("token", token);
+    },
+    setUser(state, user) {
+      state.user = user;
+    },
+    removeToken(state) {
+      state.acessToken = null;
+      localStorage.removeItem("token");
+    },
+  },
+  getters: {
+    getToken(state) {
+      return state.acessToken;
+    },
+    getUser(state) {
+      return state.user;
+    },
+    loggedIn(state) {
+      return !!state.acessToken;
+    },
+  },
+  actions: {
+    async Userlogin  ({commit}, {email, password}) {
+      try {
+          const response = await LaravelApi.post("/login", {
+              email,
+              password,
+          });
+  
+          if (response.data.token) {
+              commit("setToken", response.data.token);
+              commit("setUser", response.data.user);
+              console.log("Login bem-sucedido");
+  
+              return response.data.user;
+          } else {
+              console.error("Token não encontrado na resposta.");
+              
+              throw new Error("Token não encontrado.");
+          }
+      } catch (error) {
+          console.error("Erro ao fazer login:", error.response);
+          throw error;
+      }
+  },
+  userlogout({commit}) {
+      commit("removeToken");
+      console.log("Logout bem-sucedido");
+      return true;
+  },
+  
+}});

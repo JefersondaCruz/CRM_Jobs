@@ -56,11 +56,11 @@ class UsersController extends Controller
 
             if ($user->type === 'recruiter'){
 
-                $token = $user->createToken('recruiterToken')->plainTextToken;
+                $token = $user->createToken('recruiterToken',['create-vaga', 'view-vagas'])->plainTextToken;
 
             } else if ($user->type === 'candidate') {
 
-                $token = $user->createToken('candidateToken')->plainTextToken;
+                $token = $user->createToken('candidateToken', ['view-vagas'])->plainTextToken;
 
             } else {
                 return response()->json(['ERROR, Type nao encontrado']);

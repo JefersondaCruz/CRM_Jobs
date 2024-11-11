@@ -1,9 +1,10 @@
 <template>
+<div>
     <div class="logo">
         <img src="../../public/img/jb.png">
     </div>
     <div id="jobs">
-        <form id="FormRegister" class="row g-3">
+        <form id="FormRegister" class="row g-3" @submit.prevent="submitForm">
             <div class="col-md-6">
                 <label for="title" class="form-label">Título</label>
                 <input type="text" class="form-control" id="title" v-model="Title" placeholder="Digite o título da vaga">
@@ -33,9 +34,11 @@
             <button type="submit" class="btn">Cadastrar Vaga</button>
         </form>
     </div>
+</div>
 </template>
 
 <script>
+import { MakeVagas } from '../services/JobServices';
 export default {
     data() {
         return {
@@ -47,12 +50,13 @@ export default {
     },
     methods: {
         submitForm() {
-            console.log({
-                title: this.jobTitle,
-                description: this.jobDescription,
-                salary: this.jobSalary,
-                category: this.jobCategory
-            });
+            try {
+                const vaga = MakeVagas(this.Title, this.Description, this.Salary, this.Category);
+                console.log(vaga);
+            } catch (error) {
+                console.error("Erro ao cadastrar:", error);
+                throw error;
+            }
         }
     }
 }

@@ -24,13 +24,17 @@ class JobAplicationController extends Controller
             'description' =>'required|string|max:255',
             'salaries' =>'required|string|max:255',
             'categories' =>'required|string|max:255',
-            'publication_date' =>'required|date',
-            
+
         ]);
 
         $recruiter = Auth::user()->recruiter;
+
         if (!$recruiter) {
-            return response()->json(['message' => 'Recruiter not found'], 404);
+            return response()->json(['message' => 'Recrutador nao encontrado'], 404);
+        }
+
+        if (!$recruiter->company) {
+            return response()->json(['message' => 'Recrutador precisa ter uma empresa para criar vagas'], 400);
         }
         $validateData['recruiter_id'] = $recruiter->id;
 

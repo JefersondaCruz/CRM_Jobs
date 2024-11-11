@@ -15,7 +15,10 @@ Route::post('/register', [UsersController::class, 'register']);
 Route::post('/login', [UsersController::class, 'login']);
 
 
-Route::middleware('auth:sanctum')->post('/vagas', [JobAplicationController::class, 'store']);
+Route::middleware(['auth:sanctum','check.recruiter'])->post('/vagas', [JobAplicationController::class, 'store']);
+Route::middleware(['auth:sanctum','check.candidate'])->get('/vagas', [JobAplicationController::class, 'index']);
+
+
 Route::middleware('auth:sanctum')->put('/vagas/{id}', [JobAplicationController::class, 'update']);
 Route::get('/vagas', [JobAplicationController::class, 'show']);
 

@@ -20,8 +20,6 @@
 
 <script>
 
-import { login } from "../services/AuthServices";
-
 export default {
     name: 'SignInForm',
     
@@ -33,9 +31,18 @@ export default {
     },
     methods: {
         async handleSubmit() {
-                const user = await login(this.email, this.password);
+            try {
+                await this.$store.dispatch("Userlogin",{
+                email: this.email,
+                password: this.password
+            });
+            this.$router.push("/");
                 
-        },
+            } catch (error) {
+                console.error("Erro ao fazer login:", error);
+                throw error;
+            }
+        }
     }
 }
 </script>
