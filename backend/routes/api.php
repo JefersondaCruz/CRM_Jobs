@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompaniesController;
-use App\Http\Controllers\JobAplicationController;
+use App\Http\Controllers\JobOpeningController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
@@ -15,15 +15,15 @@ Route::post('/register', [UsersController::class, 'register']);
 Route::post('/login', [UsersController::class, 'login']);
 
 
-Route::middleware(['auth:sanctum','check.recruiter'])->post('/vagas', [JobAplicationController::class, 'store']);
-Route::middleware(['auth:sanctum','check.candidate'])->get('/vagas', [JobAplicationController::class, 'index']);
+Route::middleware(['auth:sanctum','check.recruiter'])->post('/vagas', [JobOpeningController::class, 'store']);
+Route::middleware(['auth:sanctum','check.candidate'])->get('/vagas', [JobOpeningController::class, 'index']);
 
 
-Route::middleware('auth:sanctum')->put('/vagas/{id}', [JobAplicationController::class, 'update']);
-Route::get('/vagas', [JobAplicationController::class, 'show']);
+Route::middleware('auth:sanctum')->put('/vagas/{id}', [JobOpeningController::class, 'update']);
+Route::get('/vagas', [JobOpeningController::class, 'show']);
 
 
-Route::middleware('auth:sanctum')->post('/companies', [CompaniesController::class, 'store']);
+Route::middleware(['auth:sanctum','check.recruiter'])->post('/companies', [CompaniesController::class, 'store']);
 
 
 

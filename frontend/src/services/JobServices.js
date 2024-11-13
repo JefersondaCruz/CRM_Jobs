@@ -12,8 +12,6 @@ export const MakeVagas = async (title, description, salaries, categories) => {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }
     })
-    
-    
     return response.data;
 } catch (error) {
         console.error("Erro ao criar vaga:", error);

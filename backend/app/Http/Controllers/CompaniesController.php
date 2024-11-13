@@ -29,6 +29,22 @@ class CompaniesController extends Controller
      */
     public function store(Request $request)
     {
+
+
+        if (!$request->user()->tokenCan('make-company')){
+
+
+            return response()->json([
+                'message' => 'sem permissão make-company',
+
+            ]);
+        }
+
+
+        if (Auth::user()->type !== 'recruiter') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $companies = $request->validate ([
             'name' => 'required|string|max:255|unique:companies,name',
             'CNPJ' => 'required|string|max:255',
@@ -37,7 +53,7 @@ class CompaniesController extends Controller
 
         $recruiter = Auth::user()->recruiter;
         if (!$recruiter) {
-            return response()->json(['message' => 'Recruiter not found'], 404);
+            return response()->json(['message' => 'Recruiter não encontrado'], 404);
         }
         $companies['recruiter_id'] = $recruiter->id;
 

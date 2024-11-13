@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class JobAplicationController extends Controller
+class JobOpeningController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -10,7 +10,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        title: 'Home'
+        title: 'Home',
       }
     },
     {
@@ -18,7 +18,7 @@ const router = createRouter({
       name: 'SignUp',
       component: () => import('../views/SignUpView.vue'),
       meta: {
-        title: 'SignUp'
+        title: 'SignUp',
       }
     },
     {
@@ -26,7 +26,7 @@ const router = createRouter({
       name: 'SignIn',
       component: () => import('../views/SignInView.vue'),
       meta: {
-        title: 'SignIn'
+        title: 'SignIn',
       }
     },
     {

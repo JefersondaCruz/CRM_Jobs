@@ -12,9 +12,14 @@ class JobApplication extends Model
     protected $fillable = [
         'job_opening_id',
         'candidate_id',
-        'application_data',
         'status',
     ];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+
 
     public function jobOpening()
     {

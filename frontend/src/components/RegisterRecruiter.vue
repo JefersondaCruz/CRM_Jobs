@@ -7,13 +7,13 @@
                 <span>digite suas Informações pessoais </span>
                 <img src="../../public/img/jb.png">
                 <div v-if="currentStep === 1">
-                    <input type="text" placeholder="Nome Fantasia" v-model="Nome_Fantasia">
+                    <input type="text" placeholder="Nome Fantasia" v-model="name">
                 </div>
                 <div v-if="currentStep === 2">
                     <input type="text" placeholder="CNPJ" v-model="cnpj">
                 </div>
                 <div class="form-step" v-if="currentStep === 3">
-                    <input type="text" placeholder="Localização" v-model="location" />
+                    <input type="text" placeholder="Localização" v-model="localization" />
                 </div>
                 <br><button type="button" @click="prevStep" v-if="currentStep > 1">Voltar</button><br>
                     <button type="button" @click="nextStep" v-if="currentStep < totalSteps">Avançar</button>
@@ -25,16 +25,18 @@
         </div>
         
     </div>
-</template><script>
+</template>
+<script>
+import { MakeCompany } from '../services/CompanyService';
 export default {
     name: 'PersonalInfo',
     data() {
         return {
             currentStep: 1, 
             totalSteps: 3,  
-            nome_fantasia: '',
+            name: '',
             cnpj: '',
-            location: '',
+            localization: '',
         };
     },
     methods: {
@@ -48,11 +50,18 @@ export default {
                 this.currentStep--;
             }
         },
-        handlePersonalInfoSubmit() {
-            console.log("nome_fantasia:", this.nome_fantasia, "cnpj:", this.cnpj, "location:", this.location);
-        },
-    },
-};
+        async handlePersonalInfoSubmit() {
+            try {
+                const response = await MakeCompany(this.name, this.cnpj, this.localization);
+                console.log(response);
+                this.$router.push('/');
+            } catch (error) {
+                console.error("Erro ao cadastrar:", error);
+                throw error;
+            }
+        }
+    }
+}
 </script>
 
 <style scoped>
