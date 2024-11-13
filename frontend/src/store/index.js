@@ -11,7 +11,7 @@ export default createStore({
     setToken(state, token) {
       state.acessToken = token;
       localStorage.setItem("token", token);
-    },
+    },  
     setUser(state, user) {
       state.user = user;
       localStorage.setItem('user', JSON.stringify(user))

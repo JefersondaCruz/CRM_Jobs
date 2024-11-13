@@ -57,7 +57,6 @@ class UsersController extends Controller
             if ($user->type === 'recruiter'){
 
                 $token = $user->createToken('recruiterToken',['create-vaga', 'view-vagas', 'edit-vaga', 'make-company'])->plainTextToken;
-                dd($user->tokens);
 
             } else if ($user->type === 'candidate') {
 

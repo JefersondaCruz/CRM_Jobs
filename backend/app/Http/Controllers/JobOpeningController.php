@@ -87,27 +87,37 @@ class JobOpeningController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!$request->user()->tokenCan('edit-vaga')){
+            return response()->json([
+                'message' => 'sem permissão edit-vaga',
+
+            ], 403);
+        }
         if (Auth::user()->type !== 'recruiter') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $request->validate([
+
+        $recruiter = Auth::user()->recruiter;
+
+        $datas = $request->validate([
             'title' =>'required|string|max:255',
             'description' =>'required|string|max:255',
             'salaries' =>'required|string|max:255',
             'categories' =>'required|string|max:255',
-            'publication_date' =>'required|date',
         ]);
+
 
         $job = JobOpening::findOrFail($id);
 
-        $job->title = $request->title;
-        $job->description = $request->description;
-        $job->salaries = $request->salaries;
-        $job->categories = $request->categories;
-        $job->publication_date = $request->publication_date;
+        if ($job->recruiter_id !== $recruiter->id) {
+            return response()->json([
+                'message' => 'Você não tem permissão para editar esta vaga.',
+            ], 403);
+        }
 
-        $job->save();
+        $datas['recruiter_id'] = $recruiter->id;
+        $job->update($datas);
 
         return response()->json([
             'message' => 'vaga atualizada com sucesso!',
@@ -120,6 +130,23 @@ class JobOpeningController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $job = JobOpening::find($id);
+        if (!$job){
+            response()->json([
+                'message' => 'vaga nao encontrada',
+            ], 404);
+        }
+
+        if ($job->recruiter_id !== Auth::user()->recruiter->id) {
+            return response()->json([
+                'message' => 'Você não tem permissão para editar esta vaga.',
+            ], 403);
+        }
+
+        $job->delete();
+
+        return response()->json([
+            'message' => 'Vaga excluída com sucesso!',
+        ], 200);
     }
 }
