@@ -3,9 +3,9 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
         
-            <form class="d-flex" role="search">
-            <input class="form-control me-2" @click="searchJobs" type="search" placeholder="Pesquise por vagas" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">buscar</button>
+            <form class="d-flex">
+                <h2> Central de vagas</h2>
+            <button class="btn-criar" type="submit" ><Router-link class="link"to="/FormsJobs">Criar nova vaga</Router-link></button>
             </form>
                 <a href="/perfil" class="ms-3">
                 <i class="fas fa-user-circle" style="font-size: 40px;"></i>
@@ -39,7 +39,7 @@
                 <h4>{{ job.title }}</h4>
                 <p>{{ job.salaries }} - {{ job.type }}</p>
                 <p>{{ job.description }}</p>
-                <button @click="viewJobDetails(job)">Mais Detalhes</button>
+                <button @click="viewJobDetails(job)">Vizualizar</button>
             </div>
             </div>
             <div class="details-section" v-if="selectedJob">
@@ -51,7 +51,10 @@
             <p><strong>Localização:</strong> {{ selectedJob.location }}</p>
             <p><strong>Salário:</strong> {{ selectedJob.salaries }}</p>
             <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
-            <button @click="submitApplication">Candidatar-se</button>
+                <div class="buttons">
+                    <button class="btn-editar"><i class="fas fa-edit"></i></button>
+                    <button class="btn-editar" id ="button-delet"><i class="fas fa-trash-alt"></i></button>
+                </div>
             </div>
         </div>
         </div>
@@ -99,7 +102,7 @@
         background-color: #F5F7FA;
     }
     .container {
-        max-width: 1200px;
+        max-width: 1500px;
         margin: auto;
         padding: 20px;
     }
@@ -107,31 +110,10 @@
         text-align: center;
         margin-bottom: 20px;
     }
-    .search-bar {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-    .search-bar input[type="text"] {
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ddd;
-        border-radius: 4px 0 0 4px;
-    }
-    .search-bar button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #007BFF;
-        color: #fff;
-        border: none;
-        border-radius: 0 4px 4px 0;
-        cursor: pointer;
-    }
-    .search-bar button:hover {
-        background-color: #0056B3;
-    }
+
     .content {
         display: flex;
+        
     }
     .filters {
         width: 200px;
@@ -147,6 +129,7 @@
         padding: 15px;
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding-top: 20px;
     }
     .job-list h3 {
         margin: 0 0 15px;
@@ -157,7 +140,14 @@
         border-radius: 4px;
         margin-bottom: 15px;
         transition: background-color 0.3s;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        max-height: max-content;
+        max-width: 900px;
+        
     }
+
     .job-card:hover {
         background-color: #F0F0F0;
     }
@@ -166,14 +156,17 @@
     }
     .job-card button {
         padding: 10px;
-        background-color: #28A745;
+        background-color: #136ecf;
+
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        transition: background-color 0.3s;
     }
     .job-card button:hover {
-        background-color: #218838;
+        background-color:#0056B3;
+        
     }
     .details-section {
         width: 300px;
@@ -183,6 +176,12 @@
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         position: relative;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        max-height: max-content;
+        max-width: 900px;
+        margin-top: 50px;
     }
     .details-section h3 {
         margin: 0 0 10px;
@@ -191,16 +190,36 @@
     }
     .details-section .fa-xmark {
         font-size: 24px;
-        color: #ff0000;
+        color:#df0d0d;
         position: absolute;
         top: 10px;
         right: 10px;
         cursor: pointer;
         transition: color 0.3s;
     }
+    .btn-criar {
+        background-color: #0e8cc7;
+        border: 1px solid #0e8cc7;
+        border-radius: 0.25rem;
+        display: inline-block;
+        margin-left: 780px;
+        font-size: 1rem;
+        font-weight: 400;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btn-criar:hover{
+        background-color: #0e8cc7;
     
-    .details-section button {
-        background-color: #28A745;
+    }
+    .link{
+        text-decoration: none;
+        color: #fff;
+    }
+
+
+    .btn-editar{
+        background-color: #e97a12;
         color: white;
         padding: 10px 15px;
         border: none;
@@ -209,8 +228,61 @@
         font-size: 16px;
         transition: background-color 0.3s, transform 0.2s;
     }
-    .details-section button:hover {
-        background-color: #218838;
+    .btn-editar:hover{
+        background-color: #f18a29;
         transform: scale(1.05);
+    }
+    #button-delet{
+        background-color: #df0d0d;
+    }
+    .buttons{
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 15px;
+    }
+    .custom-navbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .custom-navbar .container-fluid {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .pagination button {
+    padding: 5px 10px;
+        margin: 0 5px;
+        border: none;
+        border-radius: 3px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .pagination button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .pagination span {
+        margin: 0 10px;
+        font-weight: bold;
     }
 </style>
