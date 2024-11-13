@@ -3,8 +3,8 @@ import LaravelApi from "../services/HttpService";
 
 export default createStore({
   state: {
-    acessToken :localStorage.getItem("token"),
-    user: null,
+    acessToken :localStorage.getItem("token")|| null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
   },  
   
   mutations: {
@@ -14,10 +14,13 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user;
+      localStorage.setItem('user', JSON.stringify(user))
     },
     removeToken(state) {
       state.acessToken = null;
+      state.user = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("user")
     },
   },
   getters: {

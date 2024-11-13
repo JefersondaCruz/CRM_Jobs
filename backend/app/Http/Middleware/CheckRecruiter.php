@@ -9,11 +9,14 @@ class CheckRecruiter
 {
     public function handle(Request $request, Closure $next)
     {
-        
-        if (! $request->user()->tokenCan('create-vaga')) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
 
+        $requiredPermissions = ['create-vaga', 'view-vagas', 'edit-vaga', 'make-company'];
+
+        foreach ($requiredPermissions as $permission) {
+            if (!$request->user()->tokenCan($permission)) {
+                return response()->json(['message' => 'Forbidden'], 403);
+            }
+        }
         return $next($request);
     }
 }

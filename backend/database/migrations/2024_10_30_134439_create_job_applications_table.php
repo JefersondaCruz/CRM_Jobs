@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('job_opening_id');
             $table->unsignedBigInteger('candidate_id');
-            $table->date('application_data');
             $table->string('status');
             $table->timestamps();
 
