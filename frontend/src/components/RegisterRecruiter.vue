@@ -54,7 +54,7 @@ export default {
             try {
                 const response = await MakeCompany(this.name, this.cnpj, this.localization);
                 console.log(response);
-                this.$router.push('/');
+                this.$router.push('/Home');
             } catch (error) {
                 console.error("Erro ao cadastrar:", error);
                 throw error;

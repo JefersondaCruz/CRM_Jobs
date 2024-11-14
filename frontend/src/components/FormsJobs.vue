@@ -27,7 +27,7 @@
                     <option>Desenvolvedor Back-end</option>
                     <option>Desenvolvedor Front-end</option>
                     <option>Marketing</option>
-                    <option>Vendas</option>
+                    <option>outros</option>
                 </select>
             </div>
             
@@ -53,6 +53,7 @@ export default {
         try {
             const response = await MakeVagas(this.Title, this.Description, this.Salary, this.Category);
             console.log(response);
+            this.$router.push("/home");
         }
         catch (error) {
             console.error("Erro ao cadastrar:", error);

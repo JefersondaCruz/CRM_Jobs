@@ -35,7 +35,7 @@
             </div>
             <div class="job-list">
             <h3>Vagas de Emprego</h3>
-            <div v-for="job in jobs" :key="job.id" class="job-card">
+            <div v-for="job in paginatedJobs" :key="job.id" class="job-card">
                 <h4>{{ job.title }}</h4>
                 <p>{{ job.salaries }} - {{ job.type }}</p>
                 <p>{{ job.description }}</p>
@@ -52,11 +52,16 @@
             <p><strong>Salário:</strong> {{ selectedJob.salaries }}</p>
             <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
                 <div class="buttons">
-                    <button class="btn-editar"><i class="fas fa-edit"></i></button>
+                    <button class="btn-editar"><Router-link class="link"to="/EditForms"><i class="fas fa-edit"></i></Router-link></button>
                     <button class="btn-editar" id ="button-delet"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>
+            <div class="pagination">
+                <button @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+                <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage" :disabled="currentPage === totalPages">Próxima</button>
+            </div>
         </div>
     </template>
     <script>
@@ -69,14 +74,38 @@
             selectedLocation: '',
             selectedType: '',
             selectedJob: null,
-            jobs: []
+            jobs: [],
+            currentPage: 1,
+            jobsPerPage: 4,
         };
+        },
+        computed: {
+        totalPages() {
+            return Math.ceil(this.jobs.length / this.jobsPerPage);
+        },
+        paginatedJobs() {
+            const start = (this.currentPage - 1) * this.jobsPerPage;
+            const end = start + this.jobsPerPage;
+            return this.jobs.slice(start, end);
+        },
         },
         methods: {
         async GetJob() {
             const response = await vagas();
             console.log('response', response);
             this.jobs = response.data.vagas;  
+        },
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+                this.GetJob();
+            }
+        },
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.GetJob();
+            }
         },
         viewJobDetails(jobs) {
             this.selectedJob = jobs; 

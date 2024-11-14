@@ -13,12 +13,13 @@
                 <router-link to="/SignUp">Cadastre-se</router-link>
             </form>
         </div>
-        <div class="overlay">
-        </div>
+        <div class="overlay"></div>
     </div>
 </template>
 
 <script>
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 export default {
     name: 'SignInForm',
@@ -30,22 +31,32 @@ export default {
         };
     },
     methods: {
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: type === "success" ? "green" : "red",
+                close: true
+            }).showToast();
+        },
         async handleSubmit() {
             try {
-                await this.$store.dispatch("Userlogin",{
-                email: this.email,
-                password: this.password
-            });
-            this.$router.push("/");
-                
+                await this.$store.dispatch("Userlogin", {
+                    email: this.email,
+                    password: this.password
+                });
+                this.showToast("Bem vindo!");
+                this.$router.push("/");
             } catch (error) {
-                console.error("Erro ao fazer login:", error);
-                throw error;
+                this.showToast("Erro ao fazer login. Senha ou email incorreto.", "error");
             }
         }
     }
 }
 </script>
+
 
 <style scoped>
     body {
