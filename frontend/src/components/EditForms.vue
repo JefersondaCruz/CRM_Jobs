@@ -31,7 +31,7 @@
                 </select>
             </div>
             
-            <button type="submit" class="btn">Cadastrar Vaga</button>
+            <button type="submit" class="btn"><Router-link to="/home">Salvar</Router-link></button>
         </form>
     </div>
 </div>
