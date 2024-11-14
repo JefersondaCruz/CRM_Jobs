@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 
 class JobOpeningController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function store(Request $request): JsonResponse
     {
         if (Auth::user()->type !== 'recruiter') {
@@ -47,17 +44,25 @@ class JobOpeningController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function ShowRecrutador(Request $request, string $recrutadorId)
     {
-        //
+        $user = Auth::user();
+
+        if ($user->recruiter->id != $recrutadorId) {
+            return response()->json(['error' => 'Você não tem permissão para visualizar estas vagas.'], 403);
+        }
+
+        $recruiter = $user->recruiter;
+        $jobOpenings = $recruiter->jobOpenings;
+
+
+        return response()->json([
+            'vaga' => $jobOpenings,
+        ]);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function index(Request $request)
     {
         //

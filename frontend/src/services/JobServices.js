@@ -30,3 +30,26 @@ export const vagas = async () => {
     }
 }
 
+export const ShowRecrutadorVagas = async () => {
+    try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const recrutadorId = user ? user.id : null;
+        
+        if (!recrutadorId) {
+            throw new Error("Recrutador ID não encontrado no localStorage.");
+        }
+        const response = await LaravelApi.get(`/vagas/recrutador/${recrutadorId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            }
+        );
+        console.log('response', response);
+        return response;
+    } catch (error) {
+        console.error("Erro ao buscar vagas:", error);
+        throw error;
+    }
+}
+
