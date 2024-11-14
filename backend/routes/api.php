@@ -1,5 +1,6 @@
 <?php
 
+use app\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\JobOpeningController;
 use Illuminate\Http\Request;
@@ -11,26 +12,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('user')->group(function (){
+    Route::post('/register', [UsersController::class, 'register']);
+    Route::post('/login', [UsersController::class, 'login']);
+});
 
-
-Route::post('/register', [UsersController::class, 'register']);
-Route::post('/login', [UsersController::class, 'login']);
-
-Route::middleware(['auth:sanctum', 'check.recruiter'])->put('/vagas/{id}', [JobOpeningController::class, 'update']);
-Route::middleware(['auth:sanctum','check.recruiter'])->delete('/vagas/{id}', [JobOpeningController::class, 'destroy']);
-Route::middleware(['auth:sanctum','check.recruiter'])->post('/vagas', [JobOpeningController::class, 'store']);
-
-# Route::middleware(['auth:sanctum','check.candidate'])->get('/vagas', [JobOpeningController::class, 'index']);
-
-
-
-
-
+Route::prefix('Recruiter')->middleware(['auth:sanctum', 'check.recruiter'])->group(function (){
+    Route::put('/vagas/{id}', [JobOpeningController::class, 'update']);
+    Route::delete('/vagas/{id}', [JobOpeningController::class, 'destroy']);
+    Route::post('/vagas', [JobOpeningController::class, 'store']);
+    Route::get('/vagas/recrutador/{recrutadorId}', [JobOpeningController::class, 'showRecrutador']);
+    Route::post('/companies', [CompaniesController::class, 'store']);
+});
 Route::get('/vagas', [JobOpeningController::class, 'show']);
-Route::middleware(['auth:sanctum','check.recruiter'])->get('/vagas/recrutador/{recrutadorId}', [JobOpeningController::class, 'showRecrutador']);
 
-
-Route::middleware(['auth:sanctum','check.recruiter'])->post('/companies', [CompaniesController::class, 'store']);
+Route::prefix('Candidate')->middleware(['auth:sanctum', 'check.candidate'])->group(function (){
+    Route::post('/vagas/candidatar',[JobApplicationController::class, 'applyToJob']);
+});
 
 
 

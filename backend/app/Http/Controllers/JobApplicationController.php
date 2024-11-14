@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JobApplication;
+use App\Models\User;
 
 class JobApplicationController extends Controller
 {
     public function applyToJob(Request $request)
     {
         $user = Auth::user();
-        if ($user->type !== 'candidate') {
+        if ($user->type !== User::TYPE_CANDIDATE) {
             return response()->json(['message' => 'Somento Candidatos podem aderir a vaga']);
         }
 

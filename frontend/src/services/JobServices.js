@@ -2,7 +2,7 @@ import LaravelApi from "./HttpService";
 
 export const MakeVagas = async (title, description, salaries, categories) => {
     try {
-        const response = await LaravelApi.post("/vagas", {
+        const response = await LaravelApi.post("/Recruiter/vagas", {
         title,
         description,
         salaries,
@@ -21,7 +21,7 @@ export const MakeVagas = async (title, description, salaries, categories) => {
 
 export const vagas = async () => {
     try {
-        const response = await LaravelApi.get("/vagas");
+        const response = await LaravelApi.get("/Recruiter/vagas");
         console.log('response', response);
         return response;
     } catch (error) {
@@ -38,7 +38,7 @@ export const ShowRecrutadorVagas = async () => {
         if (!recrutadorId) {
             throw new Error("Recrutador ID não encontrado no localStorage.");
         }
-        const response = await LaravelApi.get(`/vagas/recrutador/${recrutadorId}`,
+        const response = await LaravelApi.get(`/Recruiter/vagas/recrutador/${recrutadorId}`,
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
