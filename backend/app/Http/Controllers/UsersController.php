@@ -33,16 +33,22 @@ class UsersController extends Controller
             Recruiter::create([
                 'user_id' => $user->id
             ]);
+
+            $token = $user->createToken('recruiterToken',['create-vaga', 'view-vagas', 'edit-vaga', 'make-company'])->plainTextToken;
+
         } else if ($user->type == User::TYPE_CANDIDATE) {
 
             Candidates::create([
                 'user_id' => $user->id
             ]);
+
+            $token = $user->createToken('candidateToken', ['view-vagas'])->plainTextToken;
         }
 
         return response()->json([
             'message' => 'usuario registrado com sucessoo!',
-            'usuario' => $user
+            'usuario' => $user,
+            'token' => $token
         ]);
 
     }
@@ -54,11 +60,11 @@ class UsersController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            if ($user->type === 'recruiter'){
+            if ($user->type === User::TYPE_RECRUITER){
 
                 $token = $user->createToken('recruiterToken',['create-vaga', 'view-vagas', 'edit-vaga', 'make-company'])->plainTextToken;
 
-            } else if ($user->type === 'candidate') {
+            } else if ($user->type === User::TYPE_CANDIDATE) {
 
                 $token = $user->createToken('candidateToken', ['view-vagas'])->plainTextToken;
 

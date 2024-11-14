@@ -71,7 +71,8 @@ const router = createRouter({
       name: 'HomeRecruiter',
       component: () => import('../views/HomeRecruiterView.vue'),
       meta: {
-        title: 'HomeRecruiter'
+        title: 'HomeRecruiter',
+        requiresAuth: true
       }
     },
   ]

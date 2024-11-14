@@ -5,7 +5,7 @@
         
             <form class="d-flex">
                 <h2> Central de vagas</h2>
-            <button class="btn-criar" type="submit" ><Router-link class="link"to="/FormsJobs">Criar nova vaga</Router-link></button>
+            <button class="btn-criar" type="submit" ><Router-link class="link" to="/FormsJobs">Criar nova vaga</Router-link></button>
             </form>
                 <a href="/perfil" class="ms-3">
                 <i class="fas fa-user-circle" style="font-size: 40px;"></i>
@@ -60,7 +60,7 @@
         </div>
     </template>
     <script>
-    import { vagas } from '@/services/JobServices';
+    import { ShowRecrutadorVagas } from '@/services/JobServices';
     
     export default {
         data() {
@@ -74,9 +74,9 @@
         },
         methods: {
         async GetJob() {
-            const response = await vagas();
+            const response = await ShowRecrutadorVagas();
             console.log('response', response);
-            this.jobs = response.data.vagas;  
+            this.jobs = response.data.vaga;  
         },
         viewJobDetails(jobs) {
             this.selectedJob = jobs; 

@@ -19,6 +19,7 @@ Route::post('/login', [UsersController::class, 'login']);
 Route::middleware(['auth:sanctum', 'check.recruiter'])->put('/vagas/{id}', [JobOpeningController::class, 'update']);
 Route::middleware(['auth:sanctum','check.recruiter'])->delete('/vagas/{id}', [JobOpeningController::class, 'destroy']);
 Route::middleware(['auth:sanctum','check.recruiter'])->post('/vagas', [JobOpeningController::class, 'store']);
+
 # Route::middleware(['auth:sanctum','check.candidate'])->get('/vagas', [JobOpeningController::class, 'index']);
 
 
@@ -26,6 +27,7 @@ Route::middleware(['auth:sanctum','check.recruiter'])->post('/vagas', [JobOpenin
 
 
 Route::get('/vagas', [JobOpeningController::class, 'show']);
+Route::middleware(['auth:sanctum','check.recruiter'])->get('/vagas/recrutador/{recrutadorId}', [JobOpeningController::class, 'showRecrutador']);
 
 
 Route::middleware(['auth:sanctum','check.recruiter'])->post('/companies', [CompaniesController::class, 'store']);
