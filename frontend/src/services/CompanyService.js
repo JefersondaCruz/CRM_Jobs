@@ -2,7 +2,7 @@ import LaravelApi from "./HttpService";
 
 export const MakeCompany = async (name, CNPJ, localization) => {
     try {
-        const response = await LaravelApi.post("/companies", {
+        const response = await LaravelApi.post("/Recruiter/companies", {
         name,
         CNPJ,
         localization,
