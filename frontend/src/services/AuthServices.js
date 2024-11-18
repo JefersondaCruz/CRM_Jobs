@@ -5,7 +5,7 @@ import LaravelApi from "./HttpService";
 
 export const register = async (name, email, password, password_confirmation, type) => {
         try {
-            const response = await LaravelApi.post("/register", {
+            const response = await LaravelApi.post("/user/register", {
                 name,
                 email,
                 password,

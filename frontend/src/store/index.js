@@ -37,7 +37,7 @@ export default createStore({
   actions: {
     async Userlogin  ({commit}, {email, password}) {
       try {
-          const response = await LaravelApi.post("/login", {
+          const response = await LaravelApi.post("/user/login", {
               email,
               password,
           });
