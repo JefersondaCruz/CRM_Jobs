@@ -21,7 +21,7 @@ export const MakeVagas = async (title, description, salaries, categories) => {
 
 export const vagas = async () => {
     try {
-        const response = await LaravelApi.get("/Recruiter/vagas");
+        const response = await LaravelApi.get("/vagas");
         console.log('response', response);
         return response;
     } catch (error) {

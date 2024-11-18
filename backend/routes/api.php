@@ -1,6 +1,6 @@
 <?php
 
-use app\Http\Controllers\JobApplicationController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\JobOpeningController;
 use Illuminate\Http\Request;

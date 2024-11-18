@@ -16,9 +16,12 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Somento Candidatos podem aderir a vaga']);
         }
 
+        if (!$user->candidate) {
+            return response()->json(['message' => 'Candidate precisa ter uma empresa para criar vagas'], 400);
+        }
 
         $request->validate([
-            'job_opening_id' => 'required|exists:jobOpenings,id',
+            'job_opening_id' => 'required|exists:job_openings,id',
         ]);
 
         $existingApplication = JobApplication::where('job_opening_id', $request->job_opening_id)
