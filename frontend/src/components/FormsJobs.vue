@@ -38,7 +38,9 @@
 </template>
 
 <script>
-import { MakeVagas } from '../services/JobServices';
+    import { MakeVagas } from '../services/JobServices';
+    import Toastify from "toastify-js";
+    import "toastify-js/src/toastify.css";
 export default {
     data() {
         return {
@@ -49,14 +51,25 @@ export default {
         };
     },
     methods: {
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: type === "success" ? "green" : "red",
+                close: true
+            }).showToast();
+        },
         async submitForm() {
         try {
             const response = await MakeVagas(this.Title, this.Description, this.Salary, this.Category);
             console.log(response);
+            this.showToast("Vaga Cadastrada!");
             this.$router.push("/home");
         }
         catch (error) {
-            console.error("Erro ao cadastrar:", error);
+            this.showToast("Erro ao Cadastrar vagas.", "error");
             throw error;
             };
         }
