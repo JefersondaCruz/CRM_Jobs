@@ -6,9 +6,18 @@
           <input class="form-control me-2" @click="searchJobs" type="search" placeholder="Pesquise por vagas" aria-label="Search">
           <button class="btn-busca" type="submit">buscar</button>
         </form>
-        <a href="/perfil" class="ms-3">
-          <i class="fas fa-user-circle" style="font-size: 40px;"></i>
-        </a>
+        <div class="user-actions">
+          <a v-if="!isLoggedIn" href="/SignIn" class="ms-3">
+            <i class="fas fa-user-circle" style="font-size: 40px;"></i>
+          </a>
+          <div v-else class="dropdown">
+            <i class="fas fa-user-circle" style="font-size: 40px; cursor: pointer;" @click="toggleDropdown"></i>
+            <div v-if="showDropdown" class="dropdown-menu">
+              <a @click="goToProfile">Visualizar Perfil</a>
+              <a @click="logout">Logout</a>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -65,8 +74,9 @@
 </template>
 
 <script>
-import { vagas } from '@/services/JobServices';
-
+  import { vagas } from '@/services/JobServices';
+  import Toastify from "toastify-js";
+  import "toastify-js/src/toastify.css";
 export default {
   data() {
     return {
@@ -77,6 +87,8 @@ export default {
       allJobs: [],
       currentPage: 1,
       jobsPerPage: 4,
+      isLoggedIn: false, // Simule o estado de login do usuário
+      showDropdown: false,
     };
   },
   computed: {
@@ -90,6 +102,16 @@ export default {
     },
   },
   methods: {
+    showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "green",
+                close: true
+            }).showToast();
+        },
     async GetJob() {
       const response = await vagas();
       this.allJobs = response.data.vagas;
@@ -113,13 +135,23 @@ export default {
       this.selectedJob = null;
     },
     submitApplication() {
-      alert(`Você se candidatou à vaga: ${this.selectedJob.title}`);
+      this.showToast("Você se Candidatou a vaga!");
       this.selectedJob = null;
     },
   },
   created() {
     this.GetJob();
   },
+  toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
+    },
+    goToProfile() {
+      this.$router.push('/perfil');
+    },
+    logout() {
+      this.isLoggedIn = false; // Limpa o estado de login
+      this.$router.push('/SignIn'); // Redireciona para a página de login
+    },
 };
 </script>
 
@@ -304,4 +336,34 @@ export default {
     font-weight: bold;
   }
 
+  /* Estilo do dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 150px;
+  padding: 10px;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f8f9fa;
+}
 </style>
