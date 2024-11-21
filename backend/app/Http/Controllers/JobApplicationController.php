@@ -44,4 +44,29 @@ class JobApplicationController extends Controller
             'application' => $application
         ]);
     }
+
+    public function viewJobApplications (Request $request, $jobOpeningId)
+    {
+        $user = Auth::user();
+
+
+        if ($user->type !== User::TYPE_RECRUITER) {
+            return response()->json(['message' => 'Apenas recrutadores podem visualizar candidaturas'], 403);
+        }
+
+        $recruiter = $user->recruiter;
+
+        $jobOpening = $recruiter->jobOpenings()->find($jobOpeningId);
+
+        if (!$jobOpening) {
+            return response()->json(['message' => 'Vaga não encontrada ou você não tem permissão para visualizá-la'], 404);
+        }
+
+        $applications = $jobOpening->applications()->with('candidate')->get();
+
+        return response()->json([
+            'message' => 'Candidaturas recuperadas com sucesso',
+            'applications' => $applications,
+        ]);
+    }
 }
