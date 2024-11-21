@@ -48,7 +48,8 @@ class JobOpeningController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->recruiter->id != $recrutadorId) {
+        if ($user->id != $recrutadorId) {
+
             return response()->json(['error' => 'Você não tem permissão para visualizar estas vagas.'], 403);
         }
 

@@ -52,7 +52,7 @@
             <p><strong>Salário:</strong> {{ selectedJob.salaries }}</p>
             <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
                 <div class="buttons">
-                    <button class="btn-editar"><Router-link class="link"to="/EditForms"><i class="fas fa-edit"></i></Router-link></button>
+                    <button class="btn-editar"><Router-link class="link" to="/EditForms"><i class="fas fa-edit"></i></Router-link></button>
                     <button class="btn-editar" id ="button-delet"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
