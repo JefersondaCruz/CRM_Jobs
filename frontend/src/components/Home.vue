@@ -87,7 +87,7 @@ export default {
       allJobs: [],
       currentPage: 1,
       jobsPerPage: 4,
-      isLoggedIn: false, // Simule o estado de login do usuário
+      isLoggedIn: false,
       showDropdown: false,
     };
   },
