@@ -9,11 +9,14 @@ class CheckCandidate
 {
     public function handle(Request $request, Closure $next)
     {
-        
-        if (! $request->user()->tokenCan('view-vagas')) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
 
+        $requiredPermissions = ['view-vagas', 'apply-vagas','Register-Candidate'];
+
+        foreach ($requiredPermissions as $permission) {
+            if (!$request->user()->tokenCan($permission)) {
+                return response()->json(['message' => 'Forbidden'], 403);
+            }
+        }
         return $next($request);
     }
 }

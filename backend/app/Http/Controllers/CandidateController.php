@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use App\Models\Companies;
+use App\Models\Candidates;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class CompaniesController extends Controller
+class CandidateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,38 +29,37 @@ class CompaniesController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$request->user()->tokenCan('make-company')){
-
-
+        if (!$request->user()->tokenCan('Register-Candidate')){
             return response()->json([
-                'message' => 'sem permissão make-company',
-
+                'message' => 'sem permição para registrar candidate'
             ]);
         }
-        if (Auth::user()->type !== 'recruiter') {
+
+        if (Auth::user()->type !== 'candidate'){
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $companies = $request->validate ([
-            'name' => 'required|string|max:255|unique:companies,name',
-            'CNPJ' => 'required|string|max:255',
-            'localization' => 'required|string|max:255',
+        $data = $request->validate ([
+                'experiences' => 'required|string|max:255',
+                'skills' => 'required|string|max:255',
+                'CEP' => 'required|string|max:255',
+                'house_number' => 'required|string|max:255',
         ]);
 
-        $recruiter = Auth::user()->recruiter;
-        if (!$recruiter) {
-            return response()->json(['message' => 'Recruiter não encontrado'], 404);
+        $candidate = Auth::user()->candidate;
+
+        if (!$candidate) {
+            return response()->json(['message' => 'candidate não encontrado'], 404);
         }
-        $companies['recruiter_id'] = $recruiter->id;
 
-        $companie = Companies::create($companies);
 
-        $recruiter->company_id = $companie->id;
-        $recruiter->save();
+        $data['user_id'] = Auth::user()->id;
+
+        $candidateDetails = Candidates::create($data);
 
         return response()->json([
-            'message' => 'empresa cadastrada com sucesso',
-            'empresa' => $companie,
+            'message' => 'candidato cadastrada com sucesso',
+            'candidate' => $candidateDetails,
         ]);
     }
 
