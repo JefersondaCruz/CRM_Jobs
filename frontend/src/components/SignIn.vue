@@ -48,7 +48,7 @@ export default {
                     password: this.password
                 });
                 this.showToast("Bem vindo!");
-                this.$router.push("/");
+                this.$router.push("/home");
             } catch (error) {
                 this.showToast("Erro ao fazer login. Senha ou email incorreto.", "error");
             }
