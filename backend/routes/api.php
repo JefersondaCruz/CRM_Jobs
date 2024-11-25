@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\JobOpeningController;
@@ -29,6 +30,7 @@ Route::get('/vagas', [JobOpeningController::class, 'show']);
 
 Route::prefix('Candidate')->middleware(['auth:sanctum', 'check.candidate'])->group(function (){
     Route::post('/vagas/candidatar',[JobApplicationController::class, 'applyToJob']);
+    Route::post('/details/candidate', [CandidateController::class, 'store']);
 });
 
 
