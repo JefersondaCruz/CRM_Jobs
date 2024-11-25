@@ -7,8 +7,8 @@
         <form class="d-flex">
             <h2> Meu Perfil </h2>
         </form>
-            <a href="/perfil" class="ms-3">
-            <i class="fas fa-user-circle" style="font-size: 40px;"></i>
+            <a href="/" class="ms-3">
+            <i class="fa-solid fa-house" style="font-size: 35px;"></i>
             </a>
         </div>
     </nav>
@@ -150,11 +150,16 @@ body {
         transition: background-color 0.3s;
     }
     .btn-criar:hover{
-        background-color: #0e8cc7;
+        background-color: #007bff;
     
     }
     .link{
         text-decoration: none;
         color: #fff;
+    }
+
+    .fa-solid{
+        padding-right: 20px;
+        color:rgb(44, 42, 42)
     }
 </style>

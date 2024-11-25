@@ -28,7 +28,7 @@ export default createStore({
       return state.acessToken;
     },
     getUser(state) {
-      return state.user;
+      return state.user
     },
     loggedIn(state) {
       return !!state.acessToken;
