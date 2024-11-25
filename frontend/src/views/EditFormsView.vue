@@ -4,7 +4,7 @@
     </div>
 </template>
     <script>
-    import EditForms from '@/components/EditForms.vue';
+    import EditForms from '../components/EditForms.vue';
         export default {
             components: {
                 EditForms

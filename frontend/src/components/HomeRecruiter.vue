@@ -62,7 +62,7 @@
                 <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
 
                 <div class="buttons">
-                    <button class="btn-editar"><Router-link class="link" to="/EditForms"><i class="fas fa-edit"></i></Router-link></button>
+                    <button class="btn-editar"><Router-link class="link" :to="{ name: 'EditForms', params: { id: selectedJob.id } }" ><i class="fas fa-edit"></i></Router-link> Editar</button>
                     <button class="btn-editar" id ="button-delet"><i class="fas fa-trash-alt"></i></button>
                     <button @click="viewCandidatesJob(Candidates)" class="info-candidate">candidatos</button>
                 </div>
@@ -83,7 +83,7 @@
                     </div>
                     </div>
                 </div>
-            </div>
+            </div>      
         </div>
 
             <div class="pagination">
@@ -97,6 +97,7 @@
 
 <script>
     import { ShowRecrutadorVagas } from '@/services/JobServices';
+    import { mapActions, mapGetters } from 'vuex';
 import { Transition } from 'vue';
     
     export default {
@@ -125,10 +126,18 @@ import { Transition } from 'vue';
             },
         },
         methods: {
+            
+            async editVags() {
+                const response = await EditVagas(this.title, this.description, this.salaries, this.categories, this.id);
+                console.log('response', response);
+                this.$router.push('/HomeRecruiterView');
+            },
+
             async GetJob() {
                 const response = await ShowRecrutadorVagas();
                 console.log('response', response);
                 this.jobs = response.data.vaga;  
+                
             },
             nextPage() {
                 if (this.currentPage < this.totalPages) {
@@ -156,8 +165,19 @@ import { Transition } from 'vue';
                 
             },
             logout() {
+                this.userlogout();
                 alert("Você saiu da conta!");
-            }
+                this.$router.push('/SignIn');
+            },
+
+            async deleteVaga() {
+                const response = await DeleteVagas(this.id);
+                alert("Vaga deletada com sucesso!");
+                console.log('response', response);
+                this.$router.push('/Home');
+            },
+
+            ...mapActions(['userlogout'])
         },
 
         created() {

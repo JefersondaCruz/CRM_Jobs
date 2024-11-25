@@ -38,26 +38,57 @@
 </template>
 
 <script>
-import { MakeVagas } from '../services/JobServices';
+import { EditVagas } from '../services/JobServices';
+import { getVagasById } from '../services/JobServices';
 export default {
     data() {
         return {
             Title: '',
             Description: '',
             Salary: '',
-            Category: ''
+            Category: '',
+            vagaId: this.$route.params.id
         };
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             try {
-                const vaga = MakeVagas(this.Title, this.Description, this.Salary, this.Category);
-                console.log(vaga);
+                const Updatevaga = await EditVagas(this.Title, this.Description, this.Salary, this.Category, this.vagaId);  
+                console.log(Updatevaga);
             } catch (error) {
                 console.error("Erro ao cadastrar:", error);
                 throw error;
             }
+        },
+
+        async VagaData() {
+            try {
+                const vaga = await getVagasById(this.vagaId);
+                console.log('Vaga encontrada:', vaga);
+                if (vaga) {
+                    console.log('Título:', vaga.title);
+                    console.log('Descrição:', vaga.description);
+                    console.log('Salário:', vaga.salaries);
+                    console.log('Categoria:', vaga.categories);
+
+                    
+                    this.Title = vaga.title || '';
+                    this.Description = vaga.description || '';
+                    this.Salary = vaga.salaries ? vaga.salaries.toString() : '';
+                    this.Category = vaga.categories ? vaga.categories.join(', ') : ''; 
+                }
+            } catch (error) {
+                console.error("Erro ao buscar:", error);
+                throw error;
+            }
         }
+
+
+    },
+    mounted() {
+        console.log("ID da vaga", this.vagaId);
+        this.VagaData();
+        
     }
 }
 </script>
