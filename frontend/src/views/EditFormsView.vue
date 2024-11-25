@@ -1,13 +1,13 @@
 <template>
     <div>
-        <FormsJobs />
+        <EditForms />
     </div>
 </template>
     <script>
-    import FormsJobs from '@/components/FormsJobs.vue';
+    import EditForms from '../components/EditForms.vue';
         export default {
             components: {
-                FormsJobs
+                EditForms
             }
         }
     </script>

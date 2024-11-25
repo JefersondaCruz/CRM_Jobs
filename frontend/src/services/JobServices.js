@@ -49,7 +49,7 @@ export const ShowRecrutadorVagas = async () => {
         console.log('response', response);
         return response;
     } catch (error) {
-        console.error("Erro ao buscar vagas:", error);
+        console.error("Erro ao buscar vagas:", error);  
         throw error;
     }
 }
@@ -73,7 +73,7 @@ export const DeleteVagas = async (id) => {
 
 export const EditVagas = async(title, description, salaries, categories,id) => {
     try {
-        const response = await LaravelApi.update(`/Recruiter/vagas/${id}`,{
+        const response = await LaravelApi.put(`/Recruiter/vagas/${id}`,{
         title,
         description,
         salaries,
@@ -86,6 +86,23 @@ export const EditVagas = async(title, description, salaries, categories,id) => {
     return response.data
     } catch (error) {
         console.error("Erro ao editar vaga:", error);
+        throw error;
+    }
+}
+
+export const getVagasById = async(id) => {
+    try {
+        console.log(`Buscando vaga com ID: ${id}`);
+        const response = await LaravelApi.get(`/Recruiter/vagas/recrutador/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+        
+        console.log('Vaga encontrada:', response);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar vaga:", error);
         throw error;
     }
 }

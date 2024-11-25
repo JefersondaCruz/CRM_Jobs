@@ -67,11 +67,11 @@ const router = createRouter({
       }
     },
     {
-      path: '/EditForms',
+      path: '/EditForms/:id',
       name: 'EditForms',
       component: () => import('../views/EditFormsView.vue'),
       meta: {
-        title: 'EditForms',
+        title: 'EditForms', 
         requiresAuth: true
       }
     },
