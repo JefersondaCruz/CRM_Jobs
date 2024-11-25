@@ -20,6 +20,7 @@
 <script>
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import { mapGetters } from "vuex";
 
 export default {
     name: 'SignInForm',
@@ -29,6 +30,9 @@ export default {
             email: '',
             password: '',
         };
+    },
+    computed: {
+        ...mapGetters(['getUser']),
     },
     methods: {
         showToast(message, type = "success") {
@@ -48,11 +52,16 @@ export default {
                     password: this.password
                 });
                 this.showToast("Bem vindo!");
-                this.$router.push("/home");
+                console.log(this.getUser)
+                if (this.getUser?.type === "recruiter") {
+                    this.$router.push("/home");
+                }else{
+                    this.$router.push("/");
+                }
             } catch (error) {
                 this.showToast("Erro ao fazer login. Senha ou email incorreto.", "error");
             }
-        }
+        },
     }
 }
 </script>

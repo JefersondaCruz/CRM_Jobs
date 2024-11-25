@@ -12,7 +12,6 @@
                     <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
                     <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
                         <li><Router-link class="dropdown-item" to="/perfil">Perfil</Router-link></li>
-                        <li><Router-link class="dropdown-item" to="/config">Configurações</Router-link></li>
                         <li><button class="dropdown-item" @click="logout">Sair</button></li>
                     </ul>
                 </div>
@@ -65,6 +64,24 @@
                 <div class="buttons">
                     <button class="btn-editar"><Router-link class="link" :to="{ name: 'EditForms', params: { id: selectedJob.id } }" ><i class="fas fa-edit"></i></Router-link> Editar</button>
                     <button class="btn-editar" id ="button-delet"><i class="fas fa-trash-alt"></i></button>
+                    <button @click="viewCandidatesJob(Candidates)" class="info-candidate">candidatos</button>
+                </div>
+            </div>
+            <div class="modal" tabindex="-1" v-if="selectedCandidate">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </div>
                 </div>
             </div>      
         </div>
@@ -91,6 +108,7 @@ import { Transition } from 'vue';
                 selectedType: '',
                 selectedJob: null,
                 jobs: [],
+                Candidates: [],
                 currentPage: 1,
                 jobsPerPage: 4,
                 isDropdownOpen: false, 
@@ -135,6 +153,9 @@ import { Transition } from 'vue';
             },
             viewJobDetails(jobs) {
                 this.selectedJob = jobs; 
+            },
+            viewCandidatesJob(Candidates) {
+                this.selectedCandidate = Candidates; 
             },
             closeJobDetails() {
             this.selectedJob = null;
@@ -311,6 +332,22 @@ import { Transition } from 'vue';
         gap: 10px;
         justify-content: center;
         margin-top: 15px;
+    }
+
+    .info-candidate {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 11px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+.info-candidate:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
     }
     .custom-navbar {
         display: flex;

@@ -6,18 +6,21 @@
           <input class="form-control me-2" @click="searchJobs" type="search" placeholder="Pesquise por vagas" aria-label="Search">
           <button class="btn-busca" type="submit">buscar</button>
         </form>
-        <div class="user-actions">
-          <a v-if="!isLoggedIn" href="/SignIn" class="ms-3">
-            <i class="fas fa-user-circle" style="font-size: 40px;"></i>
+        <div>
+          <div v-if="loggedIn" class="dropdown" @mouseenter="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
+                    <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
+                    <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
+                        <li><Router-link class="dropdown-item" to="/perfil">Perfil</Router-link></li>
+                        <li><button class="dropdown-item" @click="logout">Sair</button></li>
+                    </ul>
+                </div>
+
+        <div v-else class="user-actions">
+          <a href="/SignIn" class="ms-3">
+              <i class="fas fa-user-circle" style="font-size: 40px;"></i>
           </a>
-          <div v-else class="dropdown">
-            <i class="fas fa-user-circle" style="font-size: 40px; cursor: pointer;" @click="toggleDropdown"></i>
-            <div v-if="showDropdown" class="dropdown-menu">
-              <a @click="goToProfile">Visualizar Perfil</a>
-              <a @click="logout">Logout</a>
             </div>
           </div>
-        </div>
       </div>
     </nav>
 
@@ -77,6 +80,7 @@
   import { vagas } from '@/services/JobServices';
   import Toastify from "toastify-js";
   import "toastify-js/src/toastify.css";
+import { mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
@@ -87,8 +91,7 @@ export default {
       allJobs: [],
       currentPage: 1,
       jobsPerPage: 4,
-      isLoggedIn: false,
-      showDropdown: false,
+      isDropdownOpen: false, 
     };
   },
   computed: {
@@ -100,6 +103,7 @@ export default {
       const end = start + this.jobsPerPage;
       return this.allJobs.slice(start, end);
     },
+    ...mapGetters (['loggedIn']),
   },
   methods: {
     showToast(message, type = "success") {
@@ -138,6 +142,10 @@ export default {
       this.showToast("Você se Candidatou a vaga!");
       this.selectedJob = null;
     },
+    toggleDropdown(status) {
+      this.isDropdownOpen = status;
+                
+    },
   },
   created() {
     this.GetJob();
@@ -149,10 +157,12 @@ export default {
       this.$router.push('/perfil');
     },
     logout() {
-      this.isLoggedIn = false; // Limpa o estado de login
-      this.$router.push('/SignIn'); // Redireciona para a página de login
+      this.LoggedIn = false;
+      this.$router.push('/SignIn');
     },
+
 };
+
 </script>
 
 <style scoped>
@@ -336,34 +346,38 @@ export default {
     font-weight: bold;
   }
 
-  /* Estilo do dropdown */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
+  .dropdown {
+    position: relative;
+    }
 
-.dropdown-menu {
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  width: 150px;
-  padding: 10px;
-}
+    .dropdown-menu {
+        position: absolute;
+        top: 42px;
+        right: 0;
+        display: none;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        min-width: 150px;
+    }
 
-.dropdown-menu a {
-  display: block;
-  padding: 8px;
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-}
+    .dropdown-menu.show {
+        display: block;
+    }
 
-.dropdown-menu a:hover {
-  background-color: #f8f9fa;
-}
+    .dropdown-menu .dropdown-item {
+        padding: 10px 20px;
+        color: #333;
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.2s;
+        cursor: pointer;
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #f0f0f0;
+    }
 </style>
