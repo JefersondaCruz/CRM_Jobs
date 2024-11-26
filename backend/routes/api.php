@@ -13,6 +13,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleare('auth:sanctum')->get('/user/{id}', [UsersController::class, 'getUserData']);
+
 Route::prefix('user')->group(function (){
     Route::post('/register', [UsersController::class, 'register']);
     Route::post('/login', [UsersController::class, 'login']);

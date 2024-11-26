@@ -13,7 +13,7 @@ export default createStore({
       localStorage.setItem("token", token);
     },  
     setUser(state, user) {
-      state.user = user;
+      state.user = user;  
       localStorage.setItem('user', JSON.stringify(user))
     },
     removeToken(state) {
@@ -24,14 +24,17 @@ export default createStore({
     },
   },
   getters: {
+    getUserId(state) {
+      return state.user ? state.user.id : null;
+    },
     getToken(state) {
       return state.acessToken;
     },
     getUser(state) {
-      return state.user
+      return state.user || {};
     },
     loggedIn(state) {
-      return !!state.acessToken;
+      return !!state.acessToken && !!state.user;
     },
   },
   actions: {
