@@ -9,6 +9,11 @@ class JobApplication extends Model
 {
     use HasFactory;
 
+    const STATUS_PENDING = 'Pendente';
+    const STATUS_APPROVED = 'Aprovado';
+    const STATUS_REJECTED = 'Rejeitado';
+
+
     protected $fillable = [
         'job_opening_id',
         'candidate_id',

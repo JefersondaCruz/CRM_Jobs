@@ -6,6 +6,15 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/access-denied',
+      name: 'AccessDenied',
+      component: () => import('@/views/AcessDeniedView.vue'),
+      meta: {
+        title: 'Acesso Negado',
+      }
+    },
+
+    {
       path: '/',
       name: 'home',
       component: HomeView,
@@ -44,7 +53,18 @@ const router = createRouter({
       component: () => import('../views/RegisterRecruiterView.vue'),
       meta: {
         title: 'RegisterRecruiter',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresRecruiter: true
+      }
+    },
+    {
+      path: '/CandidateHistory',
+      name: 'CandidateHistory',
+      component: () => import('../views/CandidateHistoryView.vue'),
+      meta: {
+        title: 'CandidateHistory',
+        requiresAuth: true,
+        requiresCandidate: true
       }
     },
     {
@@ -53,7 +73,8 @@ const router = createRouter({
       component: () => import('../views/RegisterCandidateView.vue'),
       meta: {
         title: 'RegisterCandidate',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresCandidate: true
       }
     },
     {
@@ -63,7 +84,8 @@ const router = createRouter({
 
       meta: {
         title: 'FormsJobs',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresRecruiter : true
       }
     },
     {
@@ -72,7 +94,8 @@ const router = createRouter({
       component: () => import('../views/EditFormsView.vue'),
       meta: {
         title: 'EditForms', 
-        requiresAuth: true
+        requiresAuth: true,
+        requiresRecruiter : true
       }
     },
     {
@@ -81,7 +104,8 @@ const router = createRouter({
       component: () => import('../views/HomeRecruiterView.vue'),
       meta: {
         title: 'HomeRecruiter',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresRecruiter: true
       }
     },
   ]
@@ -89,14 +113,20 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
-  
-  console.log('requiresAuth:', to.meta.requiresAuth);
-  console.log('loggedIn:', store.getters.loggedIn);
+
+  const userType = store.getters.getUser.type;
+  const requiresAuth = to.meta.requiresAuth;
+  const isRecruiterRoute = to.meta.requiresRecruiter;
+  const isCandidateRoute = to.meta.requiresCandidate;
   if (to.meta.requiresAuth && !store.getters.loggedIn) {
     next('/SignIn');
+  } else if (isRecruiterRoute && userType !== 'recruiter') {
+    next('/access-denied');
+  } else if (isCandidateRoute && userType !== 'candidate') {
+    next('/acess-denied');
   } else {
-    next();
-    }
+    next()
+  }
 });
 
 export default router

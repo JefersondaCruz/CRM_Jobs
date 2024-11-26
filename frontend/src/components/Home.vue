@@ -64,7 +64,18 @@
         <p><strong>Localização:</strong> {{ selectedJob.location }}</p>
         <p><strong>Salário:</strong> {{ selectedJob.salaries }}</p>
         <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
-        <button @click="submitApplication">Candidatar-se</button>
+        <button 
+          v-if="loggedIn"
+          @click="submitApplication"
+          >
+            Candidatar-se
+        </button>
+        <button 
+          v-else
+          @click="$router.push('/SignUp')"
+          >
+            Fazer login para se candidatar
+        </button>
       </div>
     </div>
 
@@ -77,10 +88,11 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import { vagas } from '@/services/JobServices';
+  import { ApplyToJob } from '@/services/CandidateServices';
   import Toastify from "toastify-js";
   import "toastify-js/src/toastify.css";
-import { mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
@@ -107,6 +119,16 @@ export default {
   },
   methods: {
     showToast(message, type = "success") {
+            if(type === "error") {
+                Toastify({
+                    text: message,
+                    duration: 5000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "red",
+                    close: true
+                }).showToast();
+            } else 
             Toastify({
                 text: message,
                 duration: 5000,
@@ -138,9 +160,26 @@ export default {
     closeJobDetails() {
       this.selectedJob = null;
     },
-    submitApplication() {
-      this.showToast("Você se Candidatou a vaga!");
-      this.selectedJob = null;
+    async submitApplication() {
+      if (!this.loggedIn) {
+            this.$router.push('/SignUp');
+            return;
+        }
+        try {
+            const response = await ApplyToJob(this.selectedJob.id);
+            console.log('response', response);
+            this.showToast("Você se candidatou com sucesso à vaga!");
+            this.$router.push('/');
+            this.selectedJob = null;
+        } catch (error) {
+            console.error("Erro ao cadastrar vaga:", error);
+            if (error.response && error.response.data.message === "Você já aplicou para esta vaga") {
+              this.showToast("Você já se candidatou a esta vaga!", "error");
+            } else {
+              this.showToast("Erro ao se candidatar à vaga.", "error");
+            }
+            throw error;
+        }
     },
     toggleDropdown(status) {
       this.isDropdownOpen = status;

@@ -90,10 +90,10 @@ export const EditVagas = async(title, description, salaries, categories,id) => {
     }
 }
 
-export const getVagasById = async(id) => {
+export const getVagasById = async(Id) => {
     try {
-        console.log(`Buscando vaga com ID: ${id}`);
-        const response = await LaravelApi.get(`/Recruiter/vagas/recrutador/${id}`, {
+        console.log(`Buscando vaga com ID: ${Id}`);
+        const response = await LaravelApi.get(`/Recruiter/vagas/recrutador/${Id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }

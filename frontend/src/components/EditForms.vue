@@ -40,6 +40,8 @@
 <script>
 import { EditVagas } from '../services/JobServices';
 import { getVagasById } from '../services/JobServices';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 export default {
     data() {
         return {
@@ -51,10 +53,22 @@ export default {
         };
     },
     methods: {
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: type === "success" ? "green" : "red",
+                close: true
+            }).showToast();
+        },
         async submitForm() {
             try {
                 const Updatevaga = await EditVagas(this.Title, this.Description, this.Salary, this.Category, this.vagaId);  
-                console.log(Updatevaga);
+                console.log('vaga atualizada',Updatevaga);
+                this.showToast("Vaga atualizada!");
+                this.$router.push('/Home');
             } catch (error) {
                 console.error("Erro ao cadastrar:", error);
                 throw error;
@@ -63,21 +77,18 @@ export default {
 
         async VagaData() {
             try {
-                const vaga = await getVagasById(this.vagaId);
+                const response = await getVagasById(this.vagaId);
+                const vaga = response.vaga[0];
                 console.log('Vaga encontrada:', vaga);
-                if (vaga) {
-                    console.log('Título:', vaga.title);
-                    console.log('Descrição:', vaga.description);
-                    console.log('Salário:', vaga.salaries);
-                    console.log('Categoria:', vaga.categories);
 
-                    
                     this.Title = vaga.title || '';
                     this.Description = vaga.description || '';
                     this.Salary = vaga.salaries ? vaga.salaries.toString() : '';
-                    this.Category = vaga.categories ? vaga.categories.join(', ') : ''; 
+                    this.Category =  vaga.categories || ''; 
+
                 }
-            } catch (error) {
+                
+            catch (error) {
                 console.error("Erro ao buscar:", error);
                 throw error;
             }
