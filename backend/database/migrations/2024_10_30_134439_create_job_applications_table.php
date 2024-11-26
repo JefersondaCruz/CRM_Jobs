@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('job_opening_id');
             $table->unsignedBigInteger('candidate_id');
-            $table->string('status');
+            $table->enum('status',['Pendente', 'Aprovado', 'Rejeitado'])->default('Pendente');
             $table->timestamps();
 
             $table->foreign('job_opening_id')

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+
 class JobOpeningController extends Controller
 {
     public function store(Request $request): JsonResponse
@@ -47,6 +48,7 @@ class JobOpeningController extends Controller
     public function ShowRecrutador(Request $request, string $recrutadorId)
     {
         $user = Auth::user();
+
 
         if ($user->id != $recrutadorId) {
 

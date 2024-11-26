@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { MakeCandidate } from '@/services/CandidateServices';
 export default {
     name: 'PersonalInfo',
     data() {
@@ -51,10 +52,19 @@ export default {
                 this.currentStep--;
             }
         },
-        handlePersonalInfoSubmit() {
-            console.log("Experiences:", this.experiences, "Skills:", this.skills, "CEP:", this.cep, "House Number:", this.house_number);
+        async handlePersonalInfoSubmit () {
+            try {
+                const response = await MakeCandidate(this.experiences, this.skills, this.cep, this.house_number);
+                    console.log('response', response);
+                    this.$router.push('/');
+
+            }catch (error)  {
+                console.error('Erro ao criar candidato:', error);
+                throw error;
+                };
         },
     },
+
 };
 </script>
 

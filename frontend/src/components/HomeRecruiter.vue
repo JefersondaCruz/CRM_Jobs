@@ -17,6 +17,23 @@
                 </div>
             </div>
         </nav>
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza de que deseja excluir esta vaga?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" @click="ConfirmDeleteVaga">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="content">
 
@@ -63,7 +80,9 @@
 
                 <div class="buttons">
                     <button class="btn-editar"><Router-link class="link" :to="{ name: 'EditForms', params: { id: selectedJob.id } }" ><i class="fas fa-edit"></i></Router-link> Editar</button>
-                    <button class="btn-editar" id ="button-delet"><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn-editar" id ="button-delet" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                        <i class="fas fa-trash-alt"></i>
+                </button>
                     <button @click="viewCandidatesJob(Candidates)" class="info-candidate">candidatos</button>
                 </div>
             </div>
@@ -85,6 +104,23 @@
                 </div>
             </div>      
         </div>
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja excluir esta vaga?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" @click="confirmDelete">Excluir</button>
+                </div>
+                </div>
+            </div>
+        </div>
 
             <div class="pagination">
                 <button @click="previousPage" :disabled="currentPage === 1">Anterior</button>
@@ -99,6 +135,7 @@
     import { ShowRecrutadorVagas } from '@/services/JobServices';
     import { mapActions, mapGetters } from 'vuex';
 import { Transition } from 'vue';
+import { DeleteVagas } from '@/services/JobServices';
     
     export default {
         data() {
@@ -112,6 +149,7 @@ import { Transition } from 'vue';
                 currentPage: 1,
                 jobsPerPage: 4,
                 isDropdownOpen: false, 
+                
             };
         },
 
@@ -127,11 +165,7 @@ import { Transition } from 'vue';
         },
         methods: {
             
-            async editVags() {
-                const response = await EditVagas(this.title, this.description, this.salaries, this.categories, this.id);
-                console.log('response', response);
-                this.$router.push('/HomeRecruiterView');
-            },
+            
 
             async GetJob() {
                 const response = await ShowRecrutadorVagas();
@@ -170,11 +204,17 @@ import { Transition } from 'vue';
                 this.$router.push('/SignIn');
             },
 
-            async deleteVaga() {
-                const response = await DeleteVagas(this.id);
-                alert("Vaga deletada com sucesso!");
-                console.log('response', response);
-                this.$router.push('/Home');
+            async ConfirmDeleteVaga() {
+                try {
+                    const response = await DeleteVagas(this.selectedJob.id);
+                    alert("Vaga deletada com sucesso!");
+                    console.log('response', response);
+                    this.$router.push('/Home');
+                } catch (error) {
+                    console.error("Erro ao deletar vaga:", error);
+                    alert("Erro ao deletar vaga!");
+                }
+                
             },
 
             ...mapActions(['userlogout'])

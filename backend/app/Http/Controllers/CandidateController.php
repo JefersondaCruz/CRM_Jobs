@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Candidates;
+use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,14 @@ class CandidateController extends Controller
      */
     public function index()
     {
-        //
+        {
+            $candidaturas = JobApplication::where('candidate_id', auth()->id())
+            ->with('jobOpening')
+            ->get();
+            return response()->json([
+                'candidaturas' => $candidaturas
+            ]);
+        }
     }
 
     /**
@@ -46,20 +54,18 @@ class CandidateController extends Controller
                 'house_number' => 'required|string|max:255',
         ]);
 
-        $candidate = Auth::user()->candidate;
+        $candidate = Candidates::where('user_id', Auth::id())->first();
 
-        if (!$candidate) {
-            return response()->json(['message' => 'candidate não encontrado'], 404);
+        if ($candidate) {
+            $candidate->update($data);
+        } else {
+            $data['user_id'] = Auth::id();
+            $candidate = Candidates::create($data);
         }
 
-
-        $data['user_id'] = Auth::user()->id;
-
-        $candidateDetails = Candidates::create($data);
-
         return response()->json([
-            'message' => 'candidato cadastrada com sucesso',
-            'candidate' => $candidateDetails,
+            'message' => "candidato cadastrado com sucesso",
+            'candidate' => $candidate,
         ]);
     }
 
@@ -68,7 +74,7 @@ class CandidateController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**

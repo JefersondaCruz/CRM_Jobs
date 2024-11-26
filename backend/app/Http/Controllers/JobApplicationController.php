@@ -9,22 +9,16 @@ use App\Models\User;
 
 class JobApplicationController extends Controller
 {
-    public function applyToJob(Request $request)
+    public function applyToJob(Request $request, string $id)
     {
         $user = Auth::user();
         if ($user->type !== User::TYPE_CANDIDATE) {
             return response()->json(['message' => 'Somento Candidatos podem aderir a vaga']);
         }
 
-        if (!$user->candidate) {
-            return response()->json(['message' => 'Candidate precisa ter uma empresa para criar vagas'], 400);
-        }
+        $jobOpeningId = $id;
 
-        $request->validate([
-            'job_opening_id' => 'required|exists:job_openings,id',
-        ]);
-
-        $existingApplication = JobApplication::where('job_opening_id', $request->job_opening_id)
+        $existingApplication = JobApplication::where('job_opening_id', $jobOpeningId)
         ->where('candidate_id', $user->id)
         ->first();
 
@@ -33,9 +27,9 @@ class JobApplicationController extends Controller
         }
 
         $application = JobApplication::create([
-            'job_opening_id' => $request->job_opening_id,
+            'job_opening_id' => $id,
             'candidate_id' => $user->id,
-            'status' => 'pending',
+            'status' => JobApplication::STATUS_PENDING,
 
 
         ]);

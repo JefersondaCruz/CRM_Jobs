@@ -29,8 +29,9 @@ Route::prefix('Recruiter')->middleware(['auth:sanctum', 'check.recruiter'])->gro
 Route::get('/vagas', [JobOpeningController::class, 'show']);
 
 Route::prefix('Candidate')->middleware(['auth:sanctum', 'check.candidate'])->group(function (){
-    Route::post('/vagas/candidatar',[JobApplicationController::class, 'applyToJob']);
+    Route::post('/vagas/candidatar/{id}',[JobApplicationController::class, 'applyToJob']);
     Route::post('/details/candidate', [CandidateController::class, 'store']);
+    Route::get('/applications', [CandidateController::class, 'index']);
 });
 
 
