@@ -109,8 +109,9 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title;
+  router.beforeEach((to, from, next) => {
+    document.title = to.meta.title;
+
 
   const user = store.getters.getUser;
   const requiresAuth = to.meta.requiresAuth;
@@ -129,5 +130,6 @@ router.beforeEach((to, from, next) => {
     next()
   }
 });
+
 
 export default router
