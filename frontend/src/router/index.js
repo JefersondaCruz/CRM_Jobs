@@ -111,22 +111,22 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title;
+  router.beforeEach((to, from, next) => {
+    document.title = to.meta.title;
 
-  const userType = store.getters.getUser.type;
-  const requiresAuth = to.meta.requiresAuth;
-  const isRecruiterRoute = to.meta.requiresRecruiter;
-  const isCandidateRoute = to.meta.requiresCandidate;
-  if (to.meta.requiresAuth && !store.getters.loggedIn) {
-    next('/SignIn');
-  } else if (isRecruiterRoute && userType !== 'recruiter') {
-    next('/access-denied');
-  } else if (isCandidateRoute && userType !== 'candidate') {
-    next('/acess-denied');
-  } else {
-    next()
-  }
-});
+    const userType = store.getters.getUser.type;
+    const requiresAuth = to.meta.requiresAuth;
+    const isRecruiterRoute = to.meta.requiresRecruiter;
+    const isCandidateRoute = to.meta.requiresCandidate;
+    if (to.meta.requiresAuth && !store.getters.loggedIn) {
+      next('/SignIn');
+    } else if (isRecruiterRoute && userType !== 'recruiter') {
+      next('/access-denied');
+    } else if (isCandidateRoute && userType !== 'candidate') {
+      next('/acess-denied');
+    } else {
+      next()
+    }
+  });
 
 export default router

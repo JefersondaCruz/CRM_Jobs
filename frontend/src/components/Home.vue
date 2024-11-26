@@ -11,6 +11,7 @@
                     <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
                     <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
                         <li><Router-link class="dropdown-item" to="/perfil">Perfil</Router-link></li>
+                        <li><Router-link class="dropdown-item" to="/CandidateHistory">Candidaturas</Router-link></li>
                         <li><button class="dropdown-item" @click="logout">Sair</button></li>
                     </ul>
                 </div>
@@ -88,7 +89,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   import { vagas } from '@/services/JobServices';
   import { ApplyToJob } from '@/services/CandidateServices';
   import Toastify from "toastify-js";
@@ -160,6 +161,11 @@ export default {
     closeJobDetails() {
       this.selectedJob = null;
     },
+    logout() {
+      this.userlogout();
+      this.showToast("Você saiu da conta!", "error");
+      this.$router.push('/SignIn');
+    },
     async submitApplication() {
       if (!this.loggedIn) {
             this.$router.push('/SignUp');
@@ -185,6 +191,7 @@ export default {
       this.isDropdownOpen = status;
                 
     },
+    ...mapActions(['userlogout'])
   },
   created() {
     this.GetJob();
@@ -194,10 +201,6 @@ export default {
     },
     goToProfile() {
       this.$router.push('/perfil');
-    },
-    logout() {
-      this.LoggedIn = false;
-      this.$router.push('/SignIn');
     },
 
 };

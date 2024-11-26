@@ -29,7 +29,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger" @click="ConfirmDeleteVaga">Excluir</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="ConfirmDeleteVaga">Excluir</button>
                     </div>
                 </div>
             </div>
@@ -79,45 +79,11 @@
                 <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
 
                 <div class="buttons">
-                    <button class="btn-editar"><Router-link class="link" :to="{ name: 'EditForms', params: { id: selectedJob.id } }" ><i class="fas fa-edit"></i></Router-link> Editar</button>
+                    <button class="btn-editar"><Router-link class="link" :to="{ name: 'EditForms', params: { id: selectedJob.id } }" ><i class="fas fa-edit"></i></Router-link></button>
                     <button class="btn-editar" id ="button-delet" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                         <i class="fas fa-trash-alt"></i>
                 </button>
-                    <button @click="viewCandidatesJob(Candidates)" class="info-candidate">candidatos</button>
-                </div>
-            </div>
-            <div class="modal" tabindex="-1" v-if="selectedCandidate">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modal body text goes here.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                    </div>
-                </div>
-            </div>      
-        </div>
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Tem certeza de que deseja excluir esta vaga?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" @click="confirmDelete">Excluir</button>
-                </div>
+                    <button @click="viewCandidatesJob" class="info-candidate">candidatos</button>
                 </div>
             </div>
         </div>
@@ -134,8 +100,9 @@
 <script>
     import { ShowRecrutadorVagas } from '@/services/JobServices';
     import { mapActions, mapGetters } from 'vuex';
-import { Transition } from 'vue';
-import { DeleteVagas } from '@/services/JobServices';
+    import { DeleteVagas } from '@/services/JobServices';
+    import Toastify from "toastify-js";
+    import "toastify-js/src/toastify.css";
     
     export default {
         data() {
@@ -144,8 +111,8 @@ import { DeleteVagas } from '@/services/JobServices';
                 selectedLocation: '',
                 selectedType: '',
                 selectedJob: null,
+                selectedCandidate: null,
                 jobs: [],
-                Candidates: [],
                 currentPage: 1,
                 jobsPerPage: 4,
                 isDropdownOpen: false, 
@@ -164,55 +131,72 @@ import { DeleteVagas } from '@/services/JobServices';
             },
         },
         methods: {
+            showToast(message, type = "success") {
+                Toastify({
+                    text: message,
+                    duration: 5000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: type === "success" ? "green" : "red",
+                    close: true
+                }).showToast();
+            },
             
-            
-
             async GetJob() {
                 const response = await ShowRecrutadorVagas();
                 console.log('response', response);
                 this.jobs = response.data.vaga;  
                 
             },
+
             nextPage() {
                 if (this.currentPage < this.totalPages) {
                     this.currentPage++;
                     this.GetJob();
                 }
             },
+
             previousPage() {
                 if (this.currentPage > 1) {
                     this.currentPage--;
                     this.GetJob();
                 }
             },
+
             viewJobDetails(jobs) {
                 this.selectedJob = jobs; 
             },
-            viewCandidatesJob(Candidates) {
-                this.selectedCandidate = Candidates; 
-            },
+
+            
             closeJobDetails() {
             this.selectedJob = null;
             },
+
             toggleDropdown(status) {
                 this.isDropdownOpen = status;
                 
             },
+            
             logout() {
                 this.userlogout();
-                alert("Você saiu da conta!");
+                this.showToast("Você saiu da conta!", "error");
                 this.$router.push('/SignIn');
+            },
+
+            removeJob(jobId) {
+                this.jobs = this.jobs.filter(job => job.id != jobId)
             },
 
             async ConfirmDeleteVaga() {
                 try {
                     const response = await DeleteVagas(this.selectedJob.id);
-                    alert("Vaga deletada com sucesso!");
+                    this.removeJob(this.selectedJob.id)
+                    this.showToast("Vaga Deletada Com sucesso!", "error");
+                    this.closeJobDetails();
                     console.log('response', response);
-                    this.$router.push('/Home');
                 } catch (error) {
                     console.error("Erro ao deletar vaga:", error);
-                    alert("Erro ao deletar vaga!");
+                    this.showToast ("Erro ao Deletar vaga!", "error" )
                 }
                 
             },
