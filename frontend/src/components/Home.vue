@@ -10,7 +10,7 @@
           <div v-if="loggedIn" class="dropdown" @mouseenter="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                     <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
                     <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
-                        <li><Router-link class="dropdown-item" to="/perfil">Perfil</Router-link></li>
+                        <li><Router-link class="dropdown-item" :to="`/profile/${getUserId || ''}`">Meu Perfil</Router-link></li>
                         <li><button class="dropdown-item" @click="logout">Sair</button></li>
                     </ul>
                 </div>
@@ -103,10 +103,13 @@ export default {
       allJobs: [],
       currentPage: 1,
       jobsPerPage: 4,
-      isDropdownOpen: false, 
+      isDropdownOpen: false,
     };
   },
   computed: {
+    useId () {
+      return this.getUserId
+    },
     totalPages() {
       return Math.ceil(this.allJobs.length / this.jobsPerPage);
     },
@@ -116,6 +119,7 @@ export default {
       return this.allJobs.slice(start, end);
     },
     ...mapGetters (['loggedIn']),
+    ...mapGetters (['getUserId']),
   },
   methods: {
     showToast(message, type = "success") {
@@ -189,16 +193,17 @@ export default {
   created() {
     this.GetJob();
   },
-  toggleDropdown() {
-      this.showDropdown = !this.showDropdown;
-    },
     goToProfile() {
       this.$router.push('/perfil');
     },
     logout() {
       this.LoggedIn = false;
       this.$router.push('/SignIn');
+
+      console.log('User ID', this.getUserId)
+      console.log('retorno', this.$route.params.id)
     },
+    
 
 };
 

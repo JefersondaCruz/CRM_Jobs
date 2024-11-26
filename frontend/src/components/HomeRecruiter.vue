@@ -11,7 +11,7 @@
                 <div class="dropdown" @mouseenter="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                     <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
                     <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
-                        <li><Router-link class="dropdown-item" to="/perfil">Perfil</Router-link></li>
+                        <li><Router-link class="dropdown-item" :to="`/profile/${getUserId || ''}`">Meu Perfil</Router-link></li>
                         <li><button class="dropdown-item" @click="logout">Sair</button></li>
                     </ul>
                 </div>
@@ -162,11 +162,10 @@ import { DeleteVagas } from '@/services/JobServices';
                 const end = start + this.jobsPerPage;
                 return this.jobs.slice(start, end);
             },
+
+            ...mapGetters (['getUserId']),
         },
         methods: {
-            
-            
-
             async GetJob() {
                 const response = await ShowRecrutadorVagas();
                 console.log('response', response);
