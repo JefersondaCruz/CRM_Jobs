@@ -13,7 +13,6 @@ const router = createRouter({
         title: 'Acesso Negado',
       }
     },
-
     {
       path: '/',
       name: 'home',
@@ -23,7 +22,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/perfil',
+      path: '/profile/:id',
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
       meta: {
@@ -81,7 +80,6 @@ const router = createRouter({
       path: '/FormsJobs',
       name: 'FormsJobs',
       component: () => import('../views/FormsJobsView.vue'),
-
       meta: {
         title: 'FormsJobs',
         requiresAuth: true,
@@ -114,19 +112,24 @@ const router = createRouter({
   router.beforeEach((to, from, next) => {
     document.title = to.meta.title;
 
-    const userType = store.getters.getUser.type;
-    const requiresAuth = to.meta.requiresAuth;
-    const isRecruiterRoute = to.meta.requiresRecruiter;
-    const isCandidateRoute = to.meta.requiresCandidate;
-    if (to.meta.requiresAuth && !store.getters.loggedIn) {
-      next('/SignIn');
-    } else if (isRecruiterRoute && userType !== 'recruiter') {
-      next('/access-denied');
-    } else if (isCandidateRoute && userType !== 'candidate') {
-      next('/acess-denied');
-    } else {
-      next()
-    }
-  });
+
+  const user = store.getters.getUser;
+  const requiresAuth = to.meta.requiresAuth;
+  const isRecruiterRoute = to.meta.requiresRecruiter;
+  const isCandidateRoute = to.meta.requiresCandidate;
+
+  console.log('usuario', user)
+  
+  if (to.meta.requiresAuth && !user) {
+    next('/SignIn');
+  } else if (isRecruiterRoute && user && user.type !== 'recruiter') {
+    next('/access-denied');
+  } else if (isCandidateRoute && user && user.type !== 'candidate') {
+    next('/access-denied');
+  } else {
+    next()
+  }
+});
+
 
 export default router

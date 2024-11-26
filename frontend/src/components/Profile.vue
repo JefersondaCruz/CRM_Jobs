@@ -49,12 +49,12 @@
 
             <div class="col-md-8 mx-auto">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" v-for="item in data" :key="item.id">
                         <div class="position-relative">
                             <h5 class="card-title">Sobre</h5>
                             <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
                         </div>
-                            <p>Sou um desenvolvedor frontend com 5 anos de experiência, apaixonado por criar interfaces de usuário intuitivas e responsivas. Gosto de trabalhar com equipes dinâmicas e sempre busco aprender novas tecnologias para melhorar minha performance.</p>
+                            <p>{{ item.experiences }}</p>
                             <hr />
                         <div class="position-relative">
                             <h5 class="card-title">Experiência Profissional</h5>
@@ -89,26 +89,37 @@
 </template>
 
 <script>
+import { GetProfile } from "../services/ProfileServices";
 export default {
     data() {
     return {
         profilePicture: "https://via.placeholder.com/150",
+        data: [],
     };
     },
+    computed: {
+        
+    },  
     methods: {
-    triggerFileInput() {
-        this.$refs.fileInput.click();
-    },
-    handleFileChange(event) {
-        const file = event.target.files[0];
-        if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            this.profilePicture = reader.result;
-        };
-        reader.readAsDataURL(file);
-        }
-    },
+        triggerFileInput() {
+            this.$refs.fileInput.click();
+        },
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.profilePicture = reader.result;
+            };
+            reader.readAsDataURL(file);
+            }
+        },
+
+        async GetProfileDatas() {
+            const response = await GetProfile(this.$route.params.id);
+            console.log(response.data);
+            this.data = response.data; 
+        },
     },
 };
 </script>
