@@ -42,6 +42,7 @@ class CandidateController extends Controller
                 'CEP' => 'required|string|max:255',
                 'house_number' => 'required|string|max:255',
                 'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+                'about' => 'required|string|max:255',
         ]);
 
         if ($request->hasFile('profile_picture')) {

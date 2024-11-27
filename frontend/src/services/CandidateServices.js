@@ -1,6 +1,6 @@
 import LaravelApi from "./HttpService";
 
-export const MakeCandidate = async (experiences, skills, CEP, house_number, phone, social_media) => {
+export const MakeCandidate = async (experiences, skills, CEP, house_number, phone, social_media, about) => {
     try {
         const response = await LaravelApi.post("/Candidate/details/candidate", {
         experiences,
@@ -9,6 +9,7 @@ export const MakeCandidate = async (experiences, skills, CEP, house_number, phon
         house_number,
         phone,
         social_media,
+        about,
     },{
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`

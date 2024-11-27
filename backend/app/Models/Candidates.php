@@ -18,6 +18,7 @@ class Candidates extends Model
         'CEP',
         'house_number',
         'profile_picture',
+        'about',
 
     ];
 
