@@ -5,6 +5,7 @@ export default createStore({
   state: {
     acessToken :localStorage.getItem("token")|| null,
     user: JSON.parse(localStorage.getItem('user')) || null,
+    profilePicture: null,
   },  
   
   mutations: {
@@ -16,9 +17,14 @@ export default createStore({
       state.user = user;  
       localStorage.setItem('user', JSON.stringify(user))
     },
+
+    setProfilePicture(state, profilePicture) {
+      state.profilePicture = profilePicture;
+    },
     removeToken(state) {
       state.acessToken = null;
       state.user = null;
+      state.profilePicture = null;
       localStorage.removeItem("token");
       localStorage.removeItem("user")
     },
@@ -48,6 +54,10 @@ export default createStore({
           if (response.data.token) {
               commit("setToken", response.data.token);
               commit("setUser", response.data.user);
+              if (response.data.user.profile_picture) {
+                const profilePicturePath = response.data.user.profile_picture;
+                commit("setProfilePicture", `http://127.0.0.1:8000/storage/${profilePicturePath}`);
+              }
               console.log("Login bem-sucedido");
   
               return response.data.user;

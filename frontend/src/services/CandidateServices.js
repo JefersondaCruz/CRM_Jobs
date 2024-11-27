@@ -1,12 +1,14 @@
 import LaravelApi from "./HttpService";
 
-export const MakeCandidate = async (experiences, skills, CEP, house_number) => {
+export const MakeCandidate = async (experiences, skills, CEP, house_number, phone, social_media) => {
     try {
         const response = await LaravelApi.post("/Candidate/details/candidate", {
         experiences,
         skills,
         CEP,
         house_number,
+        phone,
+        social_media,
     },{
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
