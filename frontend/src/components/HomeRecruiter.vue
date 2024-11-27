@@ -1,99 +1,102 @@
 <template>
-    <div>
-        <div class="container">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <form class="d-flex">
-                        <h2> Meu Perfil </h2>
-                    </form>
-                    <a href="/" class="ms-3">
-                        <i class="fa-solid fa-house" style="font-size: 35px;"></i>
-                    </a>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+            
+                <form class="d-flex">
+                    <h2> Central de vagas</h2>
+                <button class="btn-criar" type="submit" ><Router-link class="link" to="/FormsJobs">Criar nova vaga</Router-link></button>
+                </form>
+                
+                <div class="dropdown" @mouseenter="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
+                    <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
+                    <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
+                        <li><Router-link class="dropdown-item" :to="`/profile/${getUserId || ''}`">Meu Perfil</Router-link></li>
+                        <li><button class="dropdown-item" @click="logout">Sair</button></li>
+                    </ul>
                 </div>
-            </nav>
-        </div>
-        <div class="container d-flex justify-content-center align-items-start min-vh-100">
-            <div class="row w-100">
-                <div class="col-md-4 mx-auto mb-4">
-                    <div class="card text-center position-relative">
-                        <div class="card-body">
-                            <label for="profile-picture" class="d-block position-relative">
-                                <img
-                                    :src="profilePicture"
-                                    alt="Foto do Usuário"
-                                    class="img-fluid rounded-circle mb-3"
-                                    style="max-width: 150px; cursor: pointer;"
-                                    @click="triggerFileInput"
-                                />
-                                <i
-                                    class="bi bi-camera position-absolute"
-                                    style="top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; color: #fff; background-color: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"
-                                ></i>
-                            </label>
-                            <input
-                                id="profile-picture"
-                                type="file"
-                                accept="image/*"
-                                class="d-none"
-                                @change="handleFileChange"
-                            />
-                            <h5 class="card-title">{{ profileData.user?.name }}</h5>
-                            <p class="card-text">
-                                <strong>{{ profileData.recruiter?.company?.name }}</strong><br />
-                                Localização: {{ profileData.recruiter?.company?.localization }}
-                            </p>
-                        </div>
+            </div>
+        </nav>
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="col-md-8 mx-auto">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="position-relative">
-                                <h5 class="card-title">Sobre</h5>
-                                <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                            </div>
-                            <p>Email: {{ profileData.user?.email }}</p>
-                            <hr />
-
-                            <!-- Seção para Recrutadores -->
-                            <div v-if="profileData.user?.type === 'recruiter'">
-                                <div class="position-relative">
-                                    <h5 class="card-title">Empresa</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                </div>
-                                <p>Nome: {{ profileData.recruiter?.company?.name }}</p>
-                                <p>CNPJ: {{ profileData.recruiter?.company?.CNPJ }}</p>
-                                <p>Localização: {{ profileData.recruiter?.company?.localization }}</p>
-                            </div>
-
-                            <!-- Seção para Candidatos -->
-                            <div v-if="profileData.user?.type === 'candidate'">
-                                <div class="position-relative">
-                                    <h5 class="card-title">Experiência</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                </div>
-                                <p>Experiência: {{ profileData.candidate?.experience }}</p>
-                                <hr />
-                                <div class="position-relative">
-                                    <h5 class="card-title">Educação</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                </div>
-                                <p>Educação: {{ profileData.candidate?.education }}</p>
-                            </div>
-
-                            <hr />
-                            <div class="position-relative">
-                                <h5 class="card-title">Informações de Contato</h5>
-                                <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                            </div>
-                            <p><strong>Email:</strong> {{ profileData.user?.email }}</p>
-                        </div>
+                    <div class="modal-body">
+                        Tem certeza de que deseja excluir esta vaga?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="ConfirmDeleteVaga">Excluir</button>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <div class="content">
+
+            <div class="filters">
+                <h3>Filtros</h3>
+                <div class="filter-group">
+                    <label for="location">Localização</label>
+                    <select v-model="selectedLocation" id="location">
+                        <option value="">Todos</option>
+                        <option value="São Paulo">São Paulo</option>
+                        <option value="Rio de Janeiro">Rio de Janeiro</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="type">Tipo de Vaga</label>
+                    <select v-model="selectedType" id="type">
+                        <option value="">Todos</option>
+                        <option value="Tempo Integral">Tempo Integral</option>
+                        <option value="Freelance">Freelance</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="job-list">
+                <h3>Vagas de Emprego</h3>
+                <div v-for="job in paginatedJobs" :key="job.id" class="job-card">
+                    <h4>{{ job.title }}</h4>
+                    <p>{{ job.salaries }} - {{ job.type }}</p>
+                    <p>{{ job.description }}</p>
+                    <button @click="viewJobDetails(job)">Vizualizar</button>
+                </div>
+            </div>
+
+            <div class="details-section" v-if="selectedJob">
+                <h3>
+                    Detalhes da Vaga
+                    <span class="fa-solid fa-xmark" @click="selectedJob = null"></span>
+                </h3>
+                <p><strong>Título:</strong> {{ selectedJob.title }}</p>
+                <p><strong>Localização:</strong> {{ selectedJob.location }}</p>
+                <p><strong>Salário:</strong> {{ selectedJob.salaries }}</p>
+                <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
+
+                <div class="buttons">
+                    <button class="btn-editar"><Router-link class="link" :to="{ name: 'EditForms', params: { id: selectedJob.id } }" ><i class="fas fa-edit"></i></Router-link></button>
+                    <button class="btn-editar" id ="button-delet" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                        <i class="fas fa-trash-alt"></i>
+                </button>
+                    <button @click="viewCandidatesJob" class="info-candidate">candidatos</button>
+                </div>
+            </div>
+        </div>
+
+            <div class="pagination">
+                <button @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+                <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage" :disabled="currentPage === totalPages">Próxima</button>
+            </div>
     </div>
+
 </template>
+
 <script>
     import { ShowRecrutadorVagas } from '@/services/JobServices';
     import { mapActions, mapGetters } from 'vuex';
