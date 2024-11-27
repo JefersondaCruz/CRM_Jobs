@@ -1,17 +1,25 @@
 <template>
     <div>
-        <Profile />
+        <Profile v-if="userType === 'Candidate'" />
+        <ProfileRecruiter v-else-if="userType === 'Recruiter'" />
     </div>
 </template>
-    <script>
-    import Profile from '../components/Profile.vue'
-        export default {
-            components: {
-                Profile
-            }
-        }
-    </script>
 
-<style>
+<script>
+import ProfileRecruiter from '@/components/ProfileRecruiter.vue';
+import Profile from '../components/Profile.vue';
+import { mapGetters } from 'vuex';
 
-</style>
+export default {
+    components: {
+        Profile,
+        ProfileRecruiter,
+    },
+    computed: {
+        ...mapGetters(["getUser"]),
+        userType() {
+            return this.getUser?.type === "recruiter" ? "Recruiter" : "Candidate";
+        },
+    },
+};
+</script>

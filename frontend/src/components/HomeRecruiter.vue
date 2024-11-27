@@ -2,22 +2,25 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-            
+
                 <form class="d-flex">
                     <h2> Central de vagas</h2>
-                <button class="btn-criar" type="submit" ><Router-link class="link" to="/FormsJobs">Criar nova vaga</Router-link></button>
+                    <button class="btn-criar" type="submit"><Router-link class="link" to="/FormsJobs">Criar nova
+                            vaga</Router-link></button>
                 </form>
-                
+
                 <div class="dropdown" @mouseenter="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                     <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
                     <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
-                        <li><Router-link class="dropdown-item" :to="`/profile/${getUserId || ''}`">Meu Perfil</Router-link></li>
+                        <li><Router-link class="dropdown-item" :to="`/profile/${getUserId || ''}`">Meu
+                                Perfil</Router-link></li>
                         <li><button class="dropdown-item" @click="logout">Sair</button></li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -29,12 +32,13 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="ConfirmDeleteVaga">Excluir</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                            @click="ConfirmDeleteVaga">Excluir</button>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="content">
 
             <div class="filters">
@@ -79,380 +83,526 @@
                 <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
 
                 <div class="buttons">
-                    <button class="btn-editar"><Router-link class="link" :to="{ name: 'EditForms', params: { id: selectedJob.id } }" ><i class="fas fa-edit"></i></Router-link></button>
-                    <button class="btn-editar" id ="button-delet" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                    <button class="btn-editar"><Router-link class="link"
+                            :to="{ name: 'EditForms', params: { id: selectedJob.id } }"><i
+                                class="fas fa-edit"></i></Router-link></button>
+                    <button class="btn-editar" id="button-delet" data-bs-toggle="modal"
+                        data-bs-target="#confirmDeleteModal">
                         <i class="fas fa-trash-alt"></i>
-                </button>
-                    <button @click="viewCandidatesJob" class="info-candidate">candidatos</button>
+                    </button>
+                    <button @click="loadCandidates" class="info-candidate" data-bs-toggle="modal"
+                        data-bs-target="#candidateModal">candidatos</button>
                 </div>
             </div>
         </div>
 
-            <div class="pagination">
-                <button @click="previousPage" :disabled="currentPage === 1">Anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage" :disabled="currentPage === totalPages">Próxima</button>
+        <div class="pagination">
+            <button @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+            <span>Página {{ currentPage }} de {{ totalPages }}</span>
+            <button @click="nextPage" :disabled="currentPage === totalPages">Próxima</button>
+        </div>
+
+        <div class="modal fade" id="candidateModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h1 class="modal-title fs-5" id="candidateModal">Candidatos</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div v-for="user in paginatedJobs" :key="user.id" class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img :src="user.profilePicture" class="img-fluid rounded-start"
+                                        alt="Foto de perfil">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ user.name }}</h5>
+                                        <p class="card-text"><strong>Sobre:</strong> {{ user.about }}</p>
+                                        <p class="card-text"><strong>Experiência:</strong> {{ user.experience }}</p>
+                                        <p class="card-text"><strong>Habilidades:</strong> {{ user.skills }}</p>
+                                        <p class="card-text"><strong>Telefone:</strong> {{ user.phone }}</p>
+                                        <p class="card-text"><strong>Social Media:</strong> <a :href="user.socialMedia"
+                                                target="_blank">{{ user.socialMedia }}</a></p>
+                                        <p class="card-text"><strong>Endereço:</strong> CEP {{ user.cep }}, Nº {{
+                                            user.houseNumber }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pagination d-flex justify-content-center align-items-center w-100">
+                            <button @click="previousPageCandidate" :disabled="currentPageCandidate === 1" class="btn btn-primary mx-2">
+                                Anterior
+                            </button>
+                            <span>Página {{ currentPageCandidate }} de {{ totalCandidatesPages }}</span>
+                            <button @click="nextPageCandidate" :disabled="currentPageCandidate === totalCandidatesPages"
+                                class="btn btn-primary mx-2">
+                                Próxima
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+
     </div>
 
 </template>
 
 <script>
-    import { ShowRecrutadorVagas } from '@/services/JobServices';
-    import { mapActions, mapGetters } from 'vuex';
-    import { DeleteVagas } from '@/services/JobServices';
-    import Toastify from "toastify-js";
-    import "toastify-js/src/toastify.css";
-    
-    export default {
-        data() {
-            return {
-                searchQuery: '',
-                selectedLocation: '',
-                selectedType: '',
-                selectedJob: null,
-                selectedCandidate: null,
-                jobs: [],
-                currentPage: 1,
-                jobsPerPage: 4,
-                isDropdownOpen: false, 
-                
-            };
+import { ShowRecrutadorVagas } from '@/services/JobServices';
+import { mapActions, mapGetters } from 'vuex';
+import { DeleteVagas } from '@/services/JobServices';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+
+export default {
+    data() {
+        return {
+            searchQuery: '',
+            selectedLocation: '',
+            selectedType: '',
+            selectedJob: null,
+            selectedCandidate: null,
+            jobs: [],
+            candidates: [],
+            currentPage: 1,
+            jobsPerPage: 4,
+            isDropdownOpen: false,
+            currentPageCandidate: 1,
+            candidatesPerPage: 1,
+            
+            users: [
+                {
+                    id: 1,
+                    name: 'João Silva',
+                    experience: '3 anos como desenvolvedor frontend.',
+                    skills: 'JavaScript, Vue.js, HTML, CSS',
+                    phone: '(11) 98765-4321',
+                    socialMedia: 'https://linkedin.com/in/joaosilva',
+                    cep: '12345-678',
+                    houseNumber: 101,
+                    profilePicture: 'https://via.placeholder.com/150',
+                    about: 'Apaixonado por tecnologia e soluções inovadoras.',
+                },
+                {
+                    id: 2,
+                    name: 'Maria Oliveira',
+                    experience: '5 anos como analista de sistemas.',
+                    skills: 'Python, Django, SQL, Machine Learning',
+                    phone: '(21) 99876-5432',
+                    socialMedia: 'https://linkedin.com/in/mariaoliveira',
+                    cep: '23456-789',
+                    houseNumber: 202,
+                    profilePicture: 'https://via.placeholder.com/150',
+                    about: 'Especialista em análise de dados e sistemas robustos.',
+                },
+                {
+                    id: 3,
+                    name: 'Carlos Almeida',
+                    experience: '2 anos como desenvolvedor mobile.',
+                    skills: 'Flutter, Dart, Kotlin',
+                    phone: '(31) 98712-4567',
+                    socialMedia: 'https://github.com/carlosalmeida',
+                    cep: '34567-890',
+                    houseNumber: 303,
+                    profilePicture: 'https://via.placeholder.com/150',
+                    about: 'Focado em criar experiências móveis incríveis.',
+                },
+            ],
+
+        };
+    },
+
+    computed: {
+        totalPages() {
+            return Math.ceil(this.jobs.length / this.jobsPerPage);
+        },
+        totalCandidatesPages() {
+            return Math.ceil();
+        },
+        paginatedJobs() {
+            const start = (this.currentPage - 1) * this.jobsPerPage;
+            const end = start + this.jobsPerPage;
+            return this.jobs.slice(start, end);
+        },
+        paginatedCandidate() {
+            const start = (this.currentPageCandidate - 1) * this.CandidatesPerPage;
+            const end = start + this.CandidatessPerPage;
+            return this.candidates.slice(start, end);
         },
 
-        computed: {
-            totalPages() {
-                return Math.ceil(this.jobs.length / this.jobsPerPage);
-            },
-            paginatedJobs() {
-                const start = (this.currentPage - 1) * this.jobsPerPage;
-                const end = start + this.jobsPerPage;
-                return this.jobs.slice(start, end);
-            },
 
-            ...mapGetters (['getUserId']),
+        ...mapGetters(['getUserId']),
+    },
+    methods: {
+
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: type === "success" ? "green" : "red",
+                close: true
+            }).showToast();
         },
-        methods: {
 
-            showToast(message, type = "success") {
-                Toastify({
-                    text: message,
-                    duration: 5000,
-                    gravity: "top",
-                    position: "center",
-                    backgroundColor: type === "success" ? "green" : "red",
-                    close: true
-                }).showToast();
-            },
-            
-            async GetJob() {
-                const response = await ShowRecrutadorVagas();
-                console.log('response', response);
-                this.jobs = response.data.vaga;  
-                
-            },
+        async GetJob() {
+            const response = await ShowRecrutadorVagas();
+            console.log('response', response);
+            this.jobs = response.data.vaga;
 
-            nextPage() {
-                if (this.currentPage < this.totalPages) {
-                    this.currentPage++;
-                    this.GetJob();
-                }
-            },
+        },
 
-            previousPage() {
-                if (this.currentPage > 1) {
-                    this.currentPage--;
-                    this.GetJob();
-                }
-            },
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+                this.GetJob();
+            }
+        },
+        nextPageCandidate() {
+            if (this.currentPage < this.totalCandidatesPages) {
+                this.currentPage++;
+            }
+        },
 
-            viewJobDetails(jobs) {
-                this.selectedJob = jobs; 
-            },
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.GetJob();
+            }
+        },
+        previousPageCandidate() {
+            if (this.currentPageCandidate > 1) {
+                this.currentPageCandidate--;
+                this.GetJob();
+            }
+        },
 
-            
-            closeJobDetails() {
+        viewJobDetails(jobs) {
+            this.selectedJob = jobs;
+        },
+
+
+        closeJobDetails() {
             this.selectedJob = null;
-            },
-
-            toggleDropdown(status) {
-                this.isDropdownOpen = status;
-                
-            },
-            
-            logout() {
-                this.userlogout();
-                this.showToast("Você saiu da conta!", "error");
-                this.$router.push('/SignIn');
-            },
-
-            removeJob(jobId) {
-                this.jobs = this.jobs.filter(job => job.id != jobId)
-            },
-
-            async ConfirmDeleteVaga() {
-                try {
-                    const response = await DeleteVagas(this.selectedJob.id);
-                    this.removeJob(this.selectedJob.id)
-                    this.showToast("Vaga Deletada Com sucesso!", "error");
-                    this.closeJobDetails();
-                    console.log('response', response);
-                } catch (error) {
-                    console.error("Erro ao deletar vaga:", error);
-                    this.showToast ("Erro ao Deletar vaga!", "error" )
-                }
-                
-            },
-
-            ...mapActions(['userlogout'])
         },
 
-        created() {
-            this.GetJob();
-        } 
-    };
+        toggleDropdown(status) {
+            this.isDropdownOpen = status;
+
+        },
+
+        logout() {
+            this.userlogout();
+            this.showToast("Você saiu da conta!", "error");
+            this.$router.push('/SignIn');
+        },
+
+        removeJob(jobId) {
+            this.jobs = this.jobs.filter(job => job.id != jobId)
+        },
+
+        async ConfirmDeleteVaga() {
+            try {
+                const response = await DeleteVagas(this.selectedJob.id);
+                this.removeJob(this.selectedJob.id)
+                this.showToast("Vaga Deletada Com sucesso!", "error");
+                this.closeJobDetails();
+                console.log('response', response);
+            } catch (error) {
+                console.error("Erro ao deletar vaga:", error);
+                this.showToast("Erro ao Deletar vaga!", "error")
+            }
+
+        },
+
+        loadCandidates() {
+            this.candidates = []
+        },
+        ...mapActions(['userlogout'])
+    },
+
+    
+    created() {
+        this.GetJob();
+    }
+};
 </script>
 
 <style scoped>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #F5F7FA;
-    }
-    .container {
-        max-width: 1500px;
-        margin: auto;
-        padding: 20px;
-    }
-    .title {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F7FA;
+}
 
-    .content {
-        display: flex;
-        
-    }
-    .filters {
-        width: 200px;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin-right: 20px;
-    }
-    .job-list {
-        flex: 1;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        padding-top: 20px;
-    }
-    .job-list h3 {
-        margin: 0 0 15px;
-    }
-    .job-card {
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        transition: background-color 0.3s;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        white-space: normal;
-        max-height: max-content;
-        max-width: 900px;
-        
-    }
+.container {
+    max-width: 1500px;
+    margin: auto;
+    padding: 20px;
+}
 
-    .job-card:hover {
-        background-color: #F0F0F0;
-    }
-    .job-card h4 {
-        margin: 0;
-    }
-    .job-card button {
-        padding: 10px;
-        background-color: #136ecf;
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .job-card button:hover {
-        background-color:#0056B3;
-        
-    }
-    .details-section {
-        width: 300px;
-        margin-left: 20px;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        position: relative;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        white-space: normal;
-        max-height: max-content;
-        max-width: 900px;
-        margin-top: 50px;
-    }
-    .details-section h3 {
-        margin: 0 0 10px;
-        margin: 0;
-        padding-right: 30px;
-    }
-    .details-section .fa-xmark {
-        font-size: 24px;
-        color:#df0d0d;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-        transition: color 0.3s;
-    }
-    .btn-criar {
-        background-color: #0e8cc7;
-        border: 1px solid #0e8cc7;
-        border-radius: 0.25rem;
-        display: inline-block;
-        margin-left: 780px;
-        font-size: 1rem;
-        font-weight: 400;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .btn-criar:hover{
-        background-color: #0e8cc7;
-    
-    }
-    .link{
-        text-decoration: none;
-        color: #fff;
-    }
+.content {
+    display: flex;
+
+}
+
+.filters {
+    width: 200px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.job-list {
+    flex: 1;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding-top: 20px;
+}
+
+.job-list h3 {
+    margin: 0 0 15px;
+}
+
+.job-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-height: max-content;
+    max-width: 900px;
+
+}
+
+.job-card:hover {
+    background-color: #F0F0F0;
+}
+
+.job-card h4 {
+    margin: 0;
+}
+
+.job-card button {
+    padding: 10px;
+    background-color: #136ecf;
+
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.job-card button:hover {
+    background-color: #0056B3;
+
+}
+
+.details-section {
+    width: 300px;
+    margin-left: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-height: max-content;
+    max-width: 900px;
+    margin-top: 50px;
+}
+
+.details-section h3 {
+    margin: 0 0 10px;
+    margin: 0;
+    padding-right: 30px;
+}
+
+.details-section .fa-xmark {
+    font-size: 24px;
+    color: #df0d0d;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.btn-criar {
+    background-color: #0e8cc7;
+    border: 1px solid #0e8cc7;
+    border-radius: 0.25rem;
+    display: inline-block;
+    margin-left: 780px;
+    font-size: 1rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-criar:hover {
+    background-color: #0e8cc7;
+
+}
+
+.link {
+    text-decoration: none;
+    color: #fff;
+}
 
 
-    .btn-editar{
-        background-color: #e97a12;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-    .btn-editar:hover{
-        background-color: #f18a29;
-        transform: scale(1.05);
-    }
-    #button-delet{
-        background-color: #df0d0d;
-    }
-    .buttons{
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 15px;
-    }
+.btn-editar {
+    background-color: #e97a12;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
 
-    .info-candidate {
-        background-color: #007bff;
-        color: white;
-        padding: 8px 11px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
+.btn-editar:hover {
+    background-color: #f18a29;
+    transform: scale(1.05);
+}
+
+#button-delet {
+    background-color: #df0d0d;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.info-candidate {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 11px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+}
 
 .info-candidate:hover {
-        background-color: #0056b3;
-        transform: scale(1.05);
-    }
-    .custom-navbar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.5rem 1rem;
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #e0e0e0;
-    }
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
 
-    .custom-navbar .container-fluid {
-        display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-    }
+.custom-navbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
 
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
-    }
+.custom-navbar .container-fluid {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
 
-    .pagination button {
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button {
     padding: 5px 10px;
-        margin: 0 5px;
-        border: none;
-        border-radius: 3px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
+    margin: 0 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
 
-    .pagination button:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
 
-    .pagination span {
-        margin: 0 10px;
-        font-weight: bold;
-    }
+.pagination span {
+    margin: 0 10px;
+    font-weight: bold;
+}
 
-    .dropdown {
+.dropdown {
     position: relative;
-    }
+}
 
-    .dropdown-menu {
-        position: absolute;
-        top: 42px;
-        right: 0;
-        display: none;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 10px 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        min-width: 150px;
-    }
+.dropdown-menu {
+    position: absolute;
+    top: 42px;
+    right: 0;
+    display: none;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px;
+}
 
-    .dropdown-menu.show {
-        display: block;
-    }
+.dropdown-menu.show {
+    display: block;
+}
 
-    .dropdown-menu .dropdown-item {
-        padding: 10px 20px;
-        color: #333;
-        text-decoration: none;
-        display: block;
-        transition: background-color 0.2s;
-        cursor: pointer;
-    }
+.dropdown-menu .dropdown-item {
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
 
-    .dropdown-menu .dropdown-item:hover {
-        background-color: #f0f0f0;
-    }
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+#candidateModal {
+    text-align: center;
+}
+
+#pageCandidate {
+    text-align: center;
+}
 </style>

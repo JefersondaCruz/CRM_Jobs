@@ -27,11 +27,11 @@
                     <option>Desenvolvedor Back-end</option>
                     <option>Desenvolvedor Front-end</option>
                     <option>Marketing</option>
-                    <option>Vendas</option>
+                    <option>Outros</option>
                 </select>
             </div>
             
-            <button type="submit" class="btn"><Router-link to="/home">Salvar</Router-link></button>
+            <button type="submit" class="btn">Salvar Alterações</button>
         </form>
     </div>
 </div>
@@ -155,4 +155,6 @@ export default {
         justify-content: center;
         margin-top: 10px;
     }
+
+    
 </style>
