@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleare('auth:sanctum')->get('/user/{id}', [UsersController::class, 'getUserData']);
+Route::middleware('auth:sanctum')->get('/user/{id}', [UsersController::class, 'getUserData']);
 
 Route::prefix('user')->group(function (){
     Route::post('/register', [UsersController::class, 'register']);
@@ -34,6 +34,7 @@ Route::prefix('Candidate')->middleware(['auth:sanctum', 'check.candidate'])->gro
     Route::post('/vagas/candidatar/{id}',[JobApplicationController::class, 'applyToJob']);
     Route::post('/details/candidate', [CandidateController::class, 'store']);
     Route::get('/applications', [CandidateController::class, 'index']);
+    Route::post('/profile/{userId}/update-picture', [CandidateController::class, 'updateProfilePicture']);
 });
 
 

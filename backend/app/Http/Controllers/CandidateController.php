@@ -7,11 +7,9 @@ use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class CandidateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         {
@@ -24,17 +22,6 @@ class CandidateController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         if (!$request->user()->tokenCan('Register-Candidate')){
@@ -50,9 +37,17 @@ class CandidateController extends Controller
         $data = $request->validate ([
                 'experiences' => 'required|string|max:255',
                 'skills' => 'required|string|max:255',
+                'phone' => 'required|string|max:255',
+                'social_media' => 'required|string|max:255',
                 'CEP' => 'required|string|max:255',
                 'house_number' => 'required|string|max:255',
+                'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
+
+        if ($request->hasFile('profile_picture')) {
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $data['profile_picture'] = $imagePath;
+        }
 
         $candidate = Candidates::where('user_id', Auth::id())->first();
 
@@ -69,35 +64,33 @@ class CandidateController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function updateProfilePicture(Request $request, $userId)
     {
+        $request->validate([
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
+        $candidate = Candidates::where('user_id', $userId)->first();
+
+        if (!$candidate) {
+            return response()->json(['error' => 'Candidato não encontrado'], 404);
+        }
+
+
+        if ($request->hasFile('profile_picture')) {
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+
+            $candidate->profile_picture = $imagePath;
+            $candidate->save();
+
+            $imagePath = asset('storage/' . $candidate->profile_picture);
+            return response()->json([
+                'message' => 'Foto de perfil do candidato atualizada com sucesso!',
+                'profile_picture' =>  $imagePath,
+            ]);
+        }
+
+        return response()->json(['error' => 'Nenhuma imagem foi enviada'], 400);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

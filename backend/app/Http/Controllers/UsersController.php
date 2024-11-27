@@ -96,7 +96,7 @@ public function getUserData(string $id)
 
 
     if ($user->type == User::TYPE_RECRUITER) {
-        $recruiterData = $user->recruiter;
+        $recruiterData = $user->recruiter()->with('company')->first();
         return response()->json([
             'user' => $user,
             'recruiter' => $recruiterData,
