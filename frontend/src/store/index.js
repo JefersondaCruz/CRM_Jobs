@@ -3,7 +3,7 @@ import LaravelApi from "../services/HttpService";
 
 export default createStore({
   state: {
-    acessToken :localStorage.getItem("token")|| null,
+    acessToken :localStorage.getItem('token')|| null,
     user: JSON.parse(localStorage.getItem('user')) || null,
     profilePicture: null,
   },  
@@ -71,6 +71,38 @@ export default createStore({
           throw error;
       }
   },
+
+  async UserRegister({commit}, {name, email, password, password_confirmation, type}) {
+      try {
+          const response = await LaravelApi.post("/user/register", {
+              name,
+              email,
+              password,
+              password_confirmation,
+              type,
+          });
+
+          console.log('registro da respostas:',response);
+          console.log('respostas do token', response.data.token);
+          
+          if (response.data.token) {
+              commit("setToken", response.data.token);
+              commit("setUser", response.data.user);
+
+              console.log('User depois do commit', this.state.user)
+              console.log("Cadastro bem-sucedido");
+
+              return response.data.user;
+          } else {
+              console.error("Token não encontrado na resposta.");
+              throw new Error("Token não encontrado.");
+          }
+        } catch (error) {
+          console.error("Erro ao cadastrar:", error.response);
+          throw error;
+        }
+  },
+
   userlogout({commit}) {
       commit("removeToken");
       console.log("Logout bem-sucedido");

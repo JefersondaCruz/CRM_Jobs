@@ -2,113 +2,113 @@
     <div>
         <div class="container">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <form class="d-flex">
-                    <h2> Meu Perfil </h2>
-                </form>
+                <div class="container-fluid">
+                    <form class="d-flex">
+                        <h2> Meu Perfil </h2>
+                    </form>
                     <a href="/" class="ms-3">
                         <i class="fa-solid fa-house" style="font-size: 35px;"></i>
                     </a>
                 </div>
             </nav>
         </div>
-            <div class="container d-flex justify-content-center align-items-start min-vh-100">
-                <div class="row w-100">
-                    <div class="col-md-4 mx-auto mb-4">
-                        <div class="card text-center position-relative">
-                            <div class="card-body">
-                                <label for="profile-picture" class="d-block position-relative">
-                                    <img
+        <div class="container d-flex justify-content-center align-items-start min-vh-100">
+            <div class="row w-100">
+                <div class="col-md-4 mx-auto mb-4">
+                    <div class="card text-center position-relative">
+                        <div class="card-body">
+                            <label for="profile-picture" class="d-block position-relative">
+                                <img
                                     :src="profilePicture || 'https://via.placeholder.com/150'"
                                     alt="Foto do Usuário"
                                     class="img-fluid rounded-circle mb-3"
                                     style="width: 200px; height: 200px; object-fit: cover; cursor: pointer;"
                                     @click="triggerFileInput"
-                                    />
-                                    <i
+                                />
+                                <i
                                     class="bi bi-camera position-absolute"
                                     style="top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; color: #fff; background-color: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"
-                                    ></i>
-                                </label>
-                                <input
-                                    id="profile-picture"
-                                    type="file"
-                                    accept="image/*"
-                                    class="d-none"
-                                    ref="fileInput"
-                                    @change="handleFileChange"
-                                />
-                                <h5 class="card-title">{{ profileData.user?.name }}</h5>
-                            </div>
+                                ></i>
+                            </label>
+                            <input
+                                id="profile-picture"
+                                type="file"
+                                accept="image/*"
+                                class="d-none"
+                                ref="fileInput"
+                                @change="handleFileChange"
+                            />
+                            <h5 class="card-title">{{ profileData.user?.name }}</h5>
+                            <p>
+                                <br /> {{ profileData.candidate?.about }}
+                            </p>
                         </div>
                     </div>
-                        <div class="col-md-8 mx-auto">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Sobre</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                        </div>
-                                        <p>Email: {{ profileData.user?.email }}</p>
-                                        <hr />
-                                    <div v-if="profileData.user?.type === 'recruiter'">
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Empresa</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
-                                        <p>Nome: {{ profileData.recruiter?.company?.name }}</p>
-                                        <p>CNPJ: {{ profileData.recruiter?.company?.CNPJ }}</p>
-                                        <p>Localização: {{ profileData.recruiter?.company?.localization }}</p>
-                                    </div>
-                                    <div v-if="profileData.user?.type === 'candidate'">
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Experiência</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
-                                        <p>Experiência: {{ profileData.candidate?.experiences }}</p>
-                                    <hr />
+                </div>
 
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Habilidades</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
-                                        <p>Habilidades: {{ profileData.candidate?.skills }}</p>
-                                    <hr />
-
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Telefone</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
-                                        <p>Telefone: {{ profileData.candidate?.phone }}</p>
-                                    <hr />
-
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Redes Sociais</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
-                                        <p>Redes Sociais: {{ profileData.candidate?.social_media }}</p>
-                                    <hr />
-
-                                    <div class="position-relative">
-                                        <h5 class="card-title">CEP</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
-                                        <p>CEP: {{ profileData.candidate?.CEP }}</p>
-                                    <hr />
-
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Número da Casa</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
-                                        <p>Número da Casa: {{ profileData.candidate?.house_number }}</p>
-                                    </div>
-
-                                    <hr />
-                                    <div class="position-relative">
-                                        <h5 class="card-title">Informações de Contato</h5>
-                                        <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                    </div>
+                <!-- Seção de Informações do Perfil abaixo da imagem -->
+                <div class="col-md-8 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="position-relative">
+                                <h5 class="card-title">Informações de Contato</h5>
+                                <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                            </div>
                             <p><strong>Email:</strong> {{ profileData.user?.email }}</p>
+                            <hr />
+
+                            <div v-if="profileData.user?.type === 'recruiter'">
+                                <div class="position-relative">
+                                    <h5 class="card-title">Empresa</h5>
+                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                </div>
+                                <p>Nome: {{ profileData.recruiter?.company?.name }}</p>
+                                <p>CNPJ: {{ profileData.recruiter?.company?.CNPJ }}</p>
+                                <p>Localização: {{ profileData.recruiter?.company?.localization }}</p>
+                            </div>
+
+                            <div v-if="profileData.user?.type === 'candidate'">
+                                <div class="position-relative">
+                                    <h5 class="card-title">Experiência</h5>
+                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                </div>
+                                <p>Experiência: {{ profileData.candidate?.experiences }}</p>
+                                <hr />
+
+                                <div class="position-relative">
+                                    <h5 class="card-title">Habilidades</h5>
+                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                </div>
+                                <p>Habilidades: {{ profileData.candidate?.skills }}</p>
+                                <hr />
+
+                                <div class="position-relative">
+                                    <h5 class="card-title">Telefone</h5>
+                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                </div>
+                                <p>Telefone: {{ profileData.candidate?.phone }}</p>
+                                <hr />
+
+                                <div class="position-relative">
+                                    <h5 class="card-title">Redes Sociais</h5>
+                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                </div>
+                                <p>Redes Sociais: {{ profileData.candidate?.social_media }}</p>
+                                <hr />
+
+                                <div class="position-relative">
+                                    <h5 class="card-title">CEP</h5>
+                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                </div>
+                                <p>CEP: {{ profileData.candidate?.CEP }}</p>
+                                <hr />
+
+                                <div class="position-relative">
+                                    <h5 class="card-title">Número da Casa</h5>
+                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                </div>
+                                <p>Número da Casa: {{ profileData.candidate?.house_number }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

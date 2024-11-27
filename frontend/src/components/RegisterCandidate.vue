@@ -24,6 +24,12 @@
 
                 <div>
                 <textarea
+                    placeholder="Diga um pouco sobre você"
+                    v-model="about"
+                    class="form-control mb-3"
+                    rows="4"
+                ></textarea>
+                <textarea
                     placeholder="Experiência"
                     v-model="experiences"
                     class="form-control mb-3"
@@ -91,12 +97,13 @@ export default {
         social_media: '',
         cep: '',
         house_number: '',
+        about: '',
         };
     },
     methods: {
         async handleRegistrationSubmit() {
         try {
-            const response = await MakeCandidate(this.experiences, this.skills, this.phone, this.social_media, this.cep, this.house_number);
+            const response = await MakeCandidate(this.experiences, this.skills, this.phone, this.social_media, this.cep, this.house_number, this.about);
             console.log("Cadastro realizado:", response);
             this.$router.push("/");
         } catch (error) {

@@ -47,7 +47,7 @@ class UsersController extends Controller
 
         return response()->json([
             'message' => 'usuario registrado com sucessoo!',
-            'usuario' => $user,
+            'user' => $user,
             'token' => $token
         ]);
 

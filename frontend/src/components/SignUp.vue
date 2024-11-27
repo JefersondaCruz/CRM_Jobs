@@ -39,13 +39,14 @@
         </div>
             <div class="overlay">
             </div>
-        
     </div>
 </template>
 
 <script>
 
-import { register } from "../services/AuthServices";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import { mapGetters } from "vuex";
 export default {
     name: 'SignUpForm',
     props: ["logo","alt"],
@@ -59,25 +60,42 @@ export default {
         };
     },
     methods: {
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: type === "success" ? "green" : "red",
+                close: true
+            }).showToast();
+        },
 
         async handleSubmit() {
-        try {
-            const response = await register( this.name, this.email, this.password, this.password_confirmation, this.type);
-            if(response.usuario.type === "recruiter") {
-                this.$router.push("/RegisterRecruiter");
-            }  
-            else if(response.usuario.type === "candidate") {
-                this.$router.push("/RegisterCandidate");
+            try {
+                await this.$store.dispatch("UserRegister", {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation: this.password_confirmation,
+                    type: this.type
+                });
+                console.log('usuario logado',this.getUser)
+                this.showToast("Bem vindo!");
+                if (this.getUser?.type === "recruiter") {
+                    this.$router.push("/RegisterRecruiter");
+                } else{
+                    this.$router.push("/RegisterCandidate");
+                }
+            } catch (error) {
+                this.showToast("Erro ao fazer login. Senha ou email incorreto.", "error");
             }
-            else
-                this.$router.push("/");
-        } catch (error) {
-            console.error("Erro ao cadastrar:", error);
-            throw error;
-        }
-
         },
     },
+    computed: {
+        ...mapGetters(['getUser']),
+    },
+    
 };
 </script>
 

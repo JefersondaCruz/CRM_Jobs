@@ -20,7 +20,8 @@ return new class extends Migration
             $table->text('social_media')->nullable();
             $table->string('CEP')->nullable();
             $table->integer('house_number')->nullable();
-            $table->string('profile_picture')->nullable(); 
+            $table->string('profile_picture')->nullable();
+            $table->text('about')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
