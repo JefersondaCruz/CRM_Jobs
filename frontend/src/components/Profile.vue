@@ -4,7 +4,7 @@
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
                     <form class="d-flex">
-                        <h2> Meu Perfil </h2>
+                        <h2>Meu Perfil</h2>
                     </form>
                     <a href="/" class="ms-3">
                         <i class="fa-solid fa-house" style="font-size: 35px;"></i>
@@ -12,6 +12,7 @@
                 </div>
             </nav>
         </div>
+
         <div class="container d-flex justify-content-center align-items-start min-vh-100">
             <div class="row w-100">
                 <div class="col-md-4 mx-auto mb-4">
@@ -39,9 +40,7 @@
                                 @change="handleFileChange"
                             />
                             <h5 class="card-title">{{ profileData.user?.name }}</h5>
-                            <p>
-                                <br /> {{ profileData.candidate?.about }}
-                            </p>
+                            <p><br /> {{ profileData.candidate?.about }}</p>
                         </div>
                     </div>
                 </div>
@@ -84,15 +83,6 @@
                                     placeholder="Digite sua experiência" 
                                 />
                                 <hr />
-                                <div class="d-flex justify-content-end mt-3">
-                                <button 
-                                    v-if="editExperience" 
-                                    @click="updateCandidateProfile" 
-                                    class="btn btn-primary"
-                                >
-                                    Atualizar Experiência
-                                </button>
-                            </div>
 
                                 <div class="position-relative">
                                     <h5 class="card-title">Habilidades</h5>
@@ -111,7 +101,7 @@
                                 <div class="position-relative">
                                     <h5 class="card-title">Redes Sociais</h5>
                                     <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                </div>
+                                </div>  
                                 <p>Redes Sociais: {{ profileData.candidate?.social_media }}</p>
                                 <hr />
 
@@ -129,12 +119,101 @@
                                 <p>Número da Casa: {{ profileData.candidate?.house_number }}</p>
                             </div>
                         </div>
+                        
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                    <button 
+                        data-bs-toggle="modal"
+                        class="btn btn-primary"
+                        data-bs-target="#candidateModal"
+                    >
+                        Atualizar Perfil
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="candidateModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateModalLabel">Atualizar Perfil</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="updateCandidateProfile">
+                            <div class="mb-3">
+                                <label for="experiences" class="form-label">Experiência</label>
+                                <input 
+                                    v-model="newExperiences" 
+                                    type="text" 
+                                    id="experiences" 
+                                    class="form-control"
+                                    :placeholder="profileData.candidate?.experiences"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="skills" class="form-label">Habilidades</label>
+                                <input 
+                                    v-model="newSkills" 
+                                    type="text" 
+                                    id="skills" 
+                                    class="form-control"
+                                    :placeholder=" profileData.candidate?.skills "
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Telefone</label>
+                                <input 
+                                    v-model="newPhone" 
+                                    type="text" 
+                                    id="phone" 
+                                    class="form-control"
+                                    :placeholder=" profileData.candidate?.phone"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="social-media" class="form-label">Redes Sociais</label>
+                                <input 
+                                    v-model="newSocialMedia" 
+                                    type="text" 
+                                    id="social-media" 
+                                    class="form-control"
+                                    :placeholder="profileData.candidate?.social_media"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="cep" class="form-label">CEP</label>
+                                <input 
+                                    v-model="newCEP" 
+                                    type="text" 
+                                    id="cep" 
+                                    class="form-control"
+                                    :placeholder="profileData.candidate?.CEP"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="house-number" class="form-label">Número da Casa</label>
+                                <input 
+                                    v-model="newHouseNumber" 
+                                    type="text" 
+                                    id="house-number" 
+                                    class="form-control"
+                                    :placeholder="profileData.candidate?.house_number"
+                                />
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" @click="closeModal" class="btn btn-primary">Salvar Alterações</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 <script>
 import { UpdateProfilePicture, GetProfile, updateProfileData } from "../services/ProfileServices";
@@ -143,15 +222,33 @@ import { mapGetters, mapState, mapMutations } from "vuex";
 export default {
     data() {
         return {
-            profileData: {},
-            editExperience: false,
-        };
-    },
+            profileData: {
+            user: {},
+            candidate: {
+                experiences: '',
+                skills: '',
+                phone: '',
+                social_media: '',
+                CEP: '',
+                house_number: '',
+            }
+        },
+        newExperiences: '',
+        newSkills: '',
+        newPhone: '',
+        newSocialMedia: '',
+        newCEP: '',
+        newHouseNumber: '',
+    };
+},
     computed: {
         ...mapState(["profilePicture", "user"]),
         ...mapGetters(["getUserId"]),
     },
     methods: {
+
+        
+
         ...mapMutations(["setProfilePicture"]),
         triggerFileInput() {
             this.$refs.fileInput.click();
@@ -159,17 +256,20 @@ export default {
         async updateCandidateProfile() {
             const updateData   = {
                 experiences: this.newExperiences || this.profileData.candidate?.experiences,
+                skills: this.newSkills || this.profileData.candidate?.skills,
+                phone: this.newPhone || this.profileData.candidate?.phone,
+                social_media: this.newSocialMedia || this.profileData.candidate?.social_media,
+                CEP: this.newCEP || this.profileData.candidate?.CEP,
+                house_number: this.newHouseNumber || this.profileData.candidate?.house_number,
             };
+
+            console.log('atualizando com os dados:', updateData)
                 try {
                 const response = await updateProfileData(updateData);
                 console.log("Resposta da API ao atualizar o perfil:", response);
-
                 
-                this.profileData.candidate.experiences = this.newExperiences || this.profileData.candidate?.experiences;
-                this.profileData.candidate.skills = this.newSkills || this.profileData.candidate?.skills;
 
-                this.editExperience = false;
-                this.editSkills = false;
+                this.closeModal();
             
 
             } catch (error) {
