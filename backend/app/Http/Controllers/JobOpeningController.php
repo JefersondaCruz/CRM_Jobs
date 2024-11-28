@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\JobApplication;
 use App\Models\JobOpening;
+use App\Models\Recruiter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -155,6 +157,39 @@ class JobOpeningController extends Controller
 
         return response()->json([
             'message' => 'Vaga excluída com sucesso!',
+        ], 200);
+    }
+
+    public function UpdateStatus(Request $request, string $jobApplicationId )
+    {
+        $data = $request->validate([
+            'status' => 'required|in:' . JobApplication::STATUS_PENDING . ',' . JobApplication::STATUS_APPROVED . ',' . JobApplication::STATUS_REJECTED,
+        ]);
+
+        $jobApplication = JobApplication::find($jobApplicationId);
+
+        if (!$jobApplication) {
+            return response()->json(['error' => 'Vaga aplicada não encontrada'], 404);
+        }
+
+        $jobOpening = JobOpening::find($jobApplication->job_opening_id);
+
+        if (!$jobOpening) {
+            return response()->json(['error' => 'Vaga não encontrada'], 404);
+        }
+
+        $recruiter = Recruiter::where('user_id', auth()->id())->first();
+
+        if (!$recruiter || $recruiter->id !== $jobOpening->recruiter_id) {
+            return response()->json(['error' => 'Permissão negada'], 403);
+        }
+
+        $jobApplication->status = $data['status'];
+        $jobApplication->save();
+
+        return response()->json([
+            'message' => 'Status da vaga  atualizado com sucesso!',
+            'jobApplication' => $jobApplication,
         ], 200);
     }
 }

@@ -12,16 +12,22 @@ class CandidateController extends Controller
 {
     public function index()
     {
-        {
-            $candidaturas = JobApplication::where('candidate_id', auth()->id())
+        $user = auth()->user();
+
+        $candidate = $user->candidate;
+
+        if (!$candidate) {
+            return response()->json(['message' => 'Você não tem um cadastro de candidato associado.'], 400);
+        }
+
+            $candidaturas = JobApplication::where('candidate_id',  $candidate->id)
             ->with('jobOpening')
             ->get();
+
             return response()->json([
                 'candidaturas' => $candidaturas
             ]);
-        }
     }
-
     public function store(Request $request)
     {
         if (!$request->user()->tokenCan('Register-Candidate')){
@@ -93,5 +99,30 @@ class CandidateController extends Controller
 
         return response()->json(['error' => 'Nenhuma imagem foi enviada'], 400);
     }
+    public function updateProfile(Request $request)
+    {
+        $data = $request->validate([
+            'experiences' => 'nullable|string|max:255',
+            'skills' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'social_media' => 'nullable|string|max:255',
+            'CEP' => 'nullable|string|max:255',
+            'house_number' => 'nullable|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'about' => 'nullable|string|max:255',
+        ]);
 
+        $candidate = Candidates::where('user_id', Auth::id())->first();
+
+        if (!$candidate) {
+            return response()->json(['message' => 'Candidato não encontrado'], 404);
+        }
+
+        $candidate->update($data);
+
+        return response()->json([
+            'message' => 'Perfil atualizado com sucesso!',
+            'candidate' => $candidate,
+        ]);
+    }
 }

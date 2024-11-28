@@ -1,14 +1,14 @@
 import LaravelApi from "./HttpService";
 
-export const MakeCandidate = async (experiences, skills, CEP, house_number, phone, social_media, about) => {
+export const MakeCandidate = async (experiences, skills, phone, social_media, CEP, house_number, about) => {
     try {
         const response = await LaravelApi.post("/Candidate/details/candidate", {
         experiences,
         skills,
-        CEP,
-        house_number,
         phone,
         social_media,
+        CEP,
+        house_number,
         about,
     },{
         headers: {
@@ -49,4 +49,26 @@ export const getApplications = async () => {
         console.error("Erro ao buscar candidaturas:", error);
         throw error;
     }
+}
+
+export const updateProfile = async (experiences, skills, phone, social_media, CEP, house_number, about) => {
+    try {
+        const response = await LaravelApi.put(`/Candidate/profile/${userId}/update-profile`, {
+        experiences,
+        skills,
+        phone,
+        social_media,
+        CEP,
+        house_number,
+        about,
+    },{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+    return response.data;
+} catch (error) {
+        console.error("Erro ao atualizar perfil:", error);
+        throw error;
+    }   
 }

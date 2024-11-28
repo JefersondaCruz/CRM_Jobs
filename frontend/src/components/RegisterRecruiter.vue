@@ -4,7 +4,7 @@
             
             <form @submit.prevent="handlePersonalInfoSubmit">
                 <h1>Informações</h1>
-                <span>digite suas Informações pessoais </span>
+                <span>Forneça as informações corporativas </span>
                 <img src="../../public/img/jb.png">
                 <div v-if="currentStep === 1">
                     <input type="text" placeholder="Nome Fantasia" v-model="name">

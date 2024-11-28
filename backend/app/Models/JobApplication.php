@@ -33,7 +33,7 @@ class JobApplication extends Model
 
     public function candidate()
     {
-        return $this->belongsTo(Candidates::class, 'candidate_id');
+        return $this->belongsTo(Candidates::class, 'candidate_id', 'id');
     }
 }
 

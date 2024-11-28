@@ -32,3 +32,18 @@ export const UpdateProfilePicture = async (userId, formData) => {
         throw error;
     }
 };
+
+export const updateProfileData = async (data) => {
+    try {
+        const response = await LaravelApi.put(`/Candidate/profile/update-profile`, data, {    
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        console.log("respostas do update perfil:", response);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao atualizar dados de perfil:", error);
+        throw error;
+    }
+}
