@@ -63,11 +63,11 @@
             </div>
 
             <div class="job-list">
-                <h3>Vagas de Emprego</h3>
-                <div v-for="job in paginatedJobs" :key="job.id" class="job-card">
-                    <h4>{{ job.title }}</h4>
-                    <p>{{ job.salaries }} - {{ job.type }}</p>
-                    <p>{{ job.description }}</p>
+                <h3>Vagas de Empregos</h3>
+                <div v-for="job in jobs" :key="job.id" class="job-card">
+                    <h4>titulo: {{ job.title }}</h4>
+                    <p>salario: {{ job.salaries }} - {{ job.type }}</p>
+                    <p>descrição {{ job.description }}</p>
                     <button @click="viewJobDetails(job)">Vizualizar</button>
                 </div>
             </div>
@@ -111,23 +111,34 @@
                     </div>
                     <div class="modal-body">
                         
-                        <div v-for="user in paginatedJobs" :key="user.id" class="card mb-3">
+                        <div v-for="application in applications" :key="application.id" class="card mb-3">
                             <div class="row g-0">
                                 <div class="col-md-4">
-                                    <img :src="user.profilePicture" class="img-fluid rounded-start"
+                                    <img :src="`http://127.0.0.1:8000/storage/${application.candidate.profile_picture}`" class="img-fluid profile-img"
                                         alt="Foto de perfil">
+                                        <h4>
+                                            nome do usuario
+                                        </h4>
+                                <div class="status-select">
+                                    <label for="status">Status:</label>
+                                    <select v-model="application.status" @change="updateStatus(application.id, application.status)">
+                                        <option value="Pendente">Pendente</option>
+                                        <option value="Aprovado">Aprovado</option>
+                                        <option value="Rejeitado">Rejeitado</option>
+                                    </select>
+                                </div>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ user.name }}</h5>
-                                        <p class="card-text"><strong>Sobre:</strong> {{ user.about }}</p>
-                                        <p class="card-text"><strong>Experiência:</strong> {{ user.experience }}</p>
-                                        <p class="card-text"><strong>Habilidades:</strong> {{ user.skills }}</p>
-                                        <p class="card-text"><strong>Telefone:</strong> {{ user.phone }}</p>
-                                        <p class="card-text"><strong>Social Media:</strong> <a :href="user.socialMedia"
-                                                target="_blank">{{ user.socialMedia }}</a></p>
-                                        <p class="card-text"><strong>Endereço:</strong> CEP {{ user.cep }}, Nº {{
-                                            user.houseNumber }}</p>
+                                        <h5 class="card-title">Informações do Candidato</h5>
+                                        <p class="card-text"><strong>Sobre:</strong> {{ application.candidate.about }}</p>
+                                        <p class="card-text"><strong>Experiência:</strong> {{ application.candidate.experiences }}</p>
+                                        <p class="card-text"><strong>Habilidades:</strong> {{ application.candidate.skills }}</p>
+                                        <p class="card-text"><strong>Telefone:</strong> {{ application.candidate.phone }}</p>
+                                        <p class="card-text"><strong>Redes Sociais:</strong> <a :href="application.candidate.social_media"
+                                                target="_blank">{{  application.candidate.social_media }}</a></p>
+                                        <p class="card-text"><strong>Endereço:</strong> CEP {{ application.candidate.CEP }}, Nº {{
+                                            application.candidate.house_number }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -148,18 +159,14 @@
                 </div>
             </div>
         </div>
-
-
     </div>
-
 </template>
-
 <script>
-import { ShowRecrutadorVagas } from '@/services/JobServices';
+import { ShowRecrutadorVagas, DeleteVagas, getApplications, UpdateVagasStatus } from '@/services/JobServices';
 import { mapActions, mapGetters } from 'vuex';
-import { DeleteVagas } from '@/services/JobServices';
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+
 
 export default {
     data() {
@@ -176,45 +183,7 @@ export default {
             isDropdownOpen: false,
             currentPageCandidate: 1,
             candidatesPerPage: 1,
-            
-            users: [
-                {
-                    id: 1,
-                    name: 'João Silva',
-                    experience: '3 anos como desenvolvedor frontend.',
-                    skills: 'JavaScript, Vue.js, HTML, CSS',
-                    phone: '(11) 98765-4321',
-                    socialMedia: 'https://linkedin.com/in/joaosilva',
-                    cep: '12345-678',
-                    houseNumber: 101,
-                    profilePicture: 'https://via.placeholder.com/150',
-                    about: 'Apaixonado por tecnologia e soluções inovadoras.',
-                },
-                {
-                    id: 2,
-                    name: 'Maria Oliveira',
-                    experience: '5 anos como analista de sistemas.',
-                    skills: 'Python, Django, SQL, Machine Learning',
-                    phone: '(21) 99876-5432',
-                    socialMedia: 'https://linkedin.com/in/mariaoliveira',
-                    cep: '23456-789',
-                    houseNumber: 202,
-                    profilePicture: 'https://via.placeholder.com/150',
-                    about: 'Especialista em análise de dados e sistemas robustos.',
-                },
-                {
-                    id: 3,
-                    name: 'Carlos Almeida',
-                    experience: '2 anos como desenvolvedor mobile.',
-                    skills: 'Flutter, Dart, Kotlin',
-                    phone: '(31) 98712-4567',
-                    socialMedia: 'https://github.com/carlosalmeida',
-                    cep: '34567-890',
-                    houseNumber: 303,
-                    profilePicture: 'https://via.placeholder.com/150',
-                    about: 'Focado em criar experiências móveis incríveis.',
-                },
-            ],
+            applications: [],
 
         };
     },
@@ -224,7 +193,7 @@ export default {
             return Math.ceil(this.jobs.length / this.jobsPerPage);
         },
         totalCandidatesPages() {
-            return Math.ceil();
+            return Math.ceil(this.candidates.length / this.candidatesPerPage);
         },
         paginatedJobs() {
             const start = (this.currentPage - 1) * this.jobsPerPage;
@@ -232,13 +201,13 @@ export default {
             return this.jobs.slice(start, end);
         },
         paginatedCandidate() {
-            const start = (this.currentPageCandidate - 1) * this.CandidatesPerPage;
-            const end = start + this.CandidatessPerPage;
+            const start = (this.currentPageCandidate - 1) * this.candidatesPerPage;
+            const end = start + this.candidatessPerPage;
             return this.candidates.slice(start, end);
         },
 
 
-        ...mapGetters(['getUserId']),
+        ...mapGetters(['getUserId', 'getUser']),
     },
     methods: {
 
@@ -253,17 +222,36 @@ export default {
             }).showToast();
         },
 
-        async GetJob() {
-            const response = await ShowRecrutadorVagas();
-            console.log('response', response);
-            this.jobs = response.data.vaga;
+        async updateStatus(id,status) {
+            const response = await UpdateVagasStatus(id, status);
+            this.showToast("Status da vaga atualizado", "success");
+            console.log('response do update status', response);
+            console.log('jobs', this.jobs);
+        },
 
+        async GetJob() {
+            const response = await ShowRecrutadorVagas();   
+            console.log('response do get job', response);
+            this.jobs = response.data.vaga;
+            console.log('jobs', this.jobs);
+
+        },
+
+        async getApplicationsData() {
+            try {
+                const response = await getApplications(this.getUserId);
+                console.log('response applications', response);
+                this.applications = response.applications;
+                console.log('applications', this.applications);
+            } catch (error) {
+                console.error('Erro ao carregar candidaturas', error);
+            }
         },
 
         nextPage() {
             if (this.currentPage < this.totalPages) {
                 this.currentPage++;
-                this.GetJob();
+                
             }
         },
         nextPageCandidate() {
@@ -275,7 +263,7 @@ export default {
         previousPage() {
             if (this.currentPage > 1) {
                 this.currentPage--;
-                this.GetJob();
+                
             }
         },
         previousPageCandidate() {
@@ -327,11 +315,13 @@ export default {
             this.candidates = []
         },
         ...mapActions(['userlogout'])
-    },
 
+    },
     
     created() {
         this.GetJob();
+        this.getApplicationsData();
+        console.log('user', this.getUser)
     }
 };
 </script>
@@ -604,5 +594,185 @@ body {
 
 #pageCandidate {
     text-align: center;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+    margin: 30px 55px;
+    border-radius: 50%;
+}
+
+.modal-header .btn-close {
+    border: none;
+    background-color: transparent;
+    font-size: 20px;
+    color: #df0d0d;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.modal-header .btn-close:hover {
+    color: #ff4d4d;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.modal-body {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.modal-footer .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .btn-danger:hover {
+    background-color: #c82333;
+}
+
+.modal-dialog {
+    max-width: 500px;
+    width: 100%;
+}
+
+.modal-header {
+    background-color: #0e8cc7;
+    color: white;
+    padding: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+}
+
+
+.fade {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.fade.show {
+    opacity: 1;
+}
+
+.modal-dialog {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.modal-content {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff; 
+}
+
+.modal-header {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+}
+
+.modal-body {
+    padding: 20px; 
+    font-size: 16px; 
+    line-height: 1.5; 
+}
+
+.modal-footer {
+    padding: 10px 20px;
+    text-align: right; 
+}
+
+.modal-footer button {
+    margin-left: 10px;
+}
+
+.btn-close {
+    font-size: 20px; 
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.status-select {
+    margin-bottom: 20px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.status-select label {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+.status-select select {
+    padding: 10px;
+    margin-left: 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+
+.status-select select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+.status-select option {
+    padding: 10px;
+    font-size: 14px;
 }
 </style>

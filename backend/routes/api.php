@@ -27,6 +27,7 @@ Route::prefix('Recruiter')->middleware(['auth:sanctum', 'check.recruiter'])->gro
     Route::get('/vagas/recrutador/{id}', [JobOpeningController::class, 'showRecrutador']);
     Route::post('/companies', [CompaniesController::class, 'store']);
     Route::get('/vagas/{id}/applications', [JobApplicationController::class, 'viewJobApplications']);
+    Route::put('/vagas/{id}/status', [JobOpeningController::class, 'updateStatus']);
 });
 Route::get('/vagas', [JobOpeningController::class, 'show']);
 
@@ -35,6 +36,7 @@ Route::prefix('Candidate')->middleware(['auth:sanctum', 'check.candidate'])->gro
     Route::post('/details/candidate', [CandidateController::class, 'store']);
     Route::get('/applications', [CandidateController::class, 'index']);
     Route::post('/profile/{userId}/update-picture', [CandidateController::class, 'updateProfilePicture']);
+    Route::put('/profile/update-profile', [CandidateController::class, 'updateProfile']);
 });
 
 

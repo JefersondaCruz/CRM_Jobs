@@ -16,10 +16,15 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Somento Candidatos podem aderir a vaga']);
         }
 
+        $candidate = $user->candidate;
+        if (!$candidate) {
+            return response()->json(['message' => 'Você precisa completar o cadastro de candidato antes de aplicar a uma vaga.'], 400);
+        }
+
         $jobOpeningId = $id;
 
         $existingApplication = JobApplication::where('job_opening_id', $jobOpeningId)
-        ->where('candidate_id', $user->id)
+        ->where('candidate_id', $candidate->id)
         ->first();
 
         if ($existingApplication) {
@@ -28,7 +33,7 @@ class JobApplicationController extends Controller
 
         $application = JobApplication::create([
             'job_opening_id' => $id,
-            'candidate_id' => $user->id,
+            'candidate_id' => $candidate->id,
             'status' => JobApplication::STATUS_PENDING,
 
 
@@ -56,7 +61,8 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Vaga não encontrada ou você não tem permissão para visualizá-la'], 404);
         }
 
-        $applications = $jobOpening->applications()->with('candidate')->get();
+        $applications = $jobOpening->applications()->with(['candidate'])->get();
+
 
         return response()->json([
             'message' => 'Candidaturas recuperadas com sucesso',

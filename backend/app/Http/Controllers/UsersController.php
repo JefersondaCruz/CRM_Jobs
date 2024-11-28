@@ -42,7 +42,7 @@ class UsersController extends Controller
                 'user_id' => $user->id
             ]);
 
-            $token = $user->createToken('candidateToken', ['view-vagas'])->plainTextToken;
+            $token = $user->createToken('candidateToken', ['view-vagas','apply-vagas', 'Register-Candidate'])->plainTextToken;
         }
 
         return response()->json([

@@ -8,7 +8,7 @@
                 <div class="dropdown" @mouseenter="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                     <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
                     <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
-                        <li><Router-link class="dropdown-item" to="/perfil">Perfil</Router-link></li>
+                        <li><Router-link class="dropdown-item" :to="`/profile/${getUserId || ''}`">Perfil</Router-link></li>
                         <li><Router-link class="dropdown-item" to="/">home</Router-link></li>
                         <li><button class="dropdown-item" @click="logout">Sair</button></li>
                     </ul>
@@ -25,7 +25,7 @@
                         <option value="">Todos</option>
                         <option value="Aprovado">Aprovado</option>
                         <option value="Rejeitado">Rejeitado</option>
-                        <option value="Em análise">Em análise</option>
+                        <option value="Pendente">Pendente</option>
                     </select>
                 </div>
             </div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import { getApplications } from '@/services/CandidateServices';
     import Toastify from "toastify-js";
     import "toastify-js/src/toastify.css";
@@ -104,6 +104,7 @@ export default {
             const end = start + this.candidaturasPerPage;
             return this.candidaturas.slice(start, end);
         },
+        ...mapGetters(['getUserId']),   
     },
     methods: {
         getStatusColor(status) {
@@ -171,6 +172,7 @@ export default {
     created() {
         this.fetchCandidaturas();
     },
+
 };
 </script>
 

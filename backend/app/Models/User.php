@@ -39,6 +39,6 @@ class User extends Authenticatable
 
     public function candidate()
     {
-        return $this->hasOne(Candidates::class);
+        return $this->hasOne(Candidates::class, 'user_id');
     }
 }

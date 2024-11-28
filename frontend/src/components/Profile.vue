@@ -46,7 +46,6 @@
                     </div>
                 </div>
 
-                <!-- Seção de Informações do Perfil abaixo da imagem -->
                 <div class="col-md-8 mx-auto">
                     <div class="card">
                         <div class="card-body">
@@ -70,10 +69,30 @@
                             <div v-if="profileData.user?.type === 'candidate'">
                                 <div class="position-relative">
                                     <h5 class="card-title">Experiência</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
+                                    <i 
+                                    class="bi bi-pencil position-absolute" 
+                                    style="top: 5px; right: 10px; cursor: pointer;"
+                                    @click="editExperience = !editExperience"
+                                    > </i>
                                 </div>
-                                <p>Experiência: {{ profileData.candidate?.experiences }}</p>
+                                <p v-if="!editExperience">{{ profileData.candidate?.experiences }}</p>
+                                <input 
+                                    v-if="editExperience" 
+                                    v-model="newExperiences" 
+                                    type="text" 
+                                    class="form-control" 
+                                    placeholder="Digite sua experiência" 
+                                />
                                 <hr />
+                                <div class="d-flex justify-content-end mt-3">
+                                <button 
+                                    v-if="editExperience" 
+                                    @click="updateCandidateProfile" 
+                                    class="btn btn-primary"
+                                >
+                                    Atualizar Experiência
+                                </button>
+                            </div>
 
                                 <div class="position-relative">
                                     <h5 class="card-title">Habilidades</h5>
@@ -118,13 +137,14 @@
 </template>
 
 <script>
-import { UpdateProfilePicture, GetProfile } from "../services/ProfileServices";
+import { UpdateProfilePicture, GetProfile, updateProfileData } from "../services/ProfileServices";
 import { mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
     data() {
         return {
             profileData: {},
+            editExperience: false,
         };
     },
     computed: {
@@ -136,6 +156,27 @@ export default {
         triggerFileInput() {
             this.$refs.fileInput.click();
         },
+        async updateCandidateProfile() {
+            const updateData   = {
+                experiences: this.newExperiences || this.profileData.candidate?.experiences,
+            };
+                try {
+                const response = await updateProfileData(updateData);
+                console.log("Resposta da API ao atualizar o perfil:", response);
+
+                
+                this.profileData.candidate.experiences = this.newExperiences || this.profileData.candidate?.experiences;
+                this.profileData.candidate.skills = this.newSkills || this.profileData.candidate?.skills;
+
+                this.editExperience = false;
+                this.editSkills = false;
+            
+
+            } catch (error) {
+                console.error("Erro ao atualizar o perfil:", error);
+            }
+        },
+
         async handleFileChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -148,7 +189,7 @@ export default {
 
                     if (response && response.profile_picture) {
                         const newProfilePicture = `http://127.0.0.1:8000/storage/${response.profile_picture}`;
-                        this.setProfilePicture(newProfilePicture); // Atualiza no Vuex
+                        this.setProfilePicture(newProfilePicture);
                         console.log("Imagem de perfil atualizada:", newProfilePicture);
                     } else {
                         console.error("Erro: 'profile_picture' não foi retornado pela API.", response);
@@ -167,7 +208,6 @@ export default {
                     this.profileData = response;
                     console.log("Perfil carregado:", this.profileData);
 
-                    // Agora a imagem de perfil está dentro de candidate.profile_picture
                     if (this.profileData.candidate?.profile_picture) {
                         const profilePicturePath = this.profileData.candidate.profile_picture;
                         this.setProfilePicture(`http://127.0.0.1:8000/storage/${profilePicturePath}`);

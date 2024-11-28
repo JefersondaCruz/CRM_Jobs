@@ -14,7 +14,7 @@ class CheckCandidate
 
         foreach ($requiredPermissions as $permission) {
             if (!$request->user()->tokenCan($permission)) {
-                return response()->json(['message' => 'Forbidden'], 403);
+                return response()->json(['message' => 'Forbidden Candidate'], 403);
             }
         }
         return $next($request);
