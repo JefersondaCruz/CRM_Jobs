@@ -1,17 +1,17 @@
 <template>
     <div>
         <div class="container">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <form class="d-flex">
-                        <h2>Meu Perfil</h2>
-                    </form>
-                    <a href="/" class="ms-3">
-                        <i class="fa-solid fa-house" style="font-size: 35px;"></i>
-                    </a>
-                </div>
-            </nav>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <form class="d-flex">
+            <h2 class="text-white">Meu Perfil</h2>
+            </form>
+            <a href="/" class="ms-3 text-white btn btn-link">
+                <i class="fas fa-home"></i> Home
+            </a>
         </div>
+        </nav>
+    </div>
 
         <div class="container d-flex justify-content-center align-items-start min-vh-100">
             <div class="row w-100">
@@ -50,73 +50,44 @@
                         <div class="card-body">
                             <div class="position-relative">
                                 <h5 class="card-title">Informações de Contato</h5>
-                                <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
                             </div>
                             <p><strong>Email:</strong> {{ profileData.user?.email }}</p>
                             <hr />
 
-                            <div v-if="profileData.user?.type === 'recruiter'">
-                                <div class="position-relative">
-                                    <h5 class="card-title">Empresa</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
-                                </div>
-                                <p>Nome: {{ profileData.recruiter?.company?.name }}</p>
-                                <p>CNPJ: {{ profileData.recruiter?.company?.CNPJ }}</p>
-                                <p>Localização: {{ profileData.recruiter?.company?.localization }}</p>
-                            </div>
-
                             <div v-if="profileData.user?.type === 'candidate'">
                                 <div class="position-relative">
                                     <h5 class="card-title">Experiência</h5>
-                                    <i 
-                                    class="bi bi-pencil position-absolute" 
-                                    style="top: 5px; right: 10px; cursor: pointer;"
-                                    @click="editExperience = !editExperience"
-                                    > </i>
                                 </div>
-                                <p v-if="!editExperience">{{ profileData.candidate?.experiences }}</p>
-                                <input 
-                                    v-if="editExperience" 
-                                    v-model="newExperiences" 
-                                    type="text" 
-                                    class="form-control" 
-                                    placeholder="Digite sua experiência" 
-                                />
+                                <p>Experiência: {{ profileData.candidate?.experiences }}</p> 
+                                
                                 <hr />
-
                                 <div class="position-relative">
                                     <h5 class="card-title">Habilidades</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
                                 </div>
-                                <p>Habilidades: {{ profileData.candidate?.skills }}</p>
+                                    <p>Habilidades: {{ profileData.candidate?.skills }}</p>
                                 <hr />
 
                                 <div class="position-relative">
                                     <h5 class="card-title">Telefone</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
                                 </div>
-                                <p>Telefone: {{ profileData.candidate?.phone }}</p>
+                                    <p>Telefone: {{ profileData.candidate?.phone }}</p>
                                 <hr />
 
                                 <div class="position-relative">
                                     <h5 class="card-title">Redes Sociais</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
                                 </div>  
-                                <p>Redes Sociais: {{ profileData.candidate?.social_media }}</p>
+                                    <p>Redes Sociais: {{ profileData.candidate?.social_media }}</p>
                                 <hr />
 
                                 <div class="position-relative">
                                     <h5 class="card-title">CEP</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
                                 </div>
-                                <p>CEP: {{ profileData.candidate?.CEP }}</p>
-                                <hr />
-
+                                    <p>CEP: {{ profileData.candidate?.CEP }}</p>
+                                    <hr />
                                 <div class="position-relative">
                                     <h5 class="card-title">Número da Casa</h5>
-                                    <i class="bi bi-pencil position-absolute" style="top: 5px; right: 10px; cursor: pointer;"></i>
                                 </div>
-                                <p>Número da Casa: {{ profileData.candidate?.house_number }}</p>
+                                    <p>Número da Casa: {{ profileData.candidate?.house_number }}</p>
                             </div>
                         </div>
                         
@@ -204,7 +175,7 @@
                                 />
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="submit" @click="closeModal" class="btn btn-primary">Salvar Alterações</button>
+                                <button type="submit"  class="btn btn-primary">Salvar Alterações</button>
                             </div>
                         </form>
                     </div>
@@ -218,6 +189,9 @@
 <script>
 import { UpdateProfilePicture, GetProfile, updateProfileData } from "../services/ProfileServices";
 import { mapGetters, mapState, mapMutations } from "vuex";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+
 
 export default {
     data() {
@@ -246,8 +220,16 @@ export default {
         ...mapGetters(["getUserId"]),
     },
     methods: {
-
-        
+        showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 5000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: type === "success" ? "green" : "red",
+                close: true
+            }).showToast();
+        },
 
         ...mapMutations(["setProfilePicture"]),
         triggerFileInput() {
@@ -265,13 +247,22 @@ export default {
 
             console.log('atualizando com os dados:', updateData)
                 try {
-                const response = await updateProfileData(updateData);
-                console.log("Resposta da API ao atualizar o perfil:", response);
-                
+                    const response = await updateProfileData(updateData);
+                    console.log("Resposta da API após a atualização dos dados:", response);
+                    this.profileData.candidate.experiences = this.newExperiences || this.profileData.candidate?.experiences;
+                    this.profileData.candidate.skills = this.newSkills || this.profileData.candidate?.skills;
+                    this.profileData.candidate.phone = this.newPhone || this.profileData.candidate?.phone;
+                    this.profileData.candidate.social_media = this.newSocialMedia || this.profileData.candidate?.social_media;
+                    this.profileData.candidate.CEP = this.newCEP || this.profileData.candidate?.CEP;
+                    this.profileData.candidate.house_number = this.newHouseNumber || this.profileData.candidate?.house_number;
 
-                this.closeModal();
-            
-
+                    this.newExperiences = '';
+                    this.newSkills = '';
+                    this.newPhone = '';
+                    this.newSocialMedia = '';
+                    this.newCEP = '';
+                    this.newHouseNumber = '';
+                    this.showToast("Perfil atualizado com sucesso!", "success");
             } catch (error) {
                 console.error("Erro ao atualizar o perfil:", error);
             }
@@ -325,54 +316,92 @@ export default {
     },
 };
 </script>
-    <style scoped>
+<style scoped>
 
-    .img-fluid {
-        max-width: 100%;
-        height: auto;
-    }
+.img-fluid {
+max-width: 100%;
+height: auto;
+}
 
-    .rounded-circle {
-        border-radius: 50%;
-    }
+.rounded-circle {
+    border-radius: 50%;
+}
 
-    .mb-3 {
-        margin-bottom: 1rem;
-    }
+.mb-3 {
+    margin-bottom: 1rem;
+}
 
-    .container {
-        padding-top: 20px;
-    }
+.container {
+    padding-top: 20px;
+}
 
-    .card-body i {
-        transition: all 0.3s ease;
-    }
+.card-body i {
+    transition: all 0.3s ease;
+}
 
-    .card-body i:hover {
-        color: #007bff;
-    }
+.card-body i:hover {
+    color: #007bff;
+}
 
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #F5F7FA;
-    }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F7FA;
+}
 
-    .container {
-        max-width: 1500px;
-        margin: auto;
-        padding: 20px;
-    }
+.container {
+    max-width: 1500px;
+    margin: auto;
+    padding: 20px;
+}
 
-    .fa-solid {
-        padding-right: 20px;
-        color: rgb(44, 42, 42);
-    }
+.fa-solid {
+    padding-right: 20px;
+    color: rgb(44, 42, 42);
+}
 
-    .profile-img {
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-    }
+.profile-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+.navbar {
+    background-color: #007bff;
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.card img {
+    border: 5px solid #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
 </style>

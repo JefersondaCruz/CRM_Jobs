@@ -78,23 +78,19 @@ export default {
         async VagaData() {
             try {
                 const response = await getVagasById(this.vagaId);
-                const vaga = response.vaga[0];
+                const vaga = response.vaga;
                 console.log('Vaga encontrada:', vaga);
 
                     this.Title = vaga.title || '';
                     this.Description = vaga.description || '';
                     this.Salary = vaga.salaries ? vaga.salaries.toString() : '';
                     this.Category =  vaga.categories || ''; 
-
                 }
-                
             catch (error) {
                 console.error("Erro ao buscar:", error);
                 throw error;
             }
         }
-
-
     },
     mounted() {
         console.log("ID da vaga", this.vagaId);

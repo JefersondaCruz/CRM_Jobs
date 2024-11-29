@@ -61,7 +61,7 @@ class JobApplicationController extends Controller
             return response()->json(['message' => 'Vaga não encontrada ou você não tem permissão para visualizá-la'], 404);
         }
 
-        $applications = $jobOpening->applications()->with(['candidate'])->get();
+        $applications = $jobOpening->applications()->with(['candidate.user'])->get();
 
 
         return response()->json([
