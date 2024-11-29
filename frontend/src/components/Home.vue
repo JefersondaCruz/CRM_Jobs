@@ -19,7 +19,7 @@
                     </ul>
                 </div>
 
-        <div v-else class="user-actions">
+        <div v-else class="user-actions"> 
           <a href="/SignIn" class="ms-3">
               <i class="fas fa-user-circle" style="font-size: 40px;"></i>
           </a>
@@ -52,9 +52,9 @@
       <div class="job-list">
         <h3>Vagas de Emprego</h3>
         <div v-for="job in paginatedJobs" :key="job.id" class="job-card">
-          <h4>{{ job.title }}</h4>
-          <p>{{ job.salaries }} - {{ job.type }}</p>
-          <p>{{ job.description }}</p>
+          <h4><i class="fa-solid fa-briefcase"></i> {{ job.title }}</h4>
+          <p><i class="fa-solid fa-dollar-sign"></i> {{ job.salaries }} - {{ job.type }}</p>
+          <p><strong>Descrição:</strong> {{ job.description }}</p>
           <button @click="viewJobDetails(job)">Mais Detalhes</button>
         </div>
       </div>
@@ -223,11 +223,18 @@ export default {
 
 <style scoped>
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
+    font-size: 16px;
+    line-height: 1.5;
     background-color: #F5F7FA;
   }
+  h3, h4 {
+    font-family: 'Lato', sans-serif;
+    color: #333;
+}
+
   .container {
     max-width: 1500px;
     margin: auto;
@@ -245,11 +252,37 @@ export default {
   .filters {
     width: 200px;
     background-color: #fff;
-    padding: 15px;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-right: 20px;
   }
+
+  .filters h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+.filter-group {
+  margin-bottom: 15px;
+}
+.filter-group select {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fafafa;
+  transition: border-color 0.3s ease;
+}
+.filter-group select:hover, .filter-group select:focus {
+  border-color: #e97a12;
+  outline: none;
+}
+.filter-group select option {
+  padding: 10px;
+}
   .job-list {
     flex: 1;
     background-color: #fff;
@@ -262,11 +295,12 @@ export default {
     margin: 0 0 15px;
   }
   .job-card {
-    padding: 15px;
+    background-color: #fff;
+    padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 10px;
     margin-bottom: 15px;
-    transition: background-color 0.3s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
@@ -276,7 +310,8 @@ export default {
   }
 
   .job-card:hover {
-    background-color: #F0F0F0;
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
   .job-card h4 {
     margin: 0;

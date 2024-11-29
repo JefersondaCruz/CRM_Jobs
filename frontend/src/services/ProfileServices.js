@@ -33,17 +33,9 @@ export const UpdateProfilePicture = async (userId, formData) => {
     }
 };
 
-export const updateProfileData = async (experinces, skills, phone, social_media, CEP, house_number, about) => {
+export const updateProfileData = async (updateData) => {
     try {
-        const response = await LaravelApi.put(`/Candidate/profile/update-profile`, {
-            experinces,
-            skills,
-            phone,
-            social_media,
-            CEP,
-            house_number,
-            about,
-        }, {
+        const response = await LaravelApi.put(`/Candidate/profile/update-profile`, updateData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

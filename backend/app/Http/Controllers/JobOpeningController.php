@@ -24,7 +24,6 @@ class JobOpeningController extends Controller
             'description' =>'required|string|max:255',
             'salaries' =>'required|string|max:255',
             'categories' =>'required|string|max:255',
-
         ]);
 
         $recruiter = Auth::user()->recruiter;
@@ -51,9 +50,7 @@ class JobOpeningController extends Controller
     {
         $user = Auth::user();
 
-
         if ($user->id != $recrutadorId) {
-
             return response()->json(['error' => 'Você não tem permissão para visualizar estas vagas.'], 403);
         }
 
@@ -64,18 +61,24 @@ class JobOpeningController extends Controller
         return response()->json([
             'vaga' => $jobOpenings,
         ]);
-
     }
 
-
-    public function index(Request $request)
+    public function ShowVaga (Request $request, string $vagaId)
     {
-        //
+        $user = Auth::user();
+        $vaga = JobOpening::where('id', $vagaId)
+        ->whereHas('recruiter', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->first();
+
+        if (!$vaga) {
+            return response()->json(['error' => 'Vaga não encontrada ou você não tem permissão para visualizá-la.'], 403);
+        }
+        return response()->json(['vaga' => $vaga]);
+
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show()
     {
         $vagas = JobOpening::all();
@@ -84,17 +87,6 @@ class JobOpeningController extends Controller
         ]);
 }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         if (!$request->user()->tokenCan('edit-vaga')){
@@ -106,8 +98,6 @@ class JobOpeningController extends Controller
         if (Auth::user()->type !== 'recruiter') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-
-
         $recruiter = Auth::user()->recruiter;
 
         $datas = $request->validate([
@@ -116,8 +106,6 @@ class JobOpeningController extends Controller
             'salaries' =>'required|string|max:255',
             'categories' =>'required|string|max:255',
         ]);
-
-
         $job = JobOpening::findOrFail($id);
 
         if ($job->recruiter_id !== $recruiter->id) {
@@ -135,9 +123,6 @@ class JobOpeningController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $job = JobOpening::find($id);

@@ -25,9 +25,11 @@ Route::prefix('Recruiter')->middleware(['auth:sanctum', 'check.recruiter'])->gro
     Route::delete('/vagas/{id}', [JobOpeningController::class, 'destroy']);
     Route::post('/vagas', [JobOpeningController::class, 'store']);
     Route::get('/vagas/recrutador/{id}', [JobOpeningController::class, 'showRecrutador']);
+    Route::get('/vagas/select/{id}',[JobOpeningController::class, 'ShowVaga']);
     Route::post('/companies', [CompaniesController::class, 'store']);
     Route::get('/vagas/{id}/applications', [JobApplicationController::class, 'viewJobApplications']);
     Route::put('/vagas/{id}/status', [JobOpeningController::class, 'updateStatus']);
+    Route::put('/companie/update-company',[CompaniesController::class, 'updateCompany']);
 });
 Route::get('/vagas', [JobOpeningController::class, 'show']);
 

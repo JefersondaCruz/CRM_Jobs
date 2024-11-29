@@ -2,13 +2,11 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-
                 <form class="d-flex">
                     <h2> Central de vagas</h2>
                     <button class="btn-criar" type="submit"><Router-link class="link" to="/FormsJobs">Criar nova
                             vaga</Router-link></button>
                 </form>
-
                 <div class="dropdown" @mouseenter="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                     <i class="fas fa-user-circle dropdown-icon" style="font-size: 40px; cursor: pointer;"></i>
                     <ul class="dropdown-menu" :class="{ show: isDropdownOpen }">
@@ -38,9 +36,7 @@
                 </div>
             </div>
         </div>
-
         <div class="content">
-
             <div class="filters">
                 <h3>Filtros</h3>
                 <div class="filter-group">
@@ -51,7 +47,6 @@
                         <option value="Rio de Janeiro">Rio de Janeiro</option>
                     </select>
                 </div>
-
                 <div class="filter-group">
                     <label for="type">Tipo de Vaga</label>
                     <select v-model="selectedType" id="type">
@@ -61,17 +56,15 @@
                     </select>
                 </div>
             </div>
-
             <div class="job-list">
                 <h3>Vagas de Empregos</h3>
                 <div v-for="job in jobs" :key="job.id" class="job-card">
-                    <h4>titulo: {{ job.title }}</h4>
-                    <p>salario: {{ job.salaries }} - {{ job.type }}</p>
-                    <p>descrição {{ job.description }}</p>
+                    <h4><i class="fa-solid fa-briefcase"></i> {{ job.title }}</h4>
+                    <p><i class="fa-solid fa-dollar-sign"></i> salario: {{ job.salaries }} - {{ job.type }}</p>
+                    <p><strong>Descrição:</strong> {{ job.description }}</p>
                     <button @click="viewJobDetails(job)">Vizualizar</button>
                 </div>
             </div>
-
             <div class="details-section" v-if="selectedJob">
                 <h3>
                     Detalhes da Vaga
@@ -81,7 +74,6 @@
                 <p><strong>Localização:</strong> {{ selectedJob.location }}</p>
                 <p><strong>Salário:</strong> {{ selectedJob.salaries }}</p>
                 <p><strong>Descrição:</strong> {{ selectedJob.description }}</p>
-
                 <div class="buttons">
                     <button class="btn-editar"><Router-link class="link"
                             :to="{ name: 'EditForms', params: { id: selectedJob.id } }"><i
@@ -95,7 +87,6 @@
                 </div>
             </div>
         </div>
-
         <div class="pagination">
             <button @click="previousPage" :disabled="currentPage === 1">Anterior</button>
             <span>Página {{ currentPage }} de {{ totalPages }}</span>
@@ -114,11 +105,13 @@
                         <div v-for="application in applications" :key="application.id" class="card mb-3">
                             <div class="row g-0">
                                 <div class="col-md-4">
-                                    <img :src="`http://127.0.0.1:8000/storage/${application.candidate.profile_picture}`" class="img-fluid profile-img"
+                                    <img :src="application.candidate.profile_picture 
+                                        ? `http://127.0.0.1:8000/storage/${application.candidate.profile_picture}` 
+                                        : 'http://127.0.0.1:8000/storage/IMG3C.jpg'" class="img-fluid profile-img"
                                         alt="Foto de perfil">
-                                        <h4>
-                                            nome do usuario
-                                        </h4>
+                                    <h4>
+                                        {{ application.candidate.user.name }}
+                                    </h4>
                                 <div class="status-select">
                                     <label for="status">Status:</label>
                                     <select v-model="application.status" @change="updateStatus(application.id, application.status)">
@@ -184,7 +177,6 @@ export default {
             currentPageCandidate: 1,
             candidatesPerPage: 1,
             applications: [],
-
         };
     },
 
@@ -202,11 +194,9 @@ export default {
         },
         paginatedCandidate() {
             const start = (this.currentPageCandidate - 1) * this.candidatesPerPage;
-            const end = start + this.candidatessPerPage;
+            const end = start + this.candidatesPerPage;
             return this.candidates.slice(start, end);
         },
-
-
         ...mapGetters(['getUserId', 'getUser']),
     },
     methods: {
@@ -221,7 +211,6 @@ export default {
                 close: true
             }).showToast();
         },
-
         async updateStatus(id,status) {
             const response = await UpdateVagasStatus(id, status);
             this.showToast("Status da vaga atualizado", "success");
@@ -234,7 +223,6 @@ export default {
             console.log('response do get job', response);
             this.jobs = response.data.vaga;
             console.log('jobs', this.jobs);
-
         },
 
         async getApplicationsData() {
@@ -255,8 +243,8 @@ export default {
             }
         },
         nextPageCandidate() {
-            if (this.currentPage < this.totalCandidatesPages) {
-                this.currentPage++;
+            if (this.currentPageCandidate < this.totalCandidatesPages) {
+                this.currentPageCandidate++;
             }
         },
 
@@ -284,7 +272,6 @@ export default {
 
         toggleDropdown(status) {
             this.isDropdownOpen = status;
-
         },
 
         logout() {
@@ -328,10 +315,16 @@ export default {
 
 <style scoped>
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
+    font-size: 16px;
+    line-height: 1.5;
     background-color: #F5F7FA;
+}
+h3, h4 {
+    font-family: 'Lato', sans-serif;
+    color: #333;
 }
 
 .container {
@@ -353,10 +346,36 @@ body {
 .filters {
     width: 200px;
     background-color: #fff;
-    padding: 15px;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-right: 20px;
+}
+
+.filters h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.filter-group {
+    margin-bottom: 15px;
+}
+.filter-group select {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease;
+}
+.filter-group select:hover, .filter-group select:focus {
+    border-color: #e97a12;
+    outline: none;
+}
+.filter-group select option {
+    padding: 10px;
 }
 
 .job-list {
@@ -373,21 +392,23 @@ body {
 }
 
 .job-card {
-    padding: 15px;
+    background-color: #fff;
+    padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 10px;
     margin-bottom: 15px;
-    transition: background-color 0.3s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
     max-height: max-content;
     max-width: 900px;
-
+    
 }
 
 .job-card:hover {
-    background-color: #F0F0F0;
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .job-card h4 {
@@ -628,6 +649,9 @@ body {
 .modal-body {
     font-size: 1.1rem;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .modal-footer {
