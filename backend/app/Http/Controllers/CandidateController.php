@@ -83,7 +83,6 @@ class CandidateController extends Controller
             return response()->json(['error' => 'Candidato não encontrado'], 404);
         }
 
-
         if ($request->hasFile('profile_picture')) {
             $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
 

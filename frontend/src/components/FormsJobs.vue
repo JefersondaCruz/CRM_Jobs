@@ -64,7 +64,6 @@ export default {
         async submitForm() {
         try {
             const response = await MakeVagas(this.Title, this.Description, this.Salary, this.Category);
-            console.log(response);
             this.showToast("Vaga Cadastrada!");
             this.$router.push("/home");
         }
@@ -79,53 +78,53 @@ export default {
 
 <style scoped>
 
-    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-    * {
-    font-family: "Poppins", serif;
-    font-weight: 400;
-    font-style: normal;
-    }
-    #jobs {
-        background-color: #fff;
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-        max-width: 94%;
-        padding: 20px;
-        margin: 30px auto 0;
-        border-radius: 8px;
-    }
+* {
+font-family: "Poppins", serif;
+font-weight: 400;
+font-style: normal;
+}
+#jobs {
+    background-color: #fff;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    max-width: 94%;
+    padding: 20px;
+    margin: 30px auto 0;
+    border-radius: 8px;
+}
 
-    textarea {
-        height: 100px;
-        resize: none;
-    }
+textarea {
+    height: 100px;
+    resize: none;
+}
 
-    .btn {
-        border-radius: 20px;
-        border: none;
-        background-color: #E97A12;
-        color: #ffffff;
-        font-size: 12px;
-        font-weight: bold;
-        padding: 12px 45px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        transition: transform 80ms ease-in;
-        cursor: pointer;
-        transition: .5s ;
-    }
+.btn {
+    border-radius: 20px;
+    border: none;
+    background-color: #E97A12;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+    cursor: pointer;
+    transition: .5s ;
+}
 
-    .btn:active {
-        transform: scale(0.95);
-    }
-    .btn:hover {
-        background-color: #ff8521;
-    }
+.btn:active {
+    transform: scale(0.95);
+}
+.btn:hover {
+    background-color: #ff8521;
+}
 
-    .logo{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 10px;
-    }
+.logo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+}
 </style>

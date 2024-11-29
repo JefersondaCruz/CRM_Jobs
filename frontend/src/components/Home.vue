@@ -180,7 +180,6 @@ export default {
         }
         try {
             const response = await ApplyToJob(this.selectedJob.id);
-            console.log('response', response);
             this.showToast("Você se candidatou com sucesso à vaga!");
             this.$router.push('/');
             this.selectedJob = null;
@@ -211,9 +210,6 @@ export default {
     logout() {
       this.LoggedIn = false;
       this.$router.push('/SignIn');
-
-      console.log('User ID', this.getUserId)
-      console.log('retorno', this.$route.params.id)
     },
 
 
@@ -222,43 +218,43 @@ export default {
 </script>
 
 <style scoped>
-  body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    font-size: 16px;
-    line-height: 1.5;
-    background-color: #F5F7FA;
-  }
-  h3, h4 {
-    font-family: 'Lato', sans-serif;
-    color: #333;
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #F5F7FA;
+}
+h3, h4 {
+  font-family: 'Lato', sans-serif;
+  color: #333;
 }
 
-  .container {
-    max-width: 1500px;
-    margin: auto;
-    padding: 20px;
-  }
-  .title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+.container {
+  max-width: 1500px;
+  margin: auto;
+  padding: 20px;
+}
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .content {
-    display: flex;
-    
-  }
-  .filters {
-    width: 200px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-right: 20px;
-  }
+.content {
+  display: flex;
 
-  .filters h3 {
+}
+.filters {
+  width: 200px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+}
+
+.filters h3 {
   font-size: 1.5rem;
   color: #333;
   margin-bottom: 20px;
@@ -283,192 +279,190 @@ export default {
 .filter-group select option {
   padding: 10px;
 }
-  .job-list {
-    flex: 1;
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding-top: 20px;
-  }
-  .job-list h3 {
-    margin: 0 0 15px;
-  }
-  .job-card {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-    max-height: max-content;
-    max-width: 900px;
-    
-  }
+.job-list {
+  flex: 1;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding-top: 20px;
+}
+.job-list h3 {
+  margin: 0 0 15px;
+}
+.job-card {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-height: max-content;
+  max-width: 900px;
+}
 
-  .job-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  }
-  .job-card h4 {
-    margin: 0;
-  }
-  .job-card button {
-    padding: 10px;
-    background-color: #136ecf;
+.job-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+.job-card h4 {
+  margin: 0;
+}
+.job-card button {
+  padding: 10px;
+  background-color: #136ecf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.job-card button:hover {
+  background-color:#0056B3;
 
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  .job-card button:hover {
-    background-color:#0056B3;
-    
-  }
-  .details-section {
-    width: 300px;
-    margin-left: 20px;
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: relative;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-    max-height: max-content;
-    max-width: 900px;
-    margin-top: 50px;
-  }
-  .details-section h3 {
-    margin: 0 0 10px;
-    margin: 0;
-    padding-right: 30px;
-  }
-  .details-section .fa-xmark {
-    font-size: 24px;
-    color:#df0d0d;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
+}
+.details-section {
+  width: 300px;
+  margin-left: 20px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-height: max-content;
+  max-width: 900px;
+  margin-top: 50px;
+}
+.details-section h3 {
+  margin: 0 0 10px;
+  margin: 0;
+  padding-right: 30px;
+}
+.details-section .fa-xmark {
+  font-size: 24px;
+  color:#df0d0d;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
 
-  .details-section button {
-    background-color: #e97a12;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-  .details-section button:hover {
-    background-color: #f18a29;
-    transform: scale(1.05);
-  }
-  .btn-busca {
-    color: #e97a12;
-    border: 1px solid #e97a12;
-    border-radius: 0.25rem;
-    display: inline-block;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    background-color: transparent;
-    cursor: pointer;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-  }
+.details-section button {
+  background-color: #e97a12;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.details-section button:hover {
+  background-color: #f18a29;
+  transform: scale(1.05);
+}
+.btn-busca {
+  color: #e97a12;
+  border: 1px solid #e97a12;
+  border-radius: 0.25rem;
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: transparent;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
 
-  .btn-busca:hover{
-    background-color: #e97a12;
-    color: #fff;
-  }
+.btn-busca:hover{
+  background-color: #e97a12;
+  color: #fff;
+}
 
-  .custom-navbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e0e0e0;
-  }
+.custom-navbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
 
-  .custom-navbar .container-fluid {
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-  }
+.custom-navbar .container-fluid {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
 
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
-  .pagination button {
-    padding: 5px 10px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 3px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 3px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
 
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
 
-  .pagination span {
-    margin: 0 10px;
-    font-weight: bold;
-  }
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
 
-  .dropdown {
-    position: relative;
-    }
+.dropdown {
+  position: relative;
+}
 
-    .dropdown-menu {
-        position: absolute;
-        top: 42px;
-        right: 0;
-        display: none;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 10px 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        min-width: 150px;
-    }
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  display: none;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 150px;
+}
 
-    .dropdown-menu.show {
-        display: block;
-    }
+.dropdown-menu.show {
+  display: block;
+}
 
-    .dropdown-menu .dropdown-item {
-        padding: 10px 20px;
-        color: #333;
-        text-decoration: none;
-        display: block;
-        transition: background-color 0.2s;
-        cursor: pointer;
-    }
+.dropdown-menu .dropdown-item {
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
 
-    .dropdown-menu .dropdown-item:hover {
-        background-color: #f0f0f0;
-    }
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f0f0f0;
+}
 </style>

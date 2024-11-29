@@ -86,6 +86,8 @@
 
 <script>
 import { MakeCandidate } from "@/services/CandidateServices"; 
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 export default {
     name: "UserRegistration",
@@ -101,10 +103,20 @@ export default {
         };
     },
     methods: {
+        showToast(message, type = "success") {
+        Toastify({
+            text: message,
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: type === "success" ? "green" : "red",
+            close: true
+        }).showToast();
+    },
         async handleRegistrationSubmit() {
         try {
             const response = await MakeCandidate(this.experiences, this.skills, this.phone, this.social_media, this.cep, this.house_number, this.about);
-            console.log("Cadastro realizado:", response);
+            this.showToast("Candidato Cadastrada com sucesso!", "success");
             this.$router.push("/");
         } catch (error) {
             console.error("Erro ao cadastrar usuário:", error);
@@ -172,6 +184,6 @@ button:hover {
 }
 
 textarea {
-    resize: vertical; /* Permite redimensionar verticalmente */
+    resize: vertical;
 }
 </style>

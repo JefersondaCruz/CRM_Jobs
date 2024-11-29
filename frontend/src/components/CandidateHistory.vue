@@ -157,7 +157,6 @@ export default {
         },
         viewCandidaturaDetails(candidatura) {
             this.selectedCandidatura = candidatura;
-            console.log("Candidatura selecionada:", this.selectedCandidatura);
         },
         toggleDropdown(status) {
             this.isDropdownOpen = status;
@@ -178,175 +177,175 @@ export default {
 
 <style scoped>
 
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #F5F7FA;
-    }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F7FA;
+}
 
-    .container {
-        max-width: 1500px;
-        margin: auto;
-        padding: 20px;
-    }
+.container {
+    max-width: 1500px;
+    margin: auto;
+    padding: 20px;
+}
 
-    .content {
-        display: flex;
-    }
+.content {
+    display: flex;
+}
 
-    .filters {
-        width: 200px;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin-right: 20px;
-    }
+.filters {
+    width: 200px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
 
-    .candidatura-list {
-        flex: 1;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+.candidatura-list {
+    flex: 1;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-    .candidatura-card {
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        transition: background-color 0.3s;
-    }
+.candidatura-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
 
-    .candidatura-card:hover {
-        background-color: #F0F0F0;
-    }
+.candidatura-card:hover {
+    background-color: #F0F0F0;
+}
 
-    .details-section {
-        width: 300px;
-        margin-left: 20px;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    .pagination button {
-        padding: 5px 10px;
-        margin: 0 5px;
-        border: none;
-        border-radius: 3px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-    }
-
-    .pagination button:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-
-    .pagination span {
-        margin: 0 10px;
-        font-weight: bold;
-    }
-
-    .status-indicator {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        margin-left: 10px;
-        display: inline-block;
-    }
-    .details {
-        padding: 10px;
-        background-color: #136ecf;
-
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .details:hover {
-        background-color:#0056B3;
-        
-    }
-    .details-section {
-        width: 300px;
-        margin-left: 20px;
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        position: relative;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        white-space: normal;
-        max-height: max-content;
-        max-width: 900px;
-        margin-top: 50px;
-    }
-
-    .details-section .fa-xmark {
-        font-size: 24px;
-        color:#df0d0d;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-        transition: color 0.3s;
-    }
-
-    .custom-navbar .container-fluid {
-        display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-    }
-
-    .dropdown {
+.details-section {
+    width: 300px;
+    margin-left: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: relative;
-    }
+}
 
-    .dropdown-menu {
-        position: absolute;
-        top: 42px;
-        right: 0;
-        display: none;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 10px 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        min-width: 150px;
-    }
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
 
-    .dropdown-menu.show {
-        display: block;
-    }
+.pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
 
-    .dropdown-menu .dropdown-item {
-        padding: 10px 20px;
-        color: #333;
-        text-decoration: none;
-        display: block;
-        transition: background-color 0.2s;
-        cursor: pointer;
-    }
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
 
-    .dropdown-menu .dropdown-item:hover {
-        background-color: #f0f0f0;
-    }
+.pagination span {
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 10px;
+    display: inline-block;
+}
+.details {
+    padding: 10px;
+    background-color: #136ecf;
+
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.details:hover {
+    background-color:#0056B3;
+    
+}
+.details-section {
+    width: 300px;
+    margin-left: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-height: max-content;
+    max-width: 900px;
+    margin-top: 50px;
+}
+
+.details-section .fa-xmark {
+    font-size: 24px;
+    color:#df0d0d;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.custom-navbar .container-fluid {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.dropdown {
+position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 42px;
+    right: 0;
+    display: none;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu .dropdown-item {
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
 </style>

@@ -3,23 +3,22 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <h2 class="navbar-brand">Meu Perfil Recrutador</h2>
-          <!-- Botão de menu no mobile -->
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <h2 class="navbar-brand">Meu Perfil Recrutador</h2>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
+                <li class="nav-item">
                 <a href="/home" class="nav-link d-flex align-items-center">
-                  <i class="fa-solid fa-house" style="font-size: 25px;"></i> <!-- Ícone com tamanho ajustado -->
-                  <span class="ms-2">Home</span>
+                    <i class="fa-solid fa-house" style="font-size: 25px;"></i> <!-- Ícone com tamanho ajustado -->
+                    <span class="ms-2">Home</span>
                 </a>
-              </li>
+                </li>
             </ul>
-          </div>
+            </div>
         </div>
-      </nav>
+        </nav>
     </div>
                 <div class="container d-flex justify-content-center align-items-start min-vh-100">
                     <div class="row w-100">
@@ -149,7 +148,6 @@ async updateCompanyData() {
         CNPJ: this.newCnpj || this.profileData.recruiter?.CNPJ,
         localization: this.Localization || this.profileData.recruiter?.localization,
     };
-    console.log('atualizando com os dados:', updateData)
     try {
         const response = await updateCompany(updateData);
         console.log("Resposta da API após a atualização dos dados:", response);
@@ -168,7 +166,6 @@ async updateCompanyData() {
 async GetProfileDatas() {
     try {
         const response = await GetProfile(this.getUserId);
-        console.log("Resposta da API:", response);
 
         if (response && response.user) {
             this.profileData = response;
@@ -236,7 +233,7 @@ body {
     height: 200px;
     object-fit: cover;
 }
-.navbar {
+.nav bar {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 

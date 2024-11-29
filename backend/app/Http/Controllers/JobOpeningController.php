@@ -45,7 +45,6 @@ class JobOpeningController extends Controller
         ]);
     }
 
-
     public function ShowRecrutador(Request $request, string $recrutadorId)
     {
         $user = Auth::user();
@@ -85,7 +84,7 @@ class JobOpeningController extends Controller
         return response()->json([
             'vagas' => $vagas
         ]);
-}
+    }
 
     public function update(Request $request, string $id)
     {

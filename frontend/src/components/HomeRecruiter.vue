@@ -306,9 +306,10 @@ export default {
     },
     
     created() {
-        this.GetJob();
         this.getApplicationsData();
         console.log('user', this.getUser)
+        this.GetJob();
+        
     }
 };
 </script>
@@ -340,7 +341,6 @@ h3, h4 {
 
 .content {
     display: flex;
-
 }
 
 .filters {
@@ -701,7 +701,6 @@ modal-footer .btn-secondary {
 .modal-title {
     font-size: 1.5rem;
 }
-
 
 .fade {
     opacity: 0;

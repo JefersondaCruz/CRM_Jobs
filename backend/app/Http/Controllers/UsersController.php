@@ -84,35 +84,35 @@ class UsersController extends Controller
         ]);
 }
 
-public function getUserData(string $id)
-{
-    $user = User::find($id);
+    public function getUserData(string $id)
+    {
+        $user = User::find($id);
 
-    if (!$user) {
+        if (!$user) {
+            return response()->json([
+                'error' => 'Usuário não encontrado',
+            ], 404);
+        }
+
+
+        if ($user->type == User::TYPE_RECRUITER) {
+            $recruiterData = $user->recruiter()->with('company')->first();
+            return response()->json([
+                'user' => $user,
+                'recruiter' => $recruiterData,
+            ]);
+        }
+
+        if ($user->type == User::TYPE_CANDIDATE) {
+            $candidateData = $user->candidate;
+            return response()->json([
+                'user' => $user,
+                'candidate' => $candidateData,
+            ]);
+        }
+
         return response()->json([
-            'error' => 'Usuário não encontrado',
+            'error' => 'Tipo de usuário não encontrado',
         ], 404);
     }
-
-
-    if ($user->type == User::TYPE_RECRUITER) {
-        $recruiterData = $user->recruiter()->with('company')->first();
-        return response()->json([
-            'user' => $user,
-            'recruiter' => $recruiterData,
-        ]);
-    }
-
-    if ($user->type == User::TYPE_CANDIDATE) {
-        $candidateData = $user->candidate;
-        return response()->json([
-            'user' => $user,
-            'candidate' => $candidateData,
-        ]);
-    }
-
-    return response()->json([
-        'error' => 'Tipo de usuário não encontrado',
-    ], 404);
-}
 }
