@@ -52,7 +52,6 @@ export default {
                     password: this.password
                 });
                 this.showToast("Bem vindo!");
-                console.log(this.getUser)
                 if (this.getUser?.type === "recruiter") {
                     this.$router.push("/home");
                 }else{

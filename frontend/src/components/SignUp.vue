@@ -80,7 +80,6 @@ export default {
                     password_confirmation: this.password_confirmation,
                     type: this.type
                 });
-                console.log('usuario logado',this.getUser)
                 this.showToast("Bem vindo!");
                 if (this.getUser?.type === "recruiter") {
                     this.$router.push("/RegisterRecruiter");

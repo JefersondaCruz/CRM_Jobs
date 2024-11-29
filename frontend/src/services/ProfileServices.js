@@ -9,7 +9,6 @@ export const GetProfile = async (id) => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
-        console.log("Resposta daa API:", response);
         return response.data;
     } catch (error) {
         console.error("Erro ao recuperar perfil:", error);
@@ -25,7 +24,6 @@ export const UpdateProfilePicture = async (userId, formData) => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
-        console.log("Resposta daa API:", response);
         return response.data;
     } catch (error) {
         console.error("Erro ao atualizar foto de perfil:", error);
@@ -40,7 +38,6 @@ export const updateProfileData = async (updateData) => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
-        console.log("respostas do update perfil:", response);
         return response.data;
     } catch (error) {
         console.error("Erro ao atualizar dados de perfil:", error);

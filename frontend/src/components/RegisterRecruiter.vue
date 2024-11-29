@@ -28,6 +28,9 @@
 </template>
 <script>
 import { MakeCompany } from '../services/CompanyService';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+
 export default {
     name: 'PersonalInfo',
     data() {
@@ -40,6 +43,16 @@ export default {
         };
     },
     methods: {
+        showToast(message, type = "success") {
+        Toastify({
+            text: message,
+            duration: 5000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: type === "success" ? "green" : "red",
+            close: true
+        }).showToast();
+    },
         nextStep() {
             if (this.currentStep < this.totalSteps) {
                 this.currentStep++;
@@ -53,7 +66,7 @@ export default {
         async handlePersonalInfoSubmit() {
             try {
                 const response = await MakeCompany(this.name, this.cnpj, this.localization);
-                console.log(response);
+                this.showToast("Empresa Cadastrada com sucesso!", "success");
                 this.$router.push('/Home');
             } catch (error) {
                 console.error("Erro ao cadastrar:", error);
@@ -166,5 +179,3 @@ export default {
         text-align: center;
     }
 </style>
-
-    

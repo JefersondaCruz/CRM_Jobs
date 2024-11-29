@@ -22,7 +22,6 @@ export const MakeVagas = async (title, description, salaries, categories) => {
 export const vagas = async () => {
     try {
         const response = await LaravelApi.get("/vagas");
-        console.log('response', response);
         return response;
     } catch (error) {
         console.error("Erro ao buscar vagas:", error);
@@ -113,10 +112,11 @@ export const getApplications = async (id) => {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
-        })
+        });
 
-        console.log('application backend response', response);
+        console.log("response: da api ", response.data);
         return response.data;
+        
     } catch (error) {
         console.error("Erro ao buscar candidaturas:", error);
         throw error;
@@ -132,7 +132,6 @@ export const UpdateVagasStatus = async (id, status) => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
         })
-        console.log('application backend response do status', response);
         return response.data;
     } catch (error) {
         console.error("Erro ao buscar candidaturas:", error);

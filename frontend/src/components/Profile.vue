@@ -244,8 +244,6 @@ export default {
                 CEP: this.newCEP || this.profileData.candidate?.CEP,
                 house_number: this.newHouseNumber || this.profileData.candidate?.house_number,
             };
-
-            console.log('atualizando com os dados:', updateData)
                 try {
                     const response = await updateProfileData(updateData);
                     console.log("Resposta da API após a atualização dos dados:", response);
@@ -276,12 +274,9 @@ export default {
 
                 try {
                     const response = await UpdateProfilePicture(this.getUserId, formData);
-                    console.log("Resposta da API após a atualização da foto:", response);
-
                     if (response && response.profile_picture) {
                         const newProfilePicture = `http://127.0.0.1:8000/storage/${response.profile_picture}`;
                         this.setProfilePicture(newProfilePicture);
-                        console.log("Imagem de perfil atualizada:", newProfilePicture);
                     } else {
                         console.error("Erro: 'profile_picture' não foi retornado pela API.", response);
                     }
@@ -293,12 +288,8 @@ export default {
         async GetProfileDatas() {
             try {
                 const response = await GetProfile(this.getUserId);
-                console.log("Resposta da API:", response);
-
                 if (response && response.user) {
                     this.profileData = response;
-                    console.log("Perfil carregado:", this.profileData);
-
                     if (this.profileData.candidate?.profile_picture) {
                         const profilePicturePath = this.profileData.candidate.profile_picture;
                         this.setProfilePicture(`http://127.0.0.1:8000/storage/${profilePicturePath}`);
